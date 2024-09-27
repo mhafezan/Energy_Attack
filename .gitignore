@@ -37,6 +37,8 @@ Mohammad/GAN/CIFAR10/cifar10_dataset/**
 Mohammad/GAN/CIFAR10/1_train/fake_sample_images/*.png
 Mohammad/GAN/CIFAR10/1_train/real_sample_images/*.png
 Mohammad/GAN/CIFAR10/1_train/weight_dir/*.pth
+Mohammad/GAN/CIFAR10/2_test_clean/z_sets/*.pt
+Mohammad/GAN/CIFAR10/2_test_clean/z_stars/*.pt
 
 Ehsan/MNIST_LeNet5/2_copy_weight/*.pkl
 Ehsan/MNIST_LeNet5/dataset/*
