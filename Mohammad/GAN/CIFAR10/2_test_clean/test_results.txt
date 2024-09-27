@@ -1,0 +1,90 @@
+python3 test_clean.py --gen_path ../1_train/weight_dir/netG_epoch_99.pth --di
+sc_path ../1_train/weight_dir/netD_epoch_99.pth --nz 512 --ngf 128 --ndf 128 --lr 0.2 --rec_iter 100 --rec_rr 20
+
+Namespace(batch_size=20, cifar10_weights='../../../../Ehsan/CIFAR10_AlexNet/3_copy_weight/alexnet_cifar10_fc_one_out_458624.pkl', cont_z_geneartion=False, dataset='../cifar10_dataset', disc_path='../1_train/weight_dir/netD_epoch_99.pth', gen_path='../1_train/weight_dir/netG_epoch_99.pth', imageSize=32, image_index_first=0, image_index_last=10000, lr=0.2, manualSeed=13, ndf=128, ngf=128, ngpu=1, nz=512, rec_iter=100, rec_rr=20, use_loss_per_image=False)
+
+Started at: 2024-09-26 19:08:59.821343 
+
+Random Seed: 13 
+
+/home/mohammad/.local/lib/python3.6/site-packages/torch/cuda/__init__.py:80: UserWarning: CUDA initialization: The NVIDIA driver on your system is too old (found version 9010). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver. (Triggered internally at  ../c10/cuda/CUDAFunctions.cpp:112.)
+  return torch._C._cuda_getDeviceCount() > 0
+Files already downloaded and verified
+
+Data loader size is 500 considering batch size of 20
+
+Files already downloaded and verified
+batch= 2 / 500 accuracy_dirty= 0.6 sparsity_dirty= 0.3896578678830589
+# Batch:  2 / 500 Accuracy (clean):  0.95 Sparsity (clean):  0.3872871895060006 
+
+batch= 3 / 500 accuracy_dirty= 0.5 sparsity_dirty= 0.3907400724776724
+# Batch:  3 / 500 Accuracy (clean):  0.925 Sparsity (clean):  0.38819266981230816 
+
+batch= 4 / 500 accuracy_dirty= 0.55 sparsity_dirty= 0.3904156418620337
+# Batch:  4 / 500 Accuracy (clean):  0.85 Sparsity (clean):  0.388049542399293 
+
+batch= 5 / 500 accuracy_dirty= 0.575 sparsity_dirty= 0.3906946103998047
+# Batch:  5 / 500 Accuracy (clean):  0.875 Sparsity (clean):  0.38848389421399665 
+
+batch= 6 / 500 accuracy_dirty= 0.57 sparsity_dirty= 0.3904309848590567
+# Batch:  6 / 500 Accuracy (clean):  0.9 Sparsity (clean):  0.3884800839031538 
+
+batch= 7 / 500 accuracy_dirty= 0.5916666666666667 sparsity_dirty= 0.39066017769094796
+# Batch:  7 / 500 Accuracy (clean):  0.9 Sparsity (clean):  0.38881560203274723 
+
+batch= 8 / 500 accuracy_dirty= 0.6 sparsity_dirty= 0.3906518037807504
+# Batch:  8 / 500 Accuracy (clean):  0.8928571428571429 Sparsity (clean):  0.3889137164337546 
+
+batch= 9 / 500 accuracy_dirty= 0.59375 sparsity_dirty= 0.3903646423867918
+# Batch:  9 / 500 Accuracy (clean):  0.89375 Sparsity (clean):  0.3886526054022468 
+
+batch= 10 / 500 accuracy_dirty= 0.5944444444444444 sparsity_dirty= 0.3902920111754582
+# Batch:  10 / 500 Accuracy (clean):  0.8944444444444445 Sparsity (clean):  0.388644668011753 
+
+batch= 11 / 500 accuracy_dirty= 0.57 sparsity_dirty= 0.3904383438284956
+# Batch:  11 / 500 Accuracy (clean):  0.895 Sparsity (clean):  0.38883458999092935 
+
+batch= 12 / 500 accuracy_dirty= 0.5772727272727273 sparsity_dirty= 0.3904706747297846
+# Batch:  12 / 500 Accuracy (clean):  0.9045454545454545 Sparsity (clean):  0.38887121634993527 
+
+batch= 13 / 500 accuracy_dirty= 0.5708333333333333 sparsity_dirty= 0.3903856336199879
+# Batch:  13 / 500 Accuracy (clean):  0.8916666666666667 Sparsity (clean):  0.38882310636454553 
+
+batch= 14 / 500 accuracy_dirty= 0.5653846153846154 sparsity_dirty= 0.39025690896111986
+# Batch:  14 / 500 Accuracy (clean):  0.8923076923076924 Sparsity (clean):  0.38874328425900084 
+
+batch= 15 / 500 accuracy_dirty= 0.5571428571428572 sparsity_dirty= 0.39017215471871136
+# Batch:  15 / 500 Accuracy (clean):  0.8892857142857142 Sparsity (clean):  0.3887160989020574 
+
+batch= 16 / 500 accuracy_dirty= 0.5633333333333334 sparsity_dirty= 0.3901152432784445
+# Batch:  16 / 500 Accuracy (clean):  0.8933333333333333 Sparsity (clean):  0.38864230102800257 
+
+batch= 17 / 500 accuracy_dirty= 0.565625 sparsity_dirty= 0.39006967717563845
+# Batch:  17 / 500 Accuracy (clean):  0.88125 Sparsity (clean):  0.38861069334574727 
+
+batch= 18 / 500 accuracy_dirty= 0.5705882352941176 sparsity_dirty= 0.3902198558655251
+# Batch:  18 / 500 Accuracy (clean):  0.8852941176470588 Sparsity (clean):  0.3887402316494558 
+
+batch= 19 / 500 accuracy_dirty= 0.5777777777777777 sparsity_dirty= 0.3903682234490805
+# Batch:  19 / 500 Accuracy (clean):  0.8833333333333333 Sparsity (clean):  0.38874751188095014 
+
+batch= 20 / 500 accuracy_dirty= 0.5710526315789474 sparsity_dirty= 0.39034652971084216
+# Batch:  20 / 500 Accuracy (clean):  0.881578947368421 Sparsity (clean):  0.3887288819094554 
+
+batch= 21 / 500 accuracy_dirty= 0.5675 sparsity_dirty= 0.39045651230637735
+# Batch:  21 / 500 Accuracy (clean):  0.88 Sparsity (clean):  0.3888022704873709 
+
+batch= 22 / 500 accuracy_dirty= 0.569047619047619 sparsity_dirty= 0.3903324634434432
+# Batch:  22 / 500 Accuracy (clean):  0.8785714285714286 Sparsity (clean):  0.38872976036807416 
+
+batch= 23 / 500 accuracy_dirty= 0.5590909090909091 sparsity_dirty= 0.39032516040075604
+# Batch:  23 / 500 Accuracy (clean):  0.8704545454545455 Sparsity (clean):  0.3887095965322356 
+
+batch= 24 / 500 accuracy_dirty= 0.558695652173913 sparsity_dirty= 0.390367708624058
+# Batch:  24 / 500 Accuracy (clean):  0.8695652173913043 Sparsity (clean):  0.3887817262829303 
+
+batch= 25 / 500 accuracy_dirty= 0.5604166666666667 sparsity_dirty= 0.3903984663907689
+# Batch:  25 / 500 Accuracy (clean):  0.8729166666666667 Sparsity (clean):  0.38879174897810265 
+
+batch= 26 / 500 accuracy_dirty= 0.566 sparsity_dirty= 0.39027673649874406
+# Batch:  26 / 500 Accuracy (clean):  0.876 Sparsity (clean):  0.38869465618894783

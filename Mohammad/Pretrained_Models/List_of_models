@@ -1,0 +1,17 @@
+MNIST_LeNet5: datasets MNIST, networks Lenet5
+https://github.com/ChawDoe/LeNet5-MNIST-PyTorch/tree/master
+--------------------------------------------------------------------------------------------------------
+CIFAR10_AlexNet: dataset CIFAR10, networks AlexNet
+https://www.kaggle.com/code/drvaibhavkumar/alexnet-in-pytorch-cifar10-clas-83-test-accuracy/notebook (1)
+https://github.com/rasbt/deeplearning-models/blob/master/pytorch_ipynb/cnn/cnn-alexnet-cifar10.ipynb (2)
+--------------------------------------------------------------------------------------------------------
+CIFAR100_GoogleNet: datasets CIFAR100, networks GoogleNet
+https://github.com/weiaicunzai/pytorch-cifar100/tree/master
+--------------------------------------------------------------------------------------------------------
+ImageNet_Vgg16_Resnet18: dataset "ImageNet", networks "VGG16", "ResNet18"
+https://github.com/aaron-xichen/pytorch-playground
+https://modelzoo.co/model/pytorch-playground
+--------------------------------------------------------------------------------------------------------
+ImageNet_ViT: datasets "ImageNet", networks "ViT"
+https://github.com/lukemelas/PyTorch-Pretrained-ViT
+--------------------------------------------------------------------------------------------------------

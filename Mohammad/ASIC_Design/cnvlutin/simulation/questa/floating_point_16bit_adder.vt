@@ -1,0 +1,73 @@
+`timescale 1 ps/ 1 ps
+
+module floating_point_16bit_adder_tb();
+
+// test vector input registers
+reg [15:0] operand1;
+reg [15:0] operand2;
+reg [15:0] expected;
+// wires                                               
+wire [15:0] sum;
+wire overflow, underflow, infinity, NaN;
+                        
+floating_point_16bit_adder pipline (.operand1(operand1),
+												.operand2(operand2),
+												.sum(sum),
+												.overflow(overflow),
+												.underflow(underflow),
+												.infinity(infinity),
+												.NaN(NaN));
+
+initial begin
+
+operand1 = 16'b0101011000100010; // +98.1123
+operand2 = 16'b0101100101001011; // +169.369
+expected = 16'b0101110000101110; // +267.4813
+#100
+operand1 = 16'b0101011000110010; // +99.12
+operand2 = 16'b1101010110010011; // -89.17
+expected = 16'b0100100011111010; // Calculator (full-precision): +9.95 , Simulation (half-precision): +9.9375 (0100100011111000)
+#100
+operand1 = 16'b1101000110100100; // -45.1213
+operand2 = 16'b0101010011110010; // +79.13
+expected = 16'b0101000001000000; // +34.0087
+#100
+operand1 = 16'b1101110001101100; // -283.0
+operand2 = 16'b1101010000100000; // -66.0
+expected = 16'b1101110101110100; // -349.0
+#100
+operand1 = 16'b1101011011100010; // -110.125
+operand2 = 16'b0101011000111110; // +99.875
+expected = 16'b1100100100100000; // -10.25
+#100
+operand1 = 16'b0101011011101110; // +110.875
+operand2 = 16'b0101011000110010; // +99.125
+expected = 16'b0101101010010000; // +210.0
+#100
+operand1 = 16'b0000000000000000; // Zero in input 1
+operand2 = 16'b0101010111001000; // +92.478
+expected = 16'b0101010111001000; // +92.478
+#100
+operand1 = 16'b0111110101010111; // NaN in input 1
+operand2 = 16'b0101010111001000; // +92.478
+expected = 16'b0111110101011000; // NaN in output
+#100
+operand1 = 16'b0111110000000000; // Infinity in input 1
+operand2 = 16'b0101010111001000; // +92.478
+expected = 16'b0111110000000000; // Infinity in output
+#100
+operand1 = 16'b0110011010001100; // +1676.0
+operand2 = 16'b1110010101110011; // -1395.0
+expected = 16'b0101110001100100; // +281.0: Exponents are equal, but signs and mantissa are different
+#100
+operand1 = 16'b0000000000000000; // Zero in input 1
+operand2 = 16'b0000000000000000; // Zero in input 2
+expected = 16'b0000000000000000; // Zero in output
+#100
+operand1 = 16'b1101100011100010; // -156.2678
+operand2 = 16'b0101100011100010; // +156.2678
+expected = 16'b0000000000000000; // Zero in output: Two equal numbers (i.e., equal exponents and mantissa) with opposite-signs
+#100;
+end
+
+endmodule

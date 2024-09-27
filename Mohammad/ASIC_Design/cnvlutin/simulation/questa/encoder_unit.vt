@@ -1,0 +1,167 @@
+`timescale 1 ps/ 1 ps
+
+module encoder_unit_tb();
+
+// test vector input registers
+reg clk;
+reg en;
+reg [15:0] ib_0;
+reg [15:0] ib_1;
+reg [15:0] ib_2;
+reg [15:0] ib_3;
+reg [15:0] ib_4;
+reg [15:0] ib_5;
+reg [15:0] ib_6;
+reg [15:0] ib_7;
+reg [15:0] ib_8;
+reg [15:0] ib_9;
+reg [15:0] ib_10;
+reg [15:0] ib_11;
+reg [15:0] ib_12;
+reg [15:0] ib_13;
+reg [15:0] ib_14;
+reg [15:0] ib_15;
+
+// wires
+wire data_ready;
+
+wire [15:0]  ob_0;
+wire [15:0]  ob_1;
+wire [15:0]  ob_2;
+wire [15:0]  ob_3;
+wire [15:0]  ob_4;
+wire [15:0]  ob_5;
+wire [15:0]  ob_6;
+wire [15:0]  ob_7;
+wire [15:0]  ob_8;
+wire [15:0]  ob_9;
+wire [15:0]  ob_10;
+wire [15:0]  ob_11;
+wire [15:0]  ob_12;
+wire [15:0]  ob_13;
+wire [15:0]  ob_14;
+wire [15:0]  ob_15;
+
+wire [3:0]  of_0;
+wire [3:0]  of_1;
+wire [3:0]  of_2;
+wire [3:0]  of_3;
+wire [3:0]  of_4;
+wire [3:0]  of_5;
+wire [3:0]  of_6;
+wire [3:0]  of_7;
+wire [3:0]  of_8;
+wire [3:0]  of_9;
+wire [3:0]  of_10;
+wire [3:0]  of_11;
+wire [3:0]  of_12;
+wire [3:0]  of_13;
+wire [3:0]  of_14;
+wire [3:0]  of_15;
+
+// port map - connection between master ports and signals/registers
+encoder_unit uut (
+	.clk(clk),
+	.en(en),
+	.ib_0(ib_0),
+	.ib_1(ib_1),
+	.ib_2(ib_2),
+	.ib_3(ib_3),
+	.ib_4(ib_4),
+	.ib_5(ib_5),
+	.ib_6(ib_6),
+	.ib_7(ib_7),
+	.ib_8(ib_8),
+	.ib_9(ib_9),
+	.ib_10(ib_10),
+	.ib_11(ib_11),
+	.ib_12(ib_12),
+	.ib_13(ib_13),
+	.ib_14(ib_14),
+	.ib_15(ib_15),
+	.ob_0(ob_0),
+	.ob_1(ob_1),
+	.ob_2(ob_2),
+	.ob_3(ob_3),
+	.ob_4(ob_4),
+	.ob_5(ob_5),
+	.ob_6(ob_6),
+	.ob_7(ob_7),
+	.ob_8(ob_8),
+	.ob_9(ob_9),
+	.ob_10(ob_10),
+	.ob_11(ob_11),
+	.ob_12(ob_12),
+	.ob_13(ob_13),
+	.ob_14(ob_14),
+	.ob_15(ob_15),
+	.of_0(of_0),
+	.of_1(of_1),
+	.of_2(of_2),
+	.of_3(of_3),
+	.of_4(of_4),
+	.of_5(of_5),
+	.of_6(of_6),
+	.of_7(of_7),
+	.of_8(of_8),
+	.of_9(of_9),
+	.of_10(of_10),
+	.of_11(of_11),
+	.of_12(of_12),
+	.of_13(of_13),
+	.of_14(of_14),
+	.of_15(of_15),
+	.data_ready(data_ready));
+
+// Clock generation
+always #50 clk = ~clk;
+
+initial begin
+en = 0;
+clk = 0;
+#200 en = 1;
+#1800 en = 0; // When data is ready for the first input, en is set to 0 by the controller when it sees data_ready=1
+#200 en = 1;  // When a window is processed the en is set again to 1 by the controller
+end
+	
+initial begin
+
+#100
+ib_0 = 16'b0000000000000000;  // Zero
+ib_1 = 16'b0100011001000000;  // +6.25
+ib_2 = 16'b1100110010000000;  // -18.0
+ib_3 = 16'b0100100011000000;  // +9.5
+ib_4 = 16'b0000000000000000;  // Zero
+ib_5 = 16'b1100000010000000;  // -2.25
+ib_6 = 16'b0101011011101011;  // +110.6875
+ib_7 = 16'b0101100100110011;  // +166.375
+ib_8 = 16'b0000000000000000;  // Zero
+ib_9 = 16'b0101010111010010;  // +93.125
+ib_10 = 16'b1100101111111111; // -15.9921
+ib_11 = 16'b1101100111011001; // -187.125
+ib_12 = 16'b0000000000000000; // Zero
+ib_13 = 16'b1101101111111111; // -255.875
+ib_14 = 16'b1101011011110011; // -111.1875
+ib_15 = 16'b0100001010110001; // +3.3457
+
+#1900
+ib_0 = 16'b0100011010110001; // +6.6914
+ib_1 = 16'b0000000000000000; // Zero
+ib_2 = 16'b0100111001010100; // +25.31
+ib_3 = 16'b0101001100100000; // +57.01
+ib_4 = 16'b0010111110111110; // +0.121
+ib_5 = 16'b0011110010000000; // +1.125
+ib_6 = 16'b1100000010000001; // -2.251
+ib_7 = 16'b0000000000000000; // Zero
+ib_8 = 16'b0011110000100110; // +1.037
+ib_9 = 16'b1100100100011000; // -10.187
+ib_10 = 16'b0101010110110010; // +91.12
+ib_11 = 16'b1100010100010011; // -5.075
+ib_12 = 16'b1100011100000011; // -7.0125
+ib_13 = 16'b0000000000000000; // Zero
+ib_14 = 16'b0100111001000000; // +25.001
+ib_15 = 16'b1100100110010111; // -11.18
+
+end
+
+endmodule

@@ -1,0 +1,3 @@
+python3 train_cifar10.py   --batch_size 20 --phase test   --weights ../1_train_256_256/models/alexnet_cifar_10.pkl
+
+

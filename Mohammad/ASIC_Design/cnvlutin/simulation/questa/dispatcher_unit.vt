@@ -1,0 +1,520 @@
+`timescale 1 ps/ 1 ps
+
+module dispatcher_unit_tb();
+
+// test vector input registers
+reg clk;
+reg zfnaf;
+
+reg [255:0] brick0;
+reg [255:0] brick1;
+reg [255:0] brick2;
+reg [255:0] brick3;
+reg [255:0] brick4;
+reg [255:0] brick5;
+reg [255:0] brick6;
+reg [255:0] brick7;
+reg [255:0] brick8;
+reg [255:0] brick9;
+reg [255:0] brick10;
+reg [255:0] brick11;
+reg [255:0] brick12;
+reg [255:0] brick13;
+reg [255:0] brick14;
+reg [255:0] brick15;
+
+reg [63:0] offset0;
+reg [63:0] offset1;
+reg [63:0] offset2;
+reg [63:0] offset3;
+reg [63:0] offset4;
+reg [63:0] offset5;
+reg [63:0] offset6;
+reg [63:0] offset7;
+reg [63:0] offset8;
+reg [63:0] offset9;
+reg [63:0] offset10;
+reg [63:0] offset11;
+reg [63:0] offset12;
+reg [63:0] offset13;
+reg [63:0] offset14;
+reg [63:0] offset15;
+
+reg ready0;
+reg ready1;
+reg ready2;
+reg ready3;
+reg ready4;
+reg ready5;
+reg ready6;
+reg ready7;
+reg ready8;
+reg ready9;
+reg ready10;
+reg ready11;
+reg ready12;
+reg ready13;
+reg ready14;
+reg ready15;
+
+// wires                                               
+wire b0_request_next;
+wire b1_request_next;
+wire b2_request_next;
+wire b3_request_next;
+wire b4_request_next;
+wire b5_request_next;
+wire b6_request_next;
+wire b7_request_next;
+wire b8_request_next;
+wire b9_request_next;
+wire b10_request_next;
+wire b11_request_next;
+wire b12_request_next;
+wire b13_request_next;
+wire b14_request_next;
+wire b15_request_next;
+
+wire [3:0]  off_l0;
+wire [3:0]  off_l1;
+wire [3:0]  off_l2;
+wire [3:0]  off_l3;
+wire [3:0]  off_l4;
+wire [3:0]  off_l5;
+wire [3:0]  off_l6;
+wire [3:0]  off_l7;
+wire [3:0]  off_l8;
+wire [3:0]  off_l9;
+wire [3:0]  off_l10;
+wire [3:0]  off_l11;
+wire [3:0]  off_l12;
+wire [3:0]  off_l13;
+wire [3:0]  off_l14;
+wire [3:0]  off_l15;
+
+wire [15:0]  out_l0;
+wire [15:0]  out_l1;
+wire [15:0]  out_l2;
+wire [15:0]  out_l3;
+wire [15:0]  out_l4;
+wire [15:0]  out_l5;
+wire [15:0]  out_l6;
+wire [15:0]  out_l7;
+wire [15:0]  out_l8;
+wire [15:0]  out_l9;
+wire [15:0]  out_l10;
+wire [15:0]  out_l11;
+wire [15:0]  out_l12;
+wire [15:0]  out_l13;
+wire [15:0]  out_l14;
+wire [15:0]  out_l15;
+
+// port map - connection between master ports and signals/registers   
+dispatcher_unit uut (
+	.clk(clk),
+	.zfnaf(zfnaf),
+	.ready0(ready0),
+	.ready1(ready1),
+	.ready2(ready2),
+	.ready3(ready3),
+	.ready4(ready4),
+	.ready5(ready5),
+	.ready6(ready6),
+	.ready7(ready7),
+	.ready8(ready8),
+	.ready9(ready9),
+	.ready10(ready10),
+	.ready11(ready11),
+	.ready12(ready12),
+	.ready13(ready13),
+	.ready14(ready14),
+	.ready15(ready15),
+	.brick0(brick0),
+	.brick1(brick1),
+	.brick2(brick2),
+	.brick3(brick3),
+	.brick4(brick4),
+	.brick5(brick5),
+	.brick6(brick6),
+	.brick7(brick7),
+	.brick8(brick8),
+	.brick9(brick9),
+	.brick10(brick10),
+	.brick11(brick11),
+	.brick12(brick12),
+	.brick13(brick13),
+	.brick14(brick14),
+	.brick15(brick15),
+	.off_l15(off_l15),
+	.offset0(offset0),
+	.offset1(offset1),
+	.offset2(offset2),
+	.offset3(offset3),
+	.offset4(offset4),
+	.offset5(offset5),
+	.offset6(offset6),
+	.offset7(offset7),
+	.offset8(offset8),
+	.offset9(offset9),
+	.offset10(offset10),
+	.offset11(offset11),
+	.offset12(offset12),
+	.offset13(offset13),
+	.offset14(offset14),
+	.offset15(offset15),
+	.out_l0(out_l0),
+	.out_l1(out_l1),
+	.out_l2(out_l2),
+	.out_l3(out_l3),
+	.out_l4(out_l4),
+	.out_l5(out_l5),
+	.out_l6(out_l6),
+	.out_l7(out_l7),
+	.out_l8(out_l8),
+	.out_l9(out_l9),
+	.out_l10(out_l10),
+	.out_l11(out_l11),
+	.out_l12(out_l12),
+	.out_l13(out_l13),
+	.out_l14(out_l14),
+	.out_l15(out_l15),
+	.off_l0(off_l0),
+	.off_l1(off_l1),
+	.off_l2(off_l2),
+	.off_l3(off_l3),
+	.off_l4(off_l4),
+	.off_l5(off_l5),
+	.off_l6(off_l6),
+	.off_l7(off_l7),
+	.off_l8(off_l8),
+	.off_l9(off_l9),
+	.off_l10(off_l10),
+	.off_l11(off_l11),
+	.off_l12(off_l12),
+	.off_l13(off_l13),
+	.off_l14(off_l14),
+	.b0_request_next(b0_request_next),
+	.b1_request_next(b1_request_next),
+	.b2_request_next(b2_request_next),
+	.b3_request_next(b3_request_next),
+	.b4_request_next(b4_request_next),
+	.b5_request_next(b5_request_next),
+	.b6_request_next(b6_request_next),
+	.b7_request_next(b7_request_next),
+	.b8_request_next(b8_request_next),
+	.b9_request_next(b9_request_next),
+	.b10_request_next(b10_request_next),
+	.b11_request_next(b11_request_next),
+	.b12_request_next(b12_request_next),
+	.b13_request_next(b13_request_next),
+	.b14_request_next(b14_request_next),
+	.b15_request_next(b15_request_next));
+
+// Clock generation
+always #1 clk = ~clk;
+
+initial begin
+
+
+clk = 0;
+zfnaf = 1;
+
+ready0  = 0;
+ready1  = 0;
+ready2  = 0;
+ready3  = 0;
+ready4  = 0;
+ready5  = 0;
+ready6  = 0;
+ready7  = 0;
+ready8  = 0;
+ready9  = 0;
+ready10 = 0;
+ready11 = 0;
+ready12 = 0;
+ready13 = 0;
+ready14 = 0;
+ready15 = 0;
+
+#10
+ready0  = 1;
+ready1  = 1;
+ready2  = 1;
+ready3  = 1;
+ready4  = 1;
+ready5  = 1;
+ready6  = 1;
+ready7  = 1;
+ready8  = 1;
+ready9  = 1;
+ready10 = 1;
+ready11 = 1;
+ready12 = 1;
+ready13 = 1;
+ready14 = 1;
+ready15 = 1;
+
+brick0  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick1  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick2  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick3  = 256'h000000000000000000000000000000000000000000000000000000005BF85978;
+brick4  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick5  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick6  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick7  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick8  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick9  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick10 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick11 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick12 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick13 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick14 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick15 = 256'h0000000000000000000000000000000070E268E262B0644C604E5CB05BF85978;
+
+offset0  = 64'h0000000000000000;
+offset1  = 64'h1111111111111111;
+offset2  = 64'h2222222222222222;
+offset3  = 64'h3333333333333333;
+offset4  = 64'h4444444444444444;
+offset5  = 64'h5555555555555555;
+offset6  = 64'h6666666666666666;
+offset7  = 64'h7777777777777777;
+offset8  = 64'h8888888888888888;
+offset9  = 64'h9999999999999999;
+offset10 = 64'haaaaaaaaaaaaaaaa;
+offset11 = 64'hbbbbbbbbbbbbbbbb;
+offset12 = 64'hcccccccccccccccc;
+offset13 = 64'hdddddddddddddddd;
+offset14 = 64'heeeeeeeeeeeeeeee;
+offset15 = 64'hffffffffffffffff;
+
+#2
+ready0  = 0;
+ready1  = 0;
+ready2  = 0;
+ready3  = 0;
+ready4  = 0;
+ready5  = 0;
+ready6  = 0;
+ready7  = 0;
+ready8  = 0;
+ready9  = 0;
+ready10 = 0;
+ready11 = 0;
+ready12 = 0;
+ready13 = 0;
+ready14 = 0;
+ready15 = 0;
+
+// b3_request_next is set to 1. Fetcher gets this signal and send it another brick3 and generates a pulse for the corresponding ready signal (with clock length).
+// According to the Dispatcher request, Fetcher will send another brick3 to Dispatcher after 5 clocks (We assumed the NM delay is 5 cycles)
+#13
+ready3  = 1;
+brick3  = 256'h6AF26AF26AF26AF26AF26AF26AF26AF26AF26AF26AF26AF26AF26AF26AF26AF2;
+offset3 =  64'h1111111111111111;
+
+#2
+ready0  = 0;
+ready1  = 0;
+ready2  = 0;
+ready3  = 0;
+ready4  = 0;
+ready5  = 0;
+ready6  = 0;
+ready7  = 0;
+ready8  = 0;
+ready9  = 0;
+ready10 = 0;
+ready11 = 0;
+ready12 = 0;
+ready13 = 0;
+ready14 = 0;
+ready15 = 0;
+
+#20
+ready15  = 1;
+brick15  = 256'h9595777766665865696988AB225569DC9595777766665865696988AB225569DC;
+offset15 =  64'h2222222222222222;
+
+#2
+ready0  = 0;
+ready1  = 0;
+ready2  = 0;
+ready3  = 0;
+ready4  = 0;
+ready5  = 0;
+ready6  = 0;
+ready7  = 0;
+ready8  = 0;
+ready9  = 0;
+ready10 = 0;
+ready11 = 0;
+ready12 = 0;
+ready13 = 0;
+ready14 = 0;
+ready15 = 0;
+
+/*
+clk = 0;
+zfnaf=0;
+
+ready0  = 0;
+ready1  = 0;
+ready2  = 0;
+ready3  = 0;
+ready4  = 0;
+ready5  = 0;
+ready6  = 0;
+ready7  = 0;
+ready8  = 0;
+ready9  = 0;
+ready10 = 0;
+ready11 = 0;
+ready12 = 0;
+ready13 = 0;
+ready14 = 0;
+ready15 = 0;
+
+#10
+ready0  = 1;
+ready1  = 1;
+ready2  = 1;
+ready3  = 1;
+ready4  = 1;
+ready5  = 1;
+ready6  = 1;
+ready7  = 1;
+ready8  = 1;
+ready9  = 1;
+ready10 = 1;
+ready11 = 1;
+ready12 = 1;
+ready13 = 1;
+ready14 = 1;
+ready15 = 1;
+
+brick0  = 256'h69DC68FC65EB7353508150604E43000070E268E262B0644C604E5CB05BF85978;
+brick1  = 256'h69DC68FC65EB73535081506000007C0070E268E262B0644C604E5CB000005978;
+brick2  = 256'h69DC68FC65EB7353000050604E437C0070E268E262B0644C604E5CB05BF85978;
+brick3  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E00005BF85978;
+brick4  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick5  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C00005CB05BF85978;
+brick6  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick7  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick8  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick9  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B00000604E5CB05BF85978;
+brick10 = 256'h69DC68FC65EB0000508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick11 = 256'h69DC68FC00007353508100004E437C0070E268E262B0644C604E5CB05BF85978;
+brick12 = 256'h69DC68FC65EB7353508150604E437C00000068E20000644C604E5CB05BF85978;
+brick13 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick14 = 256'h69DC000065EB7353508150604E437C0070E2000062B0644C604E5CB05BF85978;
+brick15 = 256'h000068FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+
+offset0  = 64'h0000000000000000;
+offset1  = 64'h1111111111111111;
+offset2  = 64'h2222222222222222;
+offset3  = 64'h3333333333333333;
+offset4  = 64'h4444444444444444;
+offset5  = 64'h5555555555555555;
+offset6  = 64'h6666666666666666;
+offset7  = 64'h7777777777777777;
+offset8  = 64'h8888888888888888;
+offset9  = 64'h9999999999999999;
+offset10 = 64'haaaaaaaaaaaaaaaa;
+offset11 = 64'hbbbbbbbbbbbbbbbb;
+offset12 = 64'hcccccccccccccccc;
+offset13 = 64'hdddddddddddddddd;
+offset14 = 64'heeeeeeeeeeeeeeee;
+offset15 = 64'hffffffffffffffff;
+
+#2
+ready0  = 0;
+ready1  = 0;
+ready2  = 0;
+ready3  = 0;
+ready4  = 0;
+ready5  = 0;
+ready6  = 0;
+ready7  = 0;
+ready8  = 0;
+ready9  = 0;
+ready10 = 0;
+ready11 = 0;
+ready12 = 0;
+ready13 = 0;
+ready14 = 0;
+ready15 = 0;
+
+#34
+ready0  = 1;
+ready1  = 1;
+ready2  = 1;
+ready3  = 1;
+ready4  = 1;
+ready5  = 1;
+ready6  = 1;
+ready7  = 1;
+ready8  = 1;
+ready9  = 1;
+ready10 = 1;
+ready11 = 1;
+ready12 = 1;
+ready13 = 1;
+ready14 = 1;
+ready15 = 1;
+
+brick0  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick1  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick2  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick3  = 256'h9DC68FC65EB7353508150604C0070E268EC0070E268E437C0070E2685BF85978;
+brick4  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick5  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick6  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick7  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick8  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick9  = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick10 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick11 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick12 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick13 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick14 = 256'h69DC68FC65EB7353508150604E437C0070E268E262B0644C604E5CB05BF85978;
+brick15 = 256'h70E268E262B0644C604E5CB05BF8597870E268E262B0644C604E5CB05BF85978;
+
+offset0  = 64'h0000000000000000;
+offset1  = 64'h1111111111111111;
+offset2  = 64'h2222222222222222;
+offset3  = 64'h3333333333333333;
+offset4  = 64'h4444444444444444;
+offset5  = 64'h5555555555555555;
+offset6  = 64'h6666666666666666;
+offset7  = 64'h7777777777777777;
+offset8  = 64'h8888888888888888;
+offset9  = 64'h9999999999999999;
+offset10 = 64'haaaaaaaaaaaaaaaa;
+offset11 = 64'hbbbbbbbbbbbbbbbb;
+offset12 = 64'hcccccccccccccccc;
+offset13 = 64'hdddddddddddddddd;
+offset14 = 64'heeeeeeeeeeeeeeee;
+offset15 = 64'hffffffffffffffff;
+
+#2
+ready0  = 0;
+ready1  = 0;
+ready2  = 0;
+ready3  = 0;
+ready4  = 0;
+ready5  = 0;
+ready6  = 0;
+ready7  = 0;
+ready8  = 0;
+ready9  = 0;
+ready10 = 0;
+ready11 = 0;
+ready12 = 0;
+ready13 = 0;
+ready14 = 0;
+ready15 = 0;
+*/
+end
+
+endmodule

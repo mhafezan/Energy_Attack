@@ -1,0 +1,15 @@
+
+
+--train
+
+python3  ./train.py  -net googlenet -gpu -b 10  -lr  0.01 -epochs 10 -dataset  /home/ehsanaf/Ehsan/eg_pytorch/TrojAI/sparsity_attack/cifar100/cifar100_dataset
+
+
+
+
+
+--test
+
+python3  ./test.py  -net googlenet -gpu -b 10   -dataset   /home/ehsanaf/Ehsan/eg_pytorch/TrojAI/sparsity_attack/cifar100/cifar100_dataset    -weights ./weight_dir/googlenet_cifar100_1.pkl  
+
+

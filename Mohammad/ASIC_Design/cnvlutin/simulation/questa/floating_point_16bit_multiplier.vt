@@ -1,0 +1,98 @@
+`timescale 1 ns/ 1 ps
+
+module floating_point_16bit_multiplier_tb();
+
+// test vector input registers
+reg [15:0] operand1;
+reg [15:0] operand2;
+// wires                                               
+wire [15:0]  result;
+wire zero, overflow, underflow, denormalized, NaN, infinity;
+
+// assign statements (if any)                          
+floating_point_16bit_multiplier fp16bit (operand1, operand2, result, zero, overflow, underflow, denormalized, NaN, infinity);
+
+initial begin
+// Initialize Inputs
+operand1 <= 16'b0100011001000000; // +6.25
+operand2 <= 16'b0100011001000000; // +6.25
+// Calculator (full-precision): +39.0625 , Simulation (half-precision): +39.0625 (0101000011100010)
+
+#100
+operand1 <= 16'b1100110010000000; // -18.0
+operand2 <= 16'b0100100011000000; // +9.5
+// Calculator (full-precision): -171.0 , Simulation (half-precision): +171.0 (1101100101011000)
+
+#100
+operand1 <= 16'b0101100000110001; // +134.125
+operand2 <= 16'b1100000010000000; // -2.25
+// Calculator (full-precision): -301.78125 , Simulation (half-precision): -301.75 (1101110010110111)
+
+#100
+operand1 <= 16'b0101011011101011; // +110.6875
+operand2 <= 16'b0101100100110011; // +166.375
+// Calculator (full-precision): +18415.6328125 , Simulation (half-precision): +18400.0 (0111010001111110)
+
+#100
+operand1 <= 16'b1101011011010011; // −109.1875
+operand2 <= 16'b0101010111010010; // +93.125
+// Calculator (full-precision): -10168.0859375 , Simulation (half-precision): -10168.0 (1111000011110111)
+
+#100
+operand1 <= 16'b1100101111111111; // -15.9921875
+operand2 <= 16'b1101100111011001; // -187.125
+// Calculator (full-precision): +2992.538085937 , Simulation (half-precision): +2992.0 (0110100111011000)
+
+#100
+operand1 <= 16'b1100101111111111; // -15.9921875
+operand2 <= 16'b1101101111111111; // -255.875
+// Calculator (full-precision): +4092.000976562 , Simulation (half-precision): +4092.0 (0110101111111110)
+
+#100
+// Zero in input (Zero should be seen in output)
+operand1 <= 16'b1101011011110011; // -111.1875
+operand2 <= 16'b0000000000000000; // 0
+// Calculator (full-precision): 0 , Simulation (half-precision): 0000000000000000
+
+#100
+// NaN in input (NaN should be seen in output)
+operand1 <= 16'b0111111011110010; // NaN
+operand2 <= 16'b0100001010110001; // +3.345703125
+// Calculator (full-precision): +NaN , Simulation (half-precision): +NaN (0111110111001111)
+
+#100
+// Infinity in input (Infinity should be seen in output)
+operand1 <= 16'b1111110000000000; // -Infinity
+operand2 <= 16'b0100011010110001; // +6.69140625
+// Calculator (full-precision): -Infinity , Simulation (half-precision): -Infinity (1111110000000000)
+
+#100
+// Overflow in exponent_result (Overflow flag is triggered meaning that it should be handled by extra hardware)
+operand1 <= 16'b1111101111111111; // -65504.0
+operand2 <= 16'b1101001111111111; // -63.96875
+// Calculator (full-precision): +4190209 , Simulation (half-precision): +0.00097560882568359375 (0001001111111110)
+
+#100
+/* Denormalized output. Needs to be normalized by a normalizer; refer to https://github.com/AkhilDotG/Floating-point-MAC/blob/main/Normalize_mul.v */
+operand1 <= 16'b1000011111111111; // -0.000122010707855224609375
+operand2 <= 16'b1011011111111111; // -0.499755859375
+// Calculator (full-precision): +0.000060976 , Simulation (half-precision): +0.00006091594696044921875 (0000001111111110)
+
+#100
+operand1 <= 16'b1011000000000011; // -0.125354
+operand2 <= 16'b0011110000011000; // +1.0232
+// Calculator (full-precision): -0.128262213 , Simulation (half-precision): -0.1282958984375 (1011000000011011)
+
+#100
+operand1 <= 16'b1100110100001000; // -20.12
+operand2 <= 16'b1011110001111100; // -1.12121212
+// Calculator (full-precision): +22.558787854 , Simulation (half-precision): +22.546875 (0100110110100011)
+
+#100
+operand1 <= 16'b0100101000100001; // +12.258
+operand2 <= 16'b1110010010111100; // -1212.11
+// Calculator (full-precision): -14858.04438 , Simulation (half-precision): -14856.0 (1111001101000001)
+
+#100;
+end
+endmodule
