@@ -1,90 +1,1532 @@
-python3 test_clean.py --gen_path ../1_train/weight_dir/netG_epoch_99.pth --di
-sc_path ../1_train/weight_dir/netD_epoch_99.pth --nz 512 --ngf 128 --ndf 128 --lr 0.2 --rec_iter 100 --rec_rr 20
+python3 test_clean.py --gen_path ../1_train/weight_dir/netG_epoch_99.pth --disc_path ../1_train/weight_dir/netD_epoch_99.pth --nz 512 --ngf 128 --ndf 128 --lr 0.2 --rec_iter 100 --rec_rr 20
 
-Namespace(batch_size=20, cifar10_weights='../../../../Ehsan/CIFAR10_AlexNet/3_copy_weight/alexnet_cifar10_fc_one_out_458624.pkl', cont_z_geneartion=False, dataset='../cifar10_dataset', disc_path='../1_train/weight_dir/netD_epoch_99.pth', gen_path='../1_train/weight_dir/netG_epoch_99.pth', imageSize=32, image_index_first=0, image_index_last=10000, lr=0.2, manualSeed=13, ndf=128, ngf=128, ngpu=1, nz=512, rec_iter=100, rec_rr=20, use_loss_per_image=False)
+Namespace(dataset='../cifar10_dataset', batch_size=20, imageSize=32, nz=512, ngf=128, ndf=128, rec_iter=100, rec_rr=20, lr=0.2, ngpu=1, manualSeed=13, gen_path='../1_train/weight_dir/netG_epoch_99.pth', disc_path='../1_train/weight_dir/netD_epoch_99.pth', cifar10_weights='./alexnet_cifar10_fc_one_out_458624.pkl', cont_z_geneartion=False, image_index_first=0, image_index_last=10000, use_loss_per_image=False)
 
-Started at: 2024-09-26 19:08:59.821343 
+Started at: 2024-09-27 18:58:43.080012 
 
 Random Seed: 13 
 
-/home/mohammad/.local/lib/python3.6/site-packages/torch/cuda/__init__.py:80: UserWarning: CUDA initialization: The NVIDIA driver on your system is too old (found version 9010). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver. (Triggered internally at  ../c10/cuda/CUDAFunctions.cpp:112.)
-  return torch._C._cuda_getDeviceCount() > 0
+/home/administrator/TrojanAI/GAN/CIFAR10/2_test_clean/test_clean.py:288: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  gen_model.load_state_dict(torch.load(args.gen_path, map_location=device))
+/home/administrator/TrojanAI/GAN/CIFAR10/2_test_clean/test_clean.py:291: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  disc_model.load_state_dict(torch.load(args.disc_path, map_location=device))
+/home/administrator/TrojanAI/GAN/CIFAR10/2_test_clean/test_clean.py:295: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model_cifar10.load_state_dict(torch.load(args.cifar10_weights, map_location=device))
 Files already downloaded and verified
 
-Data loader size is 500 considering batch size of 20
+Dataloader size is 500 considering batch size of 20
 
-Files already downloaded and verified
-batch= 2 / 500 accuracy_dirty= 0.6 sparsity_dirty= 0.3896578678830589
-# Batch:  2 / 500 Accuracy (clean):  0.95 Sparsity (clean):  0.3872871895060006 
+# Batch:  1 / 500 , Accuracy (dirty):  0.8 , SR (dirty):  0.38992944111080097
+# Batch:  1 / 500 , Accuracy (clean):  0.95 , SR (clean):  0.3872886067890037 
 
-batch= 3 / 500 accuracy_dirty= 0.5 sparsity_dirty= 0.3907400724776724
-# Batch:  3 / 500 Accuracy (clean):  0.925 Sparsity (clean):  0.38819266981230816 
+# Batch:  2 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.39092960682389055
+# Batch:  2 / 500 , Accuracy (clean):  0.925 , SR (clean):  0.38819277883407755 
 
-batch= 4 / 500 accuracy_dirty= 0.55 sparsity_dirty= 0.3904156418620337
-# Batch:  4 / 500 Accuracy (clean):  0.85 Sparsity (clean):  0.388049542399293 
+# Batch:  3 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3905781569797191
+# Batch:  3 / 500 , Accuracy (clean):  0.85 , SR (clean):  0.38804946971811327 
 
-batch= 5 / 500 accuracy_dirty= 0.575 sparsity_dirty= 0.3906946103998047
-# Batch:  5 / 500 Accuracy (clean):  0.875 Sparsity (clean):  0.38848389421399665 
+# Batch:  4 / 500 , Accuracy (dirty):  0.6125 , SR (dirty):  0.3908641392513257
+# Batch:  4 / 500 , Accuracy (clean):  0.875 , SR (clean):  0.38848329459426456 
 
-batch= 6 / 500 accuracy_dirty= 0.57 sparsity_dirty= 0.3904309848590567
-# Batch:  6 / 500 Accuracy (clean):  0.9 Sparsity (clean):  0.3884800839031538 
+# Batch:  5 / 500 , Accuracy (dirty):  0.59 , SR (dirty):  0.3905724078984092
+# Batch:  5 / 500 , Accuracy (clean):  0.9 , SR (clean):  0.38847864481579686 
 
-batch= 7 / 500 accuracy_dirty= 0.5916666666666667 sparsity_dirty= 0.39066017769094796
-# Batch:  7 / 500 Accuracy (clean):  0.9 Sparsity (clean):  0.38881560203274723 
+# Batch:  6 / 500 , Accuracy (dirty):  0.5916666666666667 , SR (dirty):  0.39069651828077034
+# Batch:  6 / 500 , Accuracy (clean):  0.9 , SR (clean):  0.3888144936447576 
 
-batch= 8 / 500 accuracy_dirty= 0.6 sparsity_dirty= 0.3906518037807504
-# Batch:  8 / 500 Accuracy (clean):  0.8928571428571429 Sparsity (clean):  0.3889137164337546 
+# Batch:  7 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3906774238965751
+# Batch:  7 / 500 , Accuracy (clean):  0.8928571428571429 , SR (clean):  0.3889123925979825 
 
-batch= 9 / 500 accuracy_dirty= 0.59375 sparsity_dirty= 0.3903646423867918
-# Batch:  9 / 500 Accuracy (clean):  0.89375 Sparsity (clean):  0.3886526054022468 
+# Batch:  8 / 500 , Accuracy (dirty):  0.59375 , SR (dirty):  0.3903247813023305
+# Batch:  8 / 500 , Accuracy (clean):  0.89375 , SR (clean):  0.3886512426301284 
 
-batch= 10 / 500 accuracy_dirty= 0.5944444444444444 sparsity_dirty= 0.3902920111754582
-# Batch:  10 / 500 Accuracy (clean):  0.8944444444444445 Sparsity (clean):  0.388644668011753 
+# Batch:  9 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3902300989239309
+# Batch:  9 / 500 , Accuracy (clean):  0.8944444444444445 , SR (clean):  0.38864338397757936 
 
-batch= 11 / 500 accuracy_dirty= 0.57 sparsity_dirty= 0.3904383438284956
-# Batch:  11 / 500 Accuracy (clean):  0.895 Sparsity (clean):  0.38883458999092935 
+# Batch:  10 / 500 , Accuracy (dirty):  0.58 , SR (dirty):  0.3904066621022886
+# Batch:  10 / 500 , Accuracy (clean):  0.895 , SR (clean):  0.38883344526235 
 
-batch= 12 / 500 accuracy_dirty= 0.5772727272727273 sparsity_dirty= 0.3904706747297846
-# Batch:  12 / 500 Accuracy (clean):  0.9045454545454545 Sparsity (clean):  0.38887121634993527 
+# Batch:  11 / 500 , Accuracy (dirty):  0.5772727272727273 , SR (dirty):  0.3904291572577576
+# Batch:  11 / 500 , Accuracy (clean):  0.9045454545454545 , SR (clean):  0.3888698783554918 
 
-batch= 13 / 500 accuracy_dirty= 0.5708333333333333 sparsity_dirty= 0.3903856336199879
-# Batch:  13 / 500 Accuracy (clean):  0.8916666666666667 Sparsity (clean):  0.38882310636454553 
+# Batch:  12 / 500 , Accuracy (dirty):  0.575 , SR (dirty):  0.39034373291992275
+# Batch:  12 / 500 , Accuracy (clean):  0.8916666666666667 , SR (clean):  0.3888214437825611 
 
-batch= 14 / 500 accuracy_dirty= 0.5653846153846154 sparsity_dirty= 0.39025690896111986
-# Batch:  14 / 500 Accuracy (clean):  0.8923076923076924 Sparsity (clean):  0.38874328425900084 
+# Batch:  13 / 500 , Accuracy (dirty):  0.5769230769230769 , SR (dirty):  0.39024124337147637
+# Batch:  13 / 500 , Accuracy (clean):  0.8923076923076924 , SR (clean):  0.388741623773589 
 
-batch= 15 / 500 accuracy_dirty= 0.5571428571428572 sparsity_dirty= 0.39017215471871136
-# Batch:  15 / 500 Accuracy (clean):  0.8892857142857142 Sparsity (clean):  0.3887160989020574 
+# Batch:  14 / 500 , Accuracy (dirty):  0.5642857142857143 , SR (dirty):  0.39016249071757503
+# Batch:  14 / 500 , Accuracy (clean):  0.8892857142857142 , SR (clean):  0.38871483736443924 
 
-batch= 16 / 500 accuracy_dirty= 0.5633333333333334 sparsity_dirty= 0.3901152432784445
-# Batch:  16 / 500 Accuracy (clean):  0.8933333333333333 Sparsity (clean):  0.38864230102800257 
+# Batch:  15 / 500 , Accuracy (dirty):  0.57 , SR (dirty):  0.39010706664573447
+# Batch:  15 / 500 , Accuracy (clean):  0.8933333333333333 , SR (clean):  0.3886411090566564 
 
-batch= 17 / 500 accuracy_dirty= 0.565625 sparsity_dirty= 0.39006967717563845
-# Batch:  17 / 500 Accuracy (clean):  0.88125 Sparsity (clean):  0.38861069334574727 
+# Batch:  16 / 500 , Accuracy (dirty):  0.56875 , SR (dirty):  0.39005647191381176
+# Batch:  16 / 500 , Accuracy (clean):  0.88125 , SR (clean):  0.3886095077340044 
 
-batch= 18 / 500 accuracy_dirty= 0.5705882352941176 sparsity_dirty= 0.3902198558655251
-# Batch:  18 / 500 Accuracy (clean):  0.8852941176470588 Sparsity (clean):  0.3887402316494558 
+# Batch:  17 / 500 , Accuracy (dirty):  0.5823529411764706 , SR (dirty):  0.3902487658735696
+# Batch:  17 / 500 , Accuracy (clean):  0.8852941176470588 , SR (clean):  0.388738750236 
 
-batch= 19 / 500 accuracy_dirty= 0.5777777777777777 sparsity_dirty= 0.3903682234490805
-# Batch:  19 / 500 Accuracy (clean):  0.8833333333333333 Sparsity (clean):  0.38874751188095014 
+# Batch:  18 / 500 , Accuracy (dirty):  0.5888888888888889 , SR (dirty):  0.3903905729118212
+# Batch:  18 / 500 , Accuracy (clean):  0.8833333333333333 , SR (clean):  0.38874588261117315 
 
-batch= 20 / 500 accuracy_dirty= 0.5710526315789474 sparsity_dirty= 0.39034652971084216
-# Batch:  20 / 500 Accuracy (clean):  0.881578947368421 Sparsity (clean):  0.3887288819094554 
+# Batch:  19 / 500 , Accuracy (dirty):  0.5894736842105263 , SR (dirty):  0.3903955895071023
+# Batch:  19 / 500 , Accuracy (clean):  0.881578947368421 , SR (clean):  0.38872715477510755 
 
-batch= 21 / 500 accuracy_dirty= 0.5675 sparsity_dirty= 0.39045651230637735
-# Batch:  21 / 500 Accuracy (clean):  0.88 Sparsity (clean):  0.3888022704873709 
+# Batch:  20 / 500 , Accuracy (dirty):  0.585 , SR (dirty):  0.39049868192680715
+# Batch:  20 / 500 , Accuracy (clean):  0.88 , SR (clean):  0.38880061880756345 
 
-batch= 22 / 500 accuracy_dirty= 0.569047619047619 sparsity_dirty= 0.3903324634434432
-# Batch:  22 / 500 Accuracy (clean):  0.8785714285714286 Sparsity (clean):  0.38872976036807416 
+# Batch:  21 / 500 , Accuracy (dirty):  0.5857142857142857 , SR (dirty):  0.39036227830163606
+# Batch:  21 / 500 , Accuracy (clean):  0.8785714285714286 , SR (clean):  0.3887283067444812 
 
-batch= 23 / 500 accuracy_dirty= 0.5590909090909091 sparsity_dirty= 0.39032516040075604
-# Batch:  23 / 500 Accuracy (clean):  0.8704545454545455 Sparsity (clean):  0.3887095965322356 
+# Batch:  22 / 500 , Accuracy (dirty):  0.575 , SR (dirty):  0.3903809646801182
+# Batch:  22 / 500 , Accuracy (clean):  0.8704545454545455 , SR (clean):  0.3887080950051379 
 
-batch= 24 / 500 accuracy_dirty= 0.558695652173913 sparsity_dirty= 0.390367708624058
-# Batch:  24 / 500 Accuracy (clean):  0.8695652173913043 Sparsity (clean):  0.3887817262829303 
+# Batch:  23 / 500 , Accuracy (dirty):  0.5695652173913044 , SR (dirty):  0.3904183136853985
+# Batch:  23 / 500 , Accuracy (clean):  0.8695652173913043 , SR (clean):  0.38878019523808083 
 
-batch= 25 / 500 accuracy_dirty= 0.5604166666666667 sparsity_dirty= 0.3903984663907689
-# Batch:  25 / 500 Accuracy (clean):  0.8729166666666667 Sparsity (clean):  0.38879174897810265 
+# Batch:  24 / 500 , Accuracy (dirty):  0.5708333333333333 , SR (dirty):  0.3904519779092822
+# Batch:  24 / 500 , Accuracy (clean):  0.8729166666666667 , SR (clean):  0.3887903271525258 
 
-batch= 26 / 500 accuracy_dirty= 0.566 sparsity_dirty= 0.39027673649874406
-# Batch:  26 / 500 Accuracy (clean):  0.876 Sparsity (clean):  0.38869465618894783
+# Batch:  25 / 500 , Accuracy (dirty):  0.574 , SR (dirty):  0.3903317488836171
+# Batch:  25 / 500 , Accuracy (clean):  0.876 , SR (clean):  0.3886933043190064 
+
+# Batch:  26 / 500 , Accuracy (dirty):  0.573076923076923 , SR (dirty):  0.39030055960035637
+# Batch:  26 / 500 , Accuracy (clean):  0.8788461538461538 , SR (clean):  0.3886551317720969 
+
+# Batch:  27 / 500 , Accuracy (dirty):  0.5722222222222222 , SR (dirty):  0.3902794131043198
+# Batch:  27 / 500 , Accuracy (clean):  0.8814814814814815 , SR (clean):  0.3886232432151311 
+
+# Batch:  28 / 500 , Accuracy (dirty):  0.5714285714285714 , SR (dirty):  0.3903460483346457
+# Batch:  28 / 500 , Accuracy (clean):  0.8839285714285714 , SR (clean):  0.3886556813735995 
+
+# Batch:  29 / 500 , Accuracy (dirty):  0.5706896551724138 , SR (dirty):  0.390390685901816
+# Batch:  29 / 500 , Accuracy (clean):  0.8827586206896552 , SR (clean):  0.3886777584161799 
+
+# Batch:  30 / 500 , Accuracy (dirty):  0.575 , SR (dirty):  0.39032933296120564
+# Batch:  30 / 500 , Accuracy (clean):  0.885 , SR (clean):  0.3885984197657921 
+
+# Batch:  31 / 500 , Accuracy (dirty):  0.5806451612903226 , SR (dirty):  0.39032566138935654
+# Batch:  31 / 500 , Accuracy (clean):  0.8887096774193548 , SR (clean):  0.3885970755156519 
+
+# Batch:  32 / 500 , Accuracy (dirty):  0.578125 , SR (dirty):  0.39029269142587397
+# Batch:  32 / 500 , Accuracy (clean):  0.8875 , SR (clean):  0.3885470144115877 
+
+# Batch:  33 / 500 , Accuracy (dirty):  0.5787878787878787 , SR (dirty):  0.39037582909403834
+# Batch:  33 / 500 , Accuracy (clean):  0.8863636363636364 , SR (clean):  0.3886420658052757 
+
+# Batch:  34 / 500 , Accuracy (dirty):  0.5764705882352941 , SR (dirty):  0.39041230814733796
+# Batch:  34 / 500 , Accuracy (clean):  0.8823529411764706 , SR (clean):  0.38867472239209666 
+
+# Batch:  35 / 500 , Accuracy (dirty):  0.5742857142857143 , SR (dirty):  0.3905143055250987
+# Batch:  35 / 500 , Accuracy (clean):  0.8785714285714286 , SR (clean):  0.38880114989932624 
+
+# Batch:  36 / 500 , Accuracy (dirty):  0.5763888888888888 , SR (dirty):  0.3905055878502264
+# Batch:  36 / 500 , Accuracy (clean):  0.8791666666666667 , SR (clean):  0.38881440279328305 
+
+# Batch:  37 / 500 , Accuracy (dirty):  0.5756756756756757 , SR (dirty):  0.39046534498495145
+# Batch:  37 / 500 , Accuracy (clean):  0.8756756756756757 , SR (clean):  0.38877909349046924 
+
+# Batch:  38 / 500 , Accuracy (dirty):  0.5776315789473684 , SR (dirty):  0.3905489974817119
+# Batch:  38 / 500 , Accuracy (clean):  0.875 , SR (clean):  0.3888641148074974 
+
+# Batch:  39 / 500 , Accuracy (dirty):  0.5717948717948718 , SR (dirty):  0.3905831468222446
+# Batch:  39 / 500 , Accuracy (clean):  0.8730769230769231 , SR (clean):  0.38889097800689865 
+
+# Batch:  40 / 500 , Accuracy (dirty):  0.57125 , SR (dirty):  0.39054296656956466
+# Batch:  40 / 500 , Accuracy (clean):  0.87 , SR (clean):  0.3888372610242813 
+
+# Batch:  41 / 500 , Accuracy (dirty):  0.5719512195121951 , SR (dirty):  0.39054491154452253
+# Batch:  41 / 500 , Accuracy (clean):  0.8670731707317073 , SR (clean):  0.3888595360331307 
+
+# Batch:  42 / 500 , Accuracy (dirty):  0.5714285714285714 , SR (dirty):  0.3905524953317917
+# Batch:  42 / 500 , Accuracy (clean):  0.8654761904761905 , SR (clean):  0.38885252666776315 
+
+# Batch:  43 / 500 , Accuracy (dirty):  0.5686046511627907 , SR (dirty):  0.3905001979632502
+# Batch:  43 / 500 , Accuracy (clean):  0.8639534883720931 , SR (clean):  0.38881668886992193 
+
+# Batch:  44 / 500 , Accuracy (dirty):  0.571590909090909 , SR (dirty):  0.3904972636526971
+# Batch:  44 / 500 , Accuracy (clean):  0.8647727272727272 , SR (clean):  0.3888357272862063 
+
+# Batch:  45 / 500 , Accuracy (dirty):  0.5733333333333334 , SR (dirty):  0.390448091586039
+# Batch:  45 / 500 , Accuracy (clean):  0.8633333333333333 , SR (clean):  0.38876990010698664 
+
+# Batch:  46 / 500 , Accuracy (dirty):  0.575 , SR (dirty):  0.3904920361019427
+# Batch:  46 / 500 , Accuracy (clean):  0.8630434782608696 , SR (clean):  0.3888133473361526 
+
+# Batch:  47 / 500 , Accuracy (dirty):  0.5776595744680851 , SR (dirty):  0.3905137490832893
+# Batch:  47 / 500 , Accuracy (clean):  0.8638297872340426 , SR (clean):  0.3888420440644652 
+
+# Batch:  48 / 500 , Accuracy (dirty):  0.5791666666666667 , SR (dirty):  0.39051902629750446
+# Batch:  48 / 500 , Accuracy (clean):  0.8635416666666667 , SR (clean):  0.38883406759495065 
+
+# Batch:  49 / 500 , Accuracy (dirty):  0.5857142857142857 , SR (dirty):  0.39052172523523787
+# Batch:  49 / 500 , Accuracy (clean):  0.8653061224489796 , SR (clean):  0.38881708087225963 
+
+# Batch:  50 / 500 , Accuracy (dirty):  0.587 , SR (dirty):  0.3904700626221044
+# Batch:  50 / 500 , Accuracy (clean):  0.864 , SR (clean):  0.38875200382012276 
+
+# Batch:  51 / 500 , Accuracy (dirty):  0.5882352941176471 , SR (dirty):  0.3904520444446269
+# Batch:  51 / 500 , Accuracy (clean):  0.8637254901960785 , SR (clean):  0.3887353342205567 
+
+# Batch:  52 / 500 , Accuracy (dirty):  0.5932692307692308 , SR (dirty):  0.3904388348457728
+# Batch:  52 / 500 , Accuracy (clean):  0.8663461538461539 , SR (clean):  0.3887073154613667 
+
+# Batch:  53 / 500 , Accuracy (dirty):  0.5933962264150944 , SR (dirty):  0.3903861703293593
+# Batch:  53 / 500 , Accuracy (clean):  0.8641509433962264 , SR (clean):  0.38867875777057803 
+
+# Batch:  54 / 500 , Accuracy (dirty):  0.5953703703703703 , SR (dirty):  0.3903616942564425
+# Batch:  54 / 500 , Accuracy (clean):  0.8657407407407407 , SR (clean):  0.3886835019698215 
+
+# Batch:  55 / 500 , Accuracy (dirty):  0.5954545454545455 , SR (dirty):  0.39046415324575645
+# Batch:  55 / 500 , Accuracy (clean):  0.8663636363636363 , SR (clean):  0.3887791682788674 
+
+# Batch:  56 / 500 , Accuracy (dirty):  0.5955357142857143 , SR (dirty):  0.39041337317092617
+# Batch:  56 / 500 , Accuracy (clean):  0.8660714285714286 , SR (clean):  0.38873959504019473 
+
+# Batch:  57 / 500 , Accuracy (dirty):  0.593859649122807 , SR (dirty):  0.39040958445950913
+# Batch:  57 / 500 , Accuracy (clean):  0.8649122807017544 , SR (clean):  0.3887396004707905 
+
+# Batch:  58 / 500 , Accuracy (dirty):  0.5948275862068966 , SR (dirty):  0.39041326468620974
+# Batch:  58 / 500 , Accuracy (clean):  0.8646551724137931 , SR (clean):  0.38873292719090147 
+
+# Batch:  59 / 500 , Accuracy (dirty):  0.5966101694915255 , SR (dirty):  0.39040658504791936
+# Batch:  59 / 500 , Accuracy (clean):  0.8652542372881356 , SR (clean):  0.3887270196892576 
+
+# Batch:  60 / 500 , Accuracy (dirty):  0.5983333333333334 , SR (dirty):  0.3903819922928877
+# Batch:  60 / 500 , Accuracy (clean):  0.865 , SR (clean):  0.38872187238347755 
+
+# Batch:  61 / 500 , Accuracy (dirty):  0.5991803278688524 , SR (dirty):  0.39033769189261225
+# Batch:  61 / 500 , Accuracy (clean):  0.8663934426229508 , SR (clean):  0.3886779748573638 
+
+# Batch:  62 / 500 , Accuracy (dirty):  0.6016129032258064 , SR (dirty):  0.39034852606787873
+# Batch:  62 / 500 , Accuracy (clean):  0.8653225806451613 , SR (clean):  0.3886927843203344 
+
+# Batch:  63 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3903289384062305
+# Batch:  63 / 500 , Accuracy (clean):  0.8634920634920635 , SR (clean):  0.38868698057183615 
+
+# Batch:  64 / 500 , Accuracy (dirty):  0.5984375 , SR (dirty):  0.39028490488668277
+# Batch:  64 / 500 , Accuracy (clean):  0.86328125 , SR (clean):  0.3886518098840226 
+
+# Batch:  65 / 500 , Accuracy (dirty):  0.5969230769230769 , SR (dirty):  0.39021400470168965
+# Batch:  65 / 500 , Accuracy (clean):  0.8630769230769231 , SR (clean):  0.3885889379468215 
+
+# Batch:  66 / 500 , Accuracy (dirty):  0.5969696969696969 , SR (dirty):  0.39024296129026803
+# Batch:  66 / 500 , Accuracy (clean):  0.8643939393939394 , SR (clean):  0.38862542677067213 
+
+# Batch:  67 / 500 , Accuracy (dirty):  0.5932835820895522 , SR (dirty):  0.3902507347741824
+# Batch:  67 / 500 , Accuracy (clean):  0.8649253731343284 , SR (clean):  0.38862860312066516 
+
+# Batch:  68 / 500 , Accuracy (dirty):  0.5919117647058824 , SR (dirty):  0.3902544398153659
+# Batch:  68 / 500 , Accuracy (clean):  0.8654411764705883 , SR (clean):  0.3886269820798993 
+
+# Batch:  69 / 500 , Accuracy (dirty):  0.5963768115942029 , SR (dirty):  0.390266846107019
+# Batch:  69 / 500 , Accuracy (clean):  0.8666666666666667 , SR (clean):  0.3886489709482581 
+
+# Batch:  70 / 500 , Accuracy (dirty):  0.5978571428571429 , SR (dirty):  0.39022531840586505
+# Batch:  70 / 500 , Accuracy (clean):  0.8671428571428571 , SR (clean):  0.3886184060518919 
+
+# Batch:  71 / 500 , Accuracy (dirty):  0.597887323943662 , SR (dirty):  0.3902303365879761
+# Batch:  71 / 500 , Accuracy (clean):  0.8683098591549295 , SR (clean):  0.38861871229996503 
+
+# Batch:  72 / 500 , Accuracy (dirty):  0.5965277777777778 , SR (dirty):  0.39023497916230576
+# Batch:  72 / 500 , Accuracy (clean):  0.86875 , SR (clean):  0.3886224184856343 
+
+# Batch:  73 / 500 , Accuracy (dirty):  0.5993150684931506 , SR (dirty):  0.390289847665823
+# Batch:  73 / 500 , Accuracy (clean):  0.8691780821917808 , SR (clean):  0.3886583473398927 
+
+# Batch:  74 / 500 , Accuracy (dirty):  0.6027027027027027 , SR (dirty):  0.390265901443849
+# Batch:  74 / 500 , Accuracy (clean):  0.8702702702702703 , SR (clean):  0.3886424243895724 
+
+# Batch:  75 / 500 , Accuracy (dirty):  0.602 , SR (dirty):  0.3902761623174249
+# Batch:  75 / 500 , Accuracy (clean):  0.8693333333333333 , SR (clean):  0.38865270751930414 
+
+# Batch:  76 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.39028918569459947
+# Batch:  76 / 500 , Accuracy (clean):  0.8697368421052631 , SR (clean):  0.3886607719934779 
+
+# Batch:  77 / 500 , Accuracy (dirty):  0.6012987012987013 , SR (dirty):  0.3903299644379483
+# Batch:  77 / 500 , Accuracy (clean):  0.8701298701298701 , SR (clean):  0.3886913757380632 
+
+# Batch:  78 / 500 , Accuracy (dirty):  0.6025641025641025 , SR (dirty):  0.39037859822156984
+# Batch:  78 / 500 , Accuracy (clean):  0.8711538461538462 , SR (clean):  0.38873439898478923 
+
+# Batch:  79 / 500 , Accuracy (dirty):  0.6031645569620253 , SR (dirty):  0.39037783522841685
+# Batch:  79 / 500 , Accuracy (clean):  0.8721518987341772 , SR (clean):  0.3887102644630763 
+
+# Batch:  80 / 500 , Accuracy (dirty):  0.6025 , SR (dirty):  0.39040456070768215
+# Batch:  80 / 500 , Accuracy (clean):  0.8725 , SR (clean):  0.3887484287237476 
+
+# Batch:  81 / 500 , Accuracy (dirty):  0.6030864197530864 , SR (dirty):  0.39037661206856455
+# Batch:  81 / 500 , Accuracy (clean):  0.8734567901234568 , SR (clean):  0.38872230497109117 
+
+# Batch:  82 / 500 , Accuracy (dirty):  0.6024390243902439 , SR (dirty):  0.3903559050232126
+# Batch:  82 / 500 , Accuracy (clean):  0.8731707317073171 , SR (clean):  0.38871070669293684 
+
+# Batch:  83 / 500 , Accuracy (dirty):  0.6036144578313253 , SR (dirty):  0.39034642704925204
+# Batch:  83 / 500 , Accuracy (clean):  0.8740963855421687 , SR (clean):  0.38872142736449566 
+
+# Batch:  84 / 500 , Accuracy (dirty):  0.6041666666666666 , SR (dirty):  0.39038911972085444
+# Batch:  84 / 500 , Accuracy (clean):  0.8738095238095238 , SR (clean):  0.3887428637464615 
+
+# Batch:  85 / 500 , Accuracy (dirty):  0.6041176470588235 , SR (dirty):  0.39040010219828936
+# Batch:  85 / 500 , Accuracy (clean):  0.8717647058823529 , SR (clean):  0.3887288728636864 
+
+# Batch:  86 / 500 , Accuracy (dirty):  0.6034883720930233 , SR (dirty):  0.3903769678682928
+# Batch:  86 / 500 , Accuracy (clean):  0.8715116279069768 , SR (clean):  0.3887021729103518 
+
+# Batch:  87 / 500 , Accuracy (dirty):  0.6011494252873564 , SR (dirty):  0.3903844528640996
+# Batch:  87 / 500 , Accuracy (clean):  0.8701149425287357 , SR (clean):  0.38871264162303787 
+
+# Batch:  88 / 500 , Accuracy (dirty):  0.6017045454545454 , SR (dirty):  0.3904017308494342
+# Batch:  88 / 500 , Accuracy (clean):  0.8704545454545455 , SR (clean):  0.38872612448026345 
+
+# Batch:  89 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3904169423651639
+# Batch:  89 / 500 , Accuracy (clean):  0.8696629213483146 , SR (clean):  0.38872192089204016 
+
+# Batch:  90 / 500 , Accuracy (dirty):  0.6005555555555555 , SR (dirty):  0.3904056239727727
+# Batch:  90 / 500 , Accuracy (clean):  0.8688888888888889 , SR (clean):  0.38871156740355695 
+
+# Batch:  91 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3904199108829699
+# Batch:  91 / 500 , Accuracy (clean):  0.8681318681318682 , SR (clean):  0.38872541906530533 
+
+# Batch:  92 / 500 , Accuracy (dirty):  0.5994565217391304 , SR (dirty):  0.3904200722539407
+# Batch:  92 / 500 , Accuracy (clean):  0.8679347826086956 , SR (clean):  0.38872841937773783 
+
+# Batch:  93 / 500 , Accuracy (dirty):  0.5994623655913979 , SR (dirty):  0.3904023048655689
+# Batch:  93 / 500 , Accuracy (clean):  0.8682795698924731 , SR (clean):  0.3887191541073588 
+
+# Batch:  94 / 500 , Accuracy (dirty):  0.5989361702127659 , SR (dirty):  0.3903805001250735
+# Batch:  94 / 500 , Accuracy (clean):  0.8680851063829788 , SR (clean):  0.3887136129406149 
+
+# Batch:  95 / 500 , Accuracy (dirty):  0.5994736842105263 , SR (dirty):  0.39039176685958543
+# Batch:  95 / 500 , Accuracy (clean):  0.868421052631579 , SR (clean):  0.3887257799532148 
+
+# Batch:  96 / 500 , Accuracy (dirty):  0.5984375 , SR (dirty):  0.3903959043791865
+# Batch:  96 / 500 , Accuracy (clean):  0.8692708333333333 , SR (clean):  0.3887247880344247 
+
+# Batch:  97 / 500 , Accuracy (dirty):  0.5989690721649484 , SR (dirty):  0.3903793930602991
+# Batch:  97 / 500 , Accuracy (clean):  0.8670103092783505 , SR (clean):  0.38871607040225753 
+
+# Batch:  98 / 500 , Accuracy (dirty):  0.5984693877551021 , SR (dirty):  0.3903864403439997
+# Batch:  98 / 500 , Accuracy (clean):  0.8683673469387755 , SR (clean):  0.38872019278074754 
+
+# Batch:  99 / 500 , Accuracy (dirty):  0.5984848484848485 , SR (dirty):  0.39039024199220784
+# Batch:  99 / 500 , Accuracy (clean):  0.8691919191919192 , SR (clean):  0.38872423738501394 
+
+# Batch:  100 / 500 , Accuracy (dirty):  0.5975 , SR (dirty):  0.3903946402717695
+# Batch:  100 / 500 , Accuracy (clean):  0.8695 , SR (clean):  0.3887203035602149 
+
+# Batch:  101 / 500 , Accuracy (dirty):  0.597029702970297 , SR (dirty):  0.3903887660169171
+# Batch:  101 / 500 , Accuracy (clean):  0.8683168316831683 , SR (clean):  0.38871651455719114 
+
+# Batch:  102 / 500 , Accuracy (dirty):  0.5980392156862745 , SR (dirty):  0.39040490321774124
+# Batch:  102 / 500 , Accuracy (clean):  0.8666666666666667 , SR (clean):  0.3887309102881663 
+
+# Batch:  103 / 500 , Accuracy (dirty):  0.5985436893203884 , SR (dirty):  0.39041093628488355
+# Batch:  103 / 500 , Accuracy (clean):  0.8674757281553398 , SR (clean):  0.3887434631393799 
+
+# Batch:  104 / 500 , Accuracy (dirty):  0.5980769230769231 , SR (dirty):  0.3904228212250961
+# Batch:  104 / 500 , Accuracy (clean):  0.8673076923076923 , SR (clean):  0.38875926643109016 
+
+# Batch:  105 / 500 , Accuracy (dirty):  0.5985714285714285 , SR (dirty):  0.3904131333230334
+# Batch:  105 / 500 , Accuracy (clean):  0.8676190476190476 , SR (clean):  0.3887516239052138 
+
+# Batch:  106 / 500 , Accuracy (dirty):  0.5990566037735849 , SR (dirty):  0.39040305430452504
+# Batch:  106 / 500 , Accuracy (clean):  0.8683962264150943 , SR (clean):  0.3887359880285046 
+
+# Batch:  107 / 500 , Accuracy (dirty):  0.5981308411214953 , SR (dirty):  0.39039885828327436
+# Batch:  107 / 500 , Accuracy (clean):  0.8663551401869158 , SR (clean):  0.38871650565951366 
+
+# Batch:  108 / 500 , Accuracy (dirty):  0.5990740740740741 , SR (dirty):  0.3903809416460575
+# Batch:  108 / 500 , Accuracy (clean):  0.8657407407407407 , SR (clean):  0.38870366494040787 
+
+# Batch:  109 / 500 , Accuracy (dirty):  0.5986238532110092 , SR (dirty):  0.3903754421682921
+# Batch:  109 / 500 , Accuracy (clean):  0.8660550458715597 , SR (clean):  0.38870035368662414 
+
+# Batch:  110 / 500 , Accuracy (dirty):  0.5990909090909091 , SR (dirty):  0.39040192560195874
+# Batch:  110 / 500 , Accuracy (clean):  0.8663636363636363 , SR (clean):  0.3887204551004745 
+
+# Batch:  111 / 500 , Accuracy (dirty):  0.5986486486486486 , SR (dirty):  0.3904064526036991
+# Batch:  111 / 500 , Accuracy (clean):  0.8671171171171171 , SR (clean):  0.3887240276751074 
+
+# Batch:  112 / 500 , Accuracy (dirty):  0.6008928571428571 , SR (dirty):  0.3904087494798104
+# Batch:  112 / 500 , Accuracy (clean):  0.8674107142857143 , SR (clean):  0.3887261386389349 
+
+# Batch:  113 / 500 , Accuracy (dirty):  0.5995575221238938 , SR (dirty):  0.3903940291806317
+# Batch:  113 / 500 , Accuracy (clean):  0.8668141592920354 , SR (clean):  0.3887158069139175 
+
+# Batch:  114 / 500 , Accuracy (dirty):  0.6004385964912281 , SR (dirty):  0.39039403068706513
+# Batch:  114 / 500 , Accuracy (clean):  0.8671052631578947 , SR (clean):  0.38869627196807777 
+
+# Batch:  115 / 500 , Accuracy (dirty):  0.6008695652173913 , SR (dirty):  0.3904176055179046
+# Batch:  115 / 500 , Accuracy (clean):  0.8665217391304347 , SR (clean):  0.3887194644243954 
+
+# Batch:  116 / 500 , Accuracy (dirty):  0.6008620689655172 , SR (dirty):  0.3904556572373613
+# Batch:  116 / 500 , Accuracy (clean):  0.8668103448275862 , SR (clean):  0.38875968451656284 
+
+# Batch:  117 / 500 , Accuracy (dirty):  0.5995726495726496 , SR (dirty):  0.3904350449415688
+# Batch:  117 / 500 , Accuracy (clean):  0.8666666666666667 , SR (clean):  0.3887414299571099 
+
+# Batch:  118 / 500 , Accuracy (dirty):  0.5995762711864406 , SR (dirty):  0.39042287641114826
+# Batch:  118 / 500 , Accuracy (clean):  0.8661016949152542 , SR (clean):  0.3887312271904284 
+
+# Batch:  119 / 500 , Accuracy (dirty):  0.6008403361344538 , SR (dirty):  0.3904067512436178
+# Batch:  119 / 500 , Accuracy (clean):  0.8659663865546219 , SR (clean):  0.38871679380131907 
+
+# Batch:  120 / 500 , Accuracy (dirty):  0.60125 , SR (dirty):  0.3903953438255884
+# Batch:  120 / 500 , Accuracy (clean):  0.8670833333333333 , SR (clean):  0.38870885155014423 
+
+# Batch:  121 / 500 , Accuracy (dirty):  0.6020661157024794 , SR (dirty):  0.3903829743748025
+# Batch:  121 / 500 , Accuracy (clean):  0.8673553719008265 , SR (clean):  0.3886965634752493 
+
+# Batch:  122 / 500 , Accuracy (dirty):  0.6024590163934426 , SR (dirty):  0.3903602424200917
+# Batch:  122 / 500 , Accuracy (clean):  0.8680327868852459 , SR (clean):  0.38867843685945247 
+
+# Batch:  123 / 500 , Accuracy (dirty):  0.6020325203252033 , SR (dirty):  0.390373767752644
+# Batch:  123 / 500 , Accuracy (clean):  0.8678861788617886 , SR (clean):  0.38869420584926784 
+
+# Batch:  124 / 500 , Accuracy (dirty):  0.6012096774193548 , SR (dirty):  0.3903561927600542
+# Batch:  124 / 500 , Accuracy (clean):  0.867741935483871 , SR (clean):  0.38868022747427367 
+
+# Batch:  125 / 500 , Accuracy (dirty):  0.6004 , SR (dirty):  0.3903399464485069
+# Batch:  125 / 500 , Accuracy (clean):  0.8668 , SR (clean):  0.3886577606056377 
+
+# Batch:  126 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.39037492915315486
+# Batch:  126 / 500 , Accuracy (clean):  0.8666666666666667 , SR (clean):  0.38867882297467315 
+
+# Batch:  127 / 500 , Accuracy (dirty):  0.5992125984251968 , SR (dirty):  0.3903431383792889
+# Batch:  127 / 500 , Accuracy (clean):  0.8653543307086614 , SR (clean):  0.38865774680880405 
+
+# Batch:  128 / 500 , Accuracy (dirty):  0.60078125 , SR (dirty):  0.3903427358249896
+# Batch:  128 / 500 , Accuracy (clean):  0.86484375 , SR (clean):  0.38865599870482137 
+
+# Batch:  129 / 500 , Accuracy (dirty):  0.6007751937984496 , SR (dirty):  0.3903459008896447
+# Batch:  129 / 500 , Accuracy (clean):  0.8651162790697674 , SR (clean):  0.3886560550116074 
+
+# Batch:  130 / 500 , Accuracy (dirty):  0.6003846153846154 , SR (dirty):  0.39034780208758235
+# Batch:  130 / 500 , Accuracy (clean):  0.8638461538461538 , SR (clean):  0.3886683594672492 
+
+# Batch:  131 / 500 , Accuracy (dirty):  0.599618320610687 , SR (dirty):  0.3903665068879122
+# Batch:  131 / 500 , Accuracy (clean):  0.8648854961832061 , SR (clean):  0.38869315338627275 
+
+# Batch:  132 / 500 , Accuracy (dirty):  0.5992424242424242 , SR (dirty):  0.390366804238925
+# Batch:  132 / 500 , Accuracy (clean):  0.8647727272727272 , SR (clean):  0.38869128583050006 
+
+# Batch:  133 / 500 , Accuracy (dirty):  0.5984962406015037 , SR (dirty):  0.3903684570216184
+# Batch:  133 / 500 , Accuracy (clean):  0.8646616541353384 , SR (clean):  0.3886904685398257 
+
+# Batch:  134 / 500 , Accuracy (dirty):  0.5985074626865672 , SR (dirty):  0.39038252582156197
+# Batch:  134 / 500 , Accuracy (clean):  0.8645522388059701 , SR (clean):  0.38870754789928397 
+
+# Batch:  135 / 500 , Accuracy (dirty):  0.5996296296296296 , SR (dirty):  0.3904083462867347
+# Batch:  135 / 500 , Accuracy (clean):  0.8655555555555555 , SR (clean):  0.3887254596034774 
+
+# Batch:  136 / 500 , Accuracy (dirty):  0.5992647058823529 , SR (dirty):  0.39039725192032226
+# Batch:  136 / 500 , Accuracy (clean):  0.8650735294117647 , SR (clean):  0.38871687373534747 
+
+# Batch:  137 / 500 , Accuracy (dirty):  0.5992700729927007 , SR (dirty):  0.39040394204892936
+# Batch:  137 / 500 , Accuracy (clean):  0.8642335766423358 , SR (clean):  0.3887333513412893 
+
+# Batch:  138 / 500 , Accuracy (dirty):  0.6003623188405797 , SR (dirty):  0.3903979013340978
+# Batch:  138 / 500 , Accuracy (clean):  0.8644927536231884 , SR (clean):  0.3887268164417216 
+
+# Batch:  139 / 500 , Accuracy (dirty):  0.5996402877697842 , SR (dirty):  0.3904122765665503
+# Batch:  139 / 500 , Accuracy (clean):  0.8647482014388489 , SR (clean):  0.3887479941563077 
+
+# Batch:  140 / 500 , Accuracy (dirty):  0.6017857142857143 , SR (dirty):  0.390426064862346
+# Batch:  140 / 500 , Accuracy (clean):  0.8646428571428572 , SR (clean):  0.3887597457674634 
+
+# Batch:  141 / 500 , Accuracy (dirty):  0.601063829787234 , SR (dirty):  0.3904336080310786
+# Batch:  141 / 500 , Accuracy (clean):  0.8648936170212767 , SR (clean):  0.38876243574983715 
+
+# Batch:  142 / 500 , Accuracy (dirty):  0.6017605633802817 , SR (dirty):  0.39044988646995005
+# Batch:  142 / 500 , Accuracy (clean):  0.8651408450704225 , SR (clean):  0.3887739163051853 
+
+# Batch:  143 / 500 , Accuracy (dirty):  0.6010489510489511 , SR (dirty):  0.39047396977934845
+# Batch:  143 / 500 , Accuracy (clean):  0.8643356643356643 , SR (clean):  0.3887938413892136 
+
+# Batch:  144 / 500 , Accuracy (dirty):  0.6013888888888889 , SR (dirty):  0.39046688663625684
+# Batch:  144 / 500 , Accuracy (clean):  0.8652777777777778 , SR (clean):  0.38878805889404444 
+
+# Batch:  145 / 500 , Accuracy (dirty):  0.6013793103448276 , SR (dirty):  0.3904739537218378
+# Batch:  145 / 500 , Accuracy (clean):  0.8655172413793103 , SR (clean):  0.3887867080057167 
+
+# Batch:  146 / 500 , Accuracy (dirty):  0.601027397260274 , SR (dirty):  0.3904531988659824
+# Batch:  146 / 500 , Accuracy (clean):  0.8657534246575342 , SR (clean):  0.38877788448304207 
+
+# Batch:  147 / 500 , Accuracy (dirty):  0.6023809523809524 , SR (dirty):  0.39043840590415624
+# Batch:  147 / 500 , Accuracy (clean):  0.8656462585034014 , SR (clean):  0.3887633309149783 
+
+# Batch:  148 / 500 , Accuracy (dirty):  0.602027027027027 , SR (dirty):  0.3903945559714228
+# Batch:  148 / 500 , Accuracy (clean):  0.8652027027027027 , SR (clean):  0.3887361050281547 
+
+# Batch:  149 / 500 , Accuracy (dirty):  0.6023489932885906 , SR (dirty):  0.390404627492662
+# Batch:  149 / 500 , Accuracy (clean):  0.8654362416107383 , SR (clean):  0.38875034213811677 
+
+# Batch:  150 / 500 , Accuracy (dirty):  0.6016666666666667 , SR (dirty):  0.39040538945483305
+# Batch:  150 / 500 , Accuracy (clean):  0.8656666666666667 , SR (clean):  0.3887505145827519 
+
+# Batch:  151 / 500 , Accuracy (dirty):  0.6009933774834437 , SR (dirty):  0.39039985055209203
+# Batch:  151 / 500 , Accuracy (clean):  0.866225165562914 , SR (clean):  0.38873526935394886 
+
+# Batch:  152 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3904005700805705
+# Batch:  152 / 500 , Accuracy (clean):  0.8664473684210526 , SR (clean):  0.38873780806683056 
+
+# Batch:  153 / 500 , Accuracy (dirty):  0.5993464052287582 , SR (dirty):  0.39041550077503795
+# Batch:  153 / 500 , Accuracy (clean):  0.8663398692810458 , SR (clean):  0.38874111094921737 
+
+# Batch:  154 / 500 , Accuracy (dirty):  0.5987012987012987 , SR (dirty):  0.3904001956954921
+# Batch:  154 / 500 , Accuracy (clean):  0.865909090909091 , SR (clean):  0.3887300720948219 
+
+# Batch:  155 / 500 , Accuracy (dirty):  0.5990322580645161 , SR (dirty):  0.39040880631431585
+# Batch:  155 / 500 , Accuracy (clean):  0.8658064516129033 , SR (clean):  0.3887252773795161 
+
+# Batch:  156 / 500 , Accuracy (dirty):  0.5980769230769231 , SR (dirty):  0.39041335520030485
+# Batch:  156 / 500 , Accuracy (clean):  0.8657051282051282 , SR (clean):  0.3887393762478799 
+
+# Batch:  157 / 500 , Accuracy (dirty):  0.5980891719745223 , SR (dirty):  0.3904019740967609
+# Batch:  157 / 500 , Accuracy (clean):  0.8662420382165605 , SR (clean):  0.38872034802304234 
+
+# Batch:  158 / 500 , Accuracy (dirty):  0.5981012658227848 , SR (dirty):  0.390373203183237
+# Batch:  158 / 500 , Accuracy (clean):  0.8658227848101265 , SR (clean):  0.3886996748612028 
+
+# Batch:  159 / 500 , Accuracy (dirty):  0.5974842767295597 , SR (dirty):  0.39036564406715324
+# Batch:  159 / 500 , Accuracy (clean):  0.8660377358490566 , SR (clean):  0.3886896380060365 
+
+# Batch:  160 / 500 , Accuracy (dirty):  0.5965625 , SR (dirty):  0.3903720763086973
+# Batch:  160 / 500 , Accuracy (clean):  0.865 , SR (clean):  0.38869447998251294 
+
+# Batch:  161 / 500 , Accuracy (dirty):  0.596583850931677 , SR (dirty):  0.39037368856968635
+# Batch:  161 / 500 , Accuracy (clean):  0.8645962732919255 , SR (clean):  0.3886974971472863 
+
+# Batch:  162 / 500 , Accuracy (dirty):  0.5959876543209877 , SR (dirty):  0.39039668351470247
+# Batch:  162 / 500 , Accuracy (clean):  0.8651234567901235 , SR (clean):  0.38871209191940337 
+
+# Batch:  163 / 500 , Accuracy (dirty):  0.5957055214723926 , SR (dirty):  0.39039408921688823
+# Batch:  163 / 500 , Accuracy (clean):  0.8653374233128834 , SR (clean):  0.3887116940308186 
+
+# Batch:  164 / 500 , Accuracy (dirty):  0.5969512195121951 , SR (dirty):  0.3903964577976199
+# Batch:  164 / 500 , Accuracy (clean):  0.8655487804878049 , SR (clean):  0.3887116666163216 
+
+# Batch:  165 / 500 , Accuracy (dirty):  0.5969696969696969 , SR (dirty):  0.3903880395322187
+# Batch:  165 / 500 , Accuracy (clean):  0.8657575757575757 , SR (clean):  0.38870350056347736 
+
+# Batch:  166 / 500 , Accuracy (dirty):  0.5972891566265061 , SR (dirty):  0.39038209752735475
+# Batch:  166 / 500 , Accuracy (clean):  0.8650602409638555 , SR (clean):  0.38870080911491345 
+
+# Batch:  167 / 500 , Accuracy (dirty):  0.5976047904191617 , SR (dirty):  0.390387057703251
+# Batch:  167 / 500 , Accuracy (clean):  0.8652694610778443 , SR (clean):  0.388706948021345 
+
+# Batch:  168 / 500 , Accuracy (dirty):  0.5973214285714286 , SR (dirty):  0.39038045054336445
+# Batch:  168 / 500 , Accuracy (clean):  0.8651785714285715 , SR (clean):  0.3886978727983832 
+
+# Batch:  169 / 500 , Accuracy (dirty):  0.5979289940828403 , SR (dirty):  0.3903902864519253
+# Batch:  169 / 500 , Accuracy (clean):  0.8656804733727811 , SR (clean):  0.38870644264211174 
+
+# Batch:  170 / 500 , Accuracy (dirty):  0.5988235294117648 , SR (dirty):  0.3903743698541725
+# Batch:  170 / 500 , Accuracy (clean):  0.8652941176470588 , SR (clean):  0.38869806587685307 
+
+# Batch:  171 / 500 , Accuracy (dirty):  0.5985380116959065 , SR (dirty):  0.3903792330539112
+# Batch:  171 / 500 , Accuracy (clean):  0.8654970760233918 , SR (clean):  0.38870001281738975 
+
+# Batch:  172 / 500 , Accuracy (dirty):  0.598546511627907 , SR (dirty):  0.39039011513307353
+# Batch:  172 / 500 , Accuracy (clean):  0.8656976744186047 , SR (clean):  0.38871361702690843 
+
+# Batch:  173 / 500 , Accuracy (dirty):  0.5985549132947977 , SR (dirty):  0.39040572319168554
+# Batch:  173 / 500 , Accuracy (clean):  0.865606936416185 , SR (clean):  0.3887307064237593 
+
+# Batch:  174 / 500 , Accuracy (dirty):  0.5997126436781609 , SR (dirty):  0.39039968708997785
+# Batch:  174 / 500 , Accuracy (clean):  0.8658045977011494 , SR (clean):  0.3887296220769133 
+
+# Batch:  175 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3904025669331367
+# Batch:  175 / 500 , Accuracy (clean):  0.8654285714285714 , SR (clean):  0.3887343083409752 
+
+# Batch:  176 / 500 , Accuracy (dirty):  0.5994318181818182 , SR (dirty):  0.39040529016243053
+# Batch:  176 / 500 , Accuracy (clean):  0.8653409090909091 , SR (clean):  0.3887297841428431 
+
+# Batch:  177 / 500 , Accuracy (dirty):  0.5994350282485875 , SR (dirty):  0.39041998610237294
+# Batch:  177 / 500 , Accuracy (clean):  0.865819209039548 , SR (clean):  0.3887327417922992 
+
+# Batch:  178 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3904199220893686
+# Batch:  178 / 500 , Accuracy (clean):  0.8660112359550561 , SR (clean):  0.3887226509704065 
+
+# Batch:  179 / 500 , Accuracy (dirty):  0.5997206703910615 , SR (dirty):  0.39041462209229805
+# Batch:  179 / 500 , Accuracy (clean):  0.8659217877094972 , SR (clean):  0.388717634299228 
+
+# Batch:  180 / 500 , Accuracy (dirty):  0.6013888888888889 , SR (dirty):  0.39042030375403136
+# Batch:  180 / 500 , Accuracy (clean):  0.8658333333333333 , SR (clean):  0.3887220310707198 
+
+# Batch:  181 / 500 , Accuracy (dirty):  0.6013812154696132 , SR (dirty):  0.390408740563172
+# Batch:  181 / 500 , Accuracy (clean):  0.8651933701657458 , SR (clean):  0.38871364780528217 
+
+# Batch:  182 / 500 , Accuracy (dirty):  0.6010989010989011 , SR (dirty):  0.39040694148554833
+# Batch:  182 / 500 , Accuracy (clean):  0.8651098901098901 , SR (clean):  0.38871226217440114 
+
+# Batch:  183 / 500 , Accuracy (dirty):  0.6019125683060109 , SR (dirty):  0.3903867004545981
+# Batch:  183 / 500 , Accuracy (clean):  0.8653005464480874 , SR (clean):  0.3887000258506701 
+
+# Batch:  184 / 500 , Accuracy (dirty):  0.6019021739130435 , SR (dirty):  0.3903913070970707
+# Batch:  184 / 500 , Accuracy (clean):  0.8652173913043478 , SR (clean):  0.3886987109455581 
+
+# Batch:  185 / 500 , Accuracy (dirty):  0.6021621621621621 , SR (dirty):  0.39038679038024904
+# Batch:  185 / 500 , Accuracy (clean):  0.8654054054054054 , SR (clean):  0.38869385791387256 
+
+# Batch:  186 / 500 , Accuracy (dirty):  0.6021505376344086 , SR (dirty):  0.39039453501300947
+# Batch:  186 / 500 , Accuracy (clean):  0.8655913978494624 , SR (clean):  0.38869424321917423 
+
+# Batch:  187 / 500 , Accuracy (dirty):  0.6024064171122995 , SR (dirty):  0.39040276232946425
+# Batch:  187 / 500 , Accuracy (clean):  0.8652406417112299 , SR (clean):  0.3887050829143788 
+
+# Batch:  188 / 500 , Accuracy (dirty):  0.6034574468085107 , SR (dirty):  0.3903963854087491
+# Batch:  188 / 500 , Accuracy (clean):  0.8651595744680851 , SR (clean):  0.3886984496362106 
+
+# Batch:  189 / 500 , Accuracy (dirty):  0.6034391534391534 , SR (dirty):  0.39038292783234174
+# Batch:  189 / 500 , Accuracy (clean):  0.8650793650793651 , SR (clean):  0.3886887358800081 
+
+# Batch:  190 / 500 , Accuracy (dirty):  0.6028947368421053 , SR (dirty):  0.39039864498564125
+# Batch:  190 / 500 , Accuracy (clean):  0.865 , SR (clean):  0.3887051880361576 
+
+# Batch:  191 / 500 , Accuracy (dirty):  0.6028795811518325 , SR (dirty):  0.39038978125141555
+# Batch:  191 / 500 , Accuracy (clean):  0.8657068062827226 , SR (clean):  0.3886960983814274 
+
+# Batch:  192 / 500 , Accuracy (dirty):  0.6033854166666667 , SR (dirty):  0.3903840317949272
+# Batch:  192 / 500 , Accuracy (clean):  0.8658854166666666 , SR (clean):  0.38869631915705094 
+
+# Batch:  193 / 500 , Accuracy (dirty):  0.6036269430051814 , SR (dirty):  0.3903844657784168
+# Batch:  193 / 500 , Accuracy (clean):  0.866062176165803 , SR (clean):  0.38869513674335054 
+
+# Batch:  194 / 500 , Accuracy (dirty):  0.6038659793814433 , SR (dirty):  0.39037533565217764
+# Batch:  194 / 500 , Accuracy (clean):  0.8662371134020619 , SR (clean):  0.3886900479174279 
+
+# Batch:  195 / 500 , Accuracy (dirty):  0.6035897435897436 , SR (dirty):  0.3903721662167142
+# Batch:  195 / 500 , Accuracy (clean):  0.8661538461538462 , SR (clean):  0.38868107699642895 
+
+# Batch:  196 / 500 , Accuracy (dirty):  0.6028061224489796 , SR (dirty):  0.39037185534493246
+# Batch:  196 / 500 , Accuracy (clean):  0.8658163265306122 , SR (clean):  0.38868427455757626 
+
+# Batch:  197 / 500 , Accuracy (dirty):  0.6030456852791878 , SR (dirty):  0.3903590793019702
+# Batch:  197 / 500 , Accuracy (clean):  0.8659898477157361 , SR (clean):  0.38867043004649704 
+
+# Batch:  198 / 500 , Accuracy (dirty):  0.6025252525252526 , SR (dirty):  0.39037428186589596
+# Batch:  198 / 500 , Accuracy (clean):  0.865909090909091 , SR (clean):  0.3886845881496729 
+
+# Batch:  199 / 500 , Accuracy (dirty):  0.6027638190954774 , SR (dirty):  0.3903719084274989
+# Batch:  199 / 500 , Accuracy (clean):  0.8660804020100502 , SR (clean):  0.38868300234251074 
+
+# Batch:  200 / 500 , Accuracy (dirty):  0.60275 , SR (dirty):  0.3903927193081914
+# Batch:  200 / 500 , Accuracy (clean):  0.866 , SR (clean):  0.3886980407697809 
+
+# Batch:  201 / 500 , Accuracy (dirty):  0.6027363184079602 , SR (dirty):  0.39039470642791485
+# Batch:  201 / 500 , Accuracy (clean):  0.8656716417910447 , SR (clean):  0.3886980922947709 
+
+# Batch:  202 / 500 , Accuracy (dirty):  0.6032178217821782 , SR (dirty):  0.39039464239823374
+# Batch:  202 / 500 , Accuracy (clean):  0.8658415841584158 , SR (clean):  0.3886988622056369 
+
+# Batch:  203 / 500 , Accuracy (dirty):  0.6022167487684729 , SR (dirty):  0.39041071046189657
+# Batch:  203 / 500 , Accuracy (clean):  0.8657635467980296 , SR (clean):  0.38871222916629433 
+
+# Batch:  204 / 500 , Accuracy (dirty):  0.6029411764705882 , SR (dirty):  0.3904115139985662
+# Batch:  204 / 500 , Accuracy (clean):  0.8659313725490196 , SR (clean):  0.3887109881630576 
+
+# Batch:  205 / 500 , Accuracy (dirty):  0.6029268292682927 , SR (dirty):  0.390407032510398
+# Batch:  205 / 500 , Accuracy (clean):  0.8663414634146341 , SR (clean):  0.388706374274181 
+
+# Batch:  206 / 500 , Accuracy (dirty):  0.6024271844660194 , SR (dirty):  0.39041545327907
+# Batch:  206 / 500 , Accuracy (clean):  0.866504854368932 , SR (clean):  0.3887114250284176 
+
+# Batch:  207 / 500 , Accuracy (dirty):  0.6019323671497585 , SR (dirty):  0.39041111561523756
+# Batch:  207 / 500 , Accuracy (clean):  0.8664251207729469 , SR (clean):  0.3887072623076835 
+
+# Batch:  208 / 500 , Accuracy (dirty):  0.6021634615384616 , SR (dirty):  0.390414939684964
+# Batch:  208 / 500 , Accuracy (clean):  0.8663461538461539 , SR (clean):  0.38871204585304675 
+
+# Batch:  209 / 500 , Accuracy (dirty):  0.6026315789473684 , SR (dirty):  0.3904122453209734
+# Batch:  209 / 500 , Accuracy (clean):  0.8665071770334928 , SR (clean):  0.38871123551022435 
+
+# Batch:  210 / 500 , Accuracy (dirty):  0.6023809523809524 , SR (dirty):  0.3904133020472004
+# Batch:  210 / 500 , Accuracy (clean):  0.8664285714285714 , SR (clean):  0.38871527085576063 
+
+# Batch:  211 / 500 , Accuracy (dirty):  0.60260663507109 , SR (dirty):  0.39042146565684055
+# Batch:  211 / 500 , Accuracy (clean):  0.866824644549763 , SR (clean):  0.38872518096166997 
+
+# Batch:  212 / 500 , Accuracy (dirty):  0.6028301886792453 , SR (dirty):  0.39042722576787525
+# Batch:  212 / 500 , Accuracy (clean):  0.8669811320754717 , SR (clean):  0.3887343984705357 
+
+# Batch:  213 / 500 , Accuracy (dirty):  0.6030516431924883 , SR (dirty):  0.3904212767008133
+# Batch:  213 / 500 , Accuracy (clean):  0.8664319248826291 , SR (clean):  0.38873012589444944 
+
+# Batch:  214 / 500 , Accuracy (dirty):  0.6025700934579439 , SR (dirty):  0.39043125405112666
+# Batch:  214 / 500 , Accuracy (clean):  0.866822429906542 , SR (clean):  0.3887407339647113 
+
+# Batch:  215 / 500 , Accuracy (dirty):  0.6020930232558139 , SR (dirty):  0.39043512312259443
+# Batch:  215 / 500 , Accuracy (clean):  0.8669767441860465 , SR (clean):  0.3887436057464513 
+
+# Batch:  216 / 500 , Accuracy (dirty):  0.6018518518518519 , SR (dirty):  0.3904294558287399
+# Batch:  216 / 500 , Accuracy (clean):  0.8662037037037037 , SR (clean):  0.3887432206629686 
+
+# Batch:  217 / 500 , Accuracy (dirty):  0.6009216589861751 , SR (dirty):  0.3904366189232371
+# Batch:  217 / 500 , Accuracy (clean):  0.866589861751152 , SR (clean):  0.38874804353652226 
+
+# Batch:  218 / 500 , Accuracy (dirty):  0.6006880733944954 , SR (dirty):  0.3904375830765887
+# Batch:  218 / 500 , Accuracy (clean):  0.8669724770642202 , SR (clean):  0.38875164492845926 
+
+# Batch:  219 / 500 , Accuracy (dirty):  0.6006849315068493 , SR (dirty):  0.3904251815157702
+# Batch:  219 / 500 , Accuracy (clean):  0.8671232876712329 , SR (clean):  0.38873512554767753 
+
+# Batch:  220 / 500 , Accuracy (dirty):  0.600909090909091 , SR (dirty):  0.3904149720388894
+# Batch:  220 / 500 , Accuracy (clean):  0.8672727272727273 , SR (clean):  0.38873279785143866 
+
+# Batch:  221 / 500 , Accuracy (dirty):  0.6009049773755656 , SR (dirty):  0.3904144903093164
+# Batch:  221 / 500 , Accuracy (clean):  0.867420814479638 , SR (clean):  0.38873251971587175 
+
+# Batch:  222 / 500 , Accuracy (dirty):  0.6006756756756757 , SR (dirty):  0.39041085128833486
+# Batch:  222 / 500 , Accuracy (clean):  0.8675675675675676 , SR (clean):  0.38873386418881206 
+
+# Batch:  223 / 500 , Accuracy (dirty):  0.6013452914798206 , SR (dirty):  0.39041126746538524
+# Batch:  223 / 500 , Accuracy (clean):  0.8670403587443947 , SR (clean):  0.3887392680534575 
+
+# Batch:  224 / 500 , Accuracy (dirty):  0.6008928571428571 , SR (dirty):  0.39042394487563414
+# Batch:  224 / 500 , Accuracy (clean):  0.8665178571428571 , SR (clean):  0.38875131001336916 
+
+# Batch:  225 / 500 , Accuracy (dirty):  0.6015555555555555 , SR (dirty):  0.39042442562486435
+# Batch:  225 / 500 , Accuracy (clean):  0.8664444444444445 , SR (clean):  0.3887463853226657 
+
+# Batch:  226 / 500 , Accuracy (dirty):  0.6015486725663717 , SR (dirty):  0.3904160337293673
+# Batch:  226 / 500 , Accuracy (clean):  0.8661504424778761 , SR (clean):  0.38874144922001386 
+
+# Batch:  227 / 500 , Accuracy (dirty):  0.6015418502202643 , SR (dirty):  0.3904299134680288
+# Batch:  227 / 500 , Accuracy (clean):  0.866079295154185 , SR (clean):  0.3887442520073069 
+
+# Batch:  228 / 500 , Accuracy (dirty):  0.6019736842105263 , SR (dirty):  0.39042623849112645
+# Batch:  228 / 500 , Accuracy (clean):  0.8655701754385965 , SR (clean):  0.38874673948402794 
+
+# Batch:  229 / 500 , Accuracy (dirty):  0.6013100436681222 , SR (dirty):  0.3904381738211862
+# Batch:  229 / 500 , Accuracy (clean):  0.8661572052401747 , SR (clean):  0.3887574461392468 
+
+# Batch:  230 / 500 , Accuracy (dirty):  0.6010869565217392 , SR (dirty):  0.39043407775925565
+# Batch:  230 / 500 , Accuracy (clean):  0.866304347826087 , SR (clean):  0.3887538617406776 
+
+# Batch:  231 / 500 , Accuracy (dirty):  0.6008658008658009 , SR (dirty):  0.3904427967778338
+# Batch:  231 / 500 , Accuracy (clean):  0.8658008658008658 , SR (clean):  0.3887623356952262 
+
+# Batch:  232 / 500 , Accuracy (dirty):  0.6004310344827586 , SR (dirty):  0.3904464308001987
+# Batch:  232 / 500 , Accuracy (clean):  0.8655172413793103 , SR (clean):  0.38876524791625566 
+
+# Batch:  233 / 500 , Accuracy (dirty):  0.6006437768240344 , SR (dirty):  0.39046635601295576
+# Batch:  233 / 500 , Accuracy (clean):  0.8660944206008584 , SR (clean):  0.3887805594102576 
+
+# Batch:  234 / 500 , Accuracy (dirty):  0.6004273504273504 , SR (dirty):  0.39046689933216805
+# Batch:  234 / 500 , Accuracy (clean):  0.8660256410256411 , SR (clean):  0.38877175431569666 
+
+# Batch:  235 / 500 , Accuracy (dirty):  0.6006382978723405 , SR (dirty):  0.3904766357533507
+# Batch:  235 / 500 , Accuracy (clean):  0.8663829787234043 , SR (clean):  0.3887781503487212 
+
+# Batch:  236 / 500 , Accuracy (dirty):  0.6008474576271187 , SR (dirty):  0.3904809452860022
+# Batch:  236 / 500 , Accuracy (clean):  0.8665254237288136 , SR (clean):  0.38877895054609923 
+
+# Batch:  237 / 500 , Accuracy (dirty):  0.600632911392405 , SR (dirty):  0.3904802393304764
+# Batch:  237 / 500 , Accuracy (clean):  0.8666666666666667 , SR (clean):  0.3887752814583282 
+
+# Batch:  238 / 500 , Accuracy (dirty):  0.5997899159663865 , SR (dirty):  0.3904824370876595
+# Batch:  238 / 500 , Accuracy (clean):  0.8661764705882353 , SR (clean):  0.38877303804057206 
+
+# Batch:  239 / 500 , Accuracy (dirty):  0.6006276150627615 , SR (dirty):  0.3904921266393955
+# Batch:  239 / 500 , Accuracy (clean):  0.8663179916317991 , SR (clean):  0.3887759004705508 
+
+# Batch:  240 / 500 , Accuracy (dirty):  0.6008333333333333 , SR (dirty):  0.39048289375755885
+# Batch:  240 / 500 , Accuracy (clean):  0.8658333333333333 , SR (clean):  0.38876759066250344 
+
+# Batch:  241 / 500 , Accuracy (dirty):  0.6012448132780083 , SR (dirty):  0.3904729852017017
+# Batch:  241 / 500 , Accuracy (clean):  0.866390041493776 , SR (clean):  0.3887652957994935 
+
+# Batch:  242 / 500 , Accuracy (dirty):  0.6010330578512396 , SR (dirty):  0.3904699061713601
+# Batch:  242 / 500 , Accuracy (clean):  0.8663223140495868 , SR (clean):  0.3887678096520991 
+
+# Batch:  243 / 500 , Accuracy (dirty):  0.6010288065843621 , SR (dirty):  0.3904753202889101
+# Batch:  243 / 500 , Accuracy (clean):  0.8666666666666667 , SR (clean):  0.3887703862633216 
+
+# Batch:  244 / 500 , Accuracy (dirty):  0.6002049180327869 , SR (dirty):  0.390470569769929
+# Batch:  244 / 500 , Accuracy (clean):  0.8665983606557377 , SR (clean):  0.3887643379712028 
+
+# Batch:  245 / 500 , Accuracy (dirty):  0.6008163265306122 , SR (dirty):  0.3904757131536678
+# Batch:  245 / 500 , Accuracy (clean):  0.866938775510204 , SR (clean):  0.38876981348288686 
+
+# Batch:  246 / 500 , Accuracy (dirty):  0.6012195121951219 , SR (dirty):  0.3904675047586673
+# Batch:  246 / 500 , Accuracy (clean):  0.8670731707317073 , SR (clean):  0.388766201875841 
+
+# Batch:  247 / 500 , Accuracy (dirty):  0.6016194331983805 , SR (dirty):  0.39045213561199366
+# Batch:  247 / 500 , Accuracy (clean):  0.867004048582996 , SR (clean):  0.3887542588228714 
+
+# Batch:  248 / 500 , Accuracy (dirty):  0.6012096774193548 , SR (dirty):  0.390458209441229
+# Batch:  248 / 500 , Accuracy (clean):  0.8669354838709677 , SR (clean):  0.3887506049828997 
+
+# Batch:  249 / 500 , Accuracy (dirty):  0.6006024096385543 , SR (dirty):  0.3904605378148094
+# Batch:  249 / 500 , Accuracy (clean):  0.8668674698795181 , SR (clean):  0.3887515094917767 
+
+# Batch:  250 / 500 , Accuracy (dirty):  0.5994 , SR (dirty):  0.3904551741731789
+# Batch:  250 / 500 , Accuracy (clean):  0.8664 , SR (clean):  0.38874960490510746 
+
+# Batch:  251 / 500 , Accuracy (dirty):  0.600199203187251 , SR (dirty):  0.39045986937333
+# Batch:  251 / 500 , Accuracy (clean):  0.8667330677290837 , SR (clean):  0.3887535948516845 
+
+# Batch:  252 / 500 , Accuracy (dirty):  0.6007936507936508 , SR (dirty):  0.390465757698529
+# Batch:  252 / 500 , Accuracy (clean):  0.8670634920634921 , SR (clean):  0.38875921614662934 
+
+# Batch:  253 / 500 , Accuracy (dirty):  0.600395256916996 , SR (dirty):  0.3904630647517261
+# Batch:  253 / 500 , Accuracy (clean):  0.8673913043478261 , SR (clean):  0.3887535534202189 
+
+# Batch:  254 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.39044941700651703
+# Batch:  254 / 500 , Accuracy (clean):  0.86751968503937 , SR (clean):  0.38874505436048623 
+
+# Batch:  255 / 500 , Accuracy (dirty):  0.6001960784313726 , SR (dirty):  0.39044667458806015
+# Batch:  255 / 500 , Accuracy (clean):  0.8676470588235294 , SR (clean):  0.38874660194108346 
+
+# Batch:  256 / 500 , Accuracy (dirty):  0.6001953125 , SR (dirty):  0.3904456498201686
+# Batch:  256 / 500 , Accuracy (clean):  0.867578125 , SR (clean):  0.38874729464182534 
+
+# Batch:  257 / 500 , Accuracy (dirty):  0.6001945525291829 , SR (dirty):  0.390450213923619
+# Batch:  257 / 500 , Accuracy (clean):  0.8673151750972763 , SR (clean):  0.38874807018741764 
+
+# Batch:  258 / 500 , Accuracy (dirty):  0.6001937984496124 , SR (dirty):  0.390451777085267
+# Batch:  258 / 500 , Accuracy (clean):  0.8670542635658914 , SR (clean):  0.38874397092712243 
+
+# Batch:  259 / 500 , Accuracy (dirty):  0.6005791505791506 , SR (dirty):  0.39045865256366674
+# Batch:  259 / 500 , Accuracy (clean):  0.8673745173745174 , SR (clean):  0.3887483224117373 
+
+# Batch:  260 / 500 , Accuracy (dirty):  0.6009615384615384 , SR (dirty):  0.39044936215555825
+# Batch:  260 / 500 , Accuracy (clean):  0.8676923076923077 , SR (clean):  0.3887411876865111 
+
+# Batch:  261 / 500 , Accuracy (dirty):  0.6001915708812261 , SR (dirty):  0.3904577877566531
+# Batch:  261 / 500 , Accuracy (clean):  0.8670498084291188 , SR (clean):  0.38874821112402325 
+
+# Batch:  262 / 500 , Accuracy (dirty):  0.600381679389313 , SR (dirty):  0.3904511535535171
+# Batch:  262 / 500 , Accuracy (clean):  0.866793893129771 , SR (clean):  0.3887442071990187 
+
+# Batch:  263 / 500 , Accuracy (dirty):  0.6015209125475285 , SR (dirty):  0.3904485314775944
+# Batch:  263 / 500 , Accuracy (clean):  0.8673003802281369 , SR (clean):  0.38874539049326196 
+
+# Batch:  264 / 500 , Accuracy (dirty):  0.6017045454545454 , SR (dirty):  0.39045145055776864
+# Batch:  264 / 500 , Accuracy (clean):  0.8678030303030303 , SR (clean):  0.3887517763941043 
+
+# Batch:  265 / 500 , Accuracy (dirty):  0.6015094339622642 , SR (dirty):  0.39045770465484286
+# Batch:  265 / 500 , Accuracy (clean):  0.8677358490566037 , SR (clean):  0.3887580643197174 
+
+# Batch:  266 / 500 , Accuracy (dirty):  0.6015037593984962 , SR (dirty):  0.39045828071325217
+# Batch:  266 / 500 , Accuracy (clean):  0.8680451127819548 , SR (clean):  0.38875605783970457 
+
+# Batch:  267 / 500 , Accuracy (dirty):  0.601685393258427 , SR (dirty):  0.39046390257363894
+# Batch:  267 / 500 , Accuracy (clean):  0.8683520599250937 , SR (clean):  0.38876147007011885 
+
+# Batch:  268 / 500 , Accuracy (dirty):  0.6011194029850746 , SR (dirty):  0.39045589299763916
+# Batch:  268 / 500 , Accuracy (clean):  0.8682835820895523 , SR (clean):  0.3887593145270889 
+
+# Batch:  269 / 500 , Accuracy (dirty):  0.6013011152416357 , SR (dirty):  0.3904486489795368
+# Batch:  269 / 500 , Accuracy (clean):  0.8685873605947956 , SR (clean):  0.3887489493381593 
+
+# Batch:  270 / 500 , Accuracy (dirty):  0.6012962962962963 , SR (dirty):  0.39044192176145587
+# Batch:  270 / 500 , Accuracy (clean):  0.8688888888888889 , SR (clean):  0.38874035561124554 
+
+# Batch:  271 / 500 , Accuracy (dirty):  0.6011070110701107 , SR (dirty):  0.39045613614104324
+# Batch:  271 / 500 , Accuracy (clean):  0.868450184501845 , SR (clean):  0.38874643945360576 
+
+# Batch:  272 / 500 , Accuracy (dirty):  0.600735294117647 , SR (dirty):  0.39045729646148686
+# Batch:  272 / 500 , Accuracy (clean):  0.8685661764705882 , SR (clean):  0.38874426345084945 
+
+# Batch:  273 / 500 , Accuracy (dirty):  0.6007326007326007 , SR (dirty):  0.3904587202368174
+# Batch:  273 / 500 , Accuracy (clean):  0.8683150183150183 , SR (clean):  0.38874665155409294 
+
+# Batch:  274 / 500 , Accuracy (dirty):  0.6001824817518249 , SR (dirty):  0.39046198022558376
+# Batch:  274 / 500 , Accuracy (clean):  0.8682481751824818 , SR (clean):  0.3887547211996635 
+
+# Batch:  275 / 500 , Accuracy (dirty):  0.6001818181818181 , SR (dirty):  0.3904609876500139
+# Batch:  275 / 500 , Accuracy (clean):  0.8681818181818182 , SR (clean):  0.3887535862215513 
+
+# Batch:  276 / 500 , Accuracy (dirty):  0.6003623188405797 , SR (dirty):  0.39045640059856423
+# Batch:  276 / 500 , Accuracy (clean):  0.8681159420289855 , SR (clean):  0.3887487333724421 
+
+# Batch:  277 / 500 , Accuracy (dirty):  0.6001805054151624 , SR (dirty):  0.3904588350801166
+# Batch:  277 / 500 , Accuracy (clean):  0.8680505415162455 , SR (clean):  0.38874873534747423 
+
+# Batch:  278 / 500 , Accuracy (dirty):  0.6005395683453237 , SR (dirty):  0.3904550397673767
+# Batch:  278 / 500 , Accuracy (clean):  0.8678057553956835 , SR (clean):  0.3887487541713768 
+
+# Batch:  279 / 500 , Accuracy (dirty):  0.6010752688172043 , SR (dirty):  0.39046136184086144
+# Batch:  279 / 500 , Accuracy (clean):  0.8681003584229391 , SR (clean):  0.3887515363082037 
+
+# Batch:  280 / 500 , Accuracy (dirty):  0.6008928571428571 , SR (dirty):  0.3904600399393465
+# Batch:  280 / 500 , Accuracy (clean):  0.8682142857142857 , SR (clean):  0.3887581704028946 
+
+# Batch:  281 / 500 , Accuracy (dirty):  0.6008896797153025 , SR (dirty):  0.390461799066842
+# Batch:  281 / 500 , Accuracy (clean):  0.8685053380782918 , SR (clean):  0.3887585057930987 
+
+# Batch:  282 / 500 , Accuracy (dirty):  0.6007092198581561 , SR (dirty):  0.39047193343566844
+# Batch:  282 / 500 , Accuracy (clean):  0.8682624113475177 , SR (clean):  0.3887626955463942 
+
+# Batch:  283 / 500 , Accuracy (dirty):  0.6007067137809188 , SR (dirty):  0.39047371784851714
+# Batch:  283 / 500 , Accuracy (clean):  0.8683745583038869 , SR (clean):  0.38876713652712214 
+
+# Batch:  284 / 500 , Accuracy (dirty):  0.6007042253521127 , SR (dirty):  0.39047548739180127
+# Batch:  284 / 500 , Accuracy (clean):  0.8684859154929577 , SR (clean):  0.38877155122377094 
+
+# Batch:  285 / 500 , Accuracy (dirty):  0.6008771929824561 , SR (dirty):  0.39047571323954244
+# Batch:  285 / 500 , Accuracy (clean):  0.8689473684210526 , SR (clean):  0.38877039739926844 
+
+# Batch:  286 / 500 , Accuracy (dirty):  0.6010489510489511 , SR (dirty):  0.3904905826385623
+# Batch:  286 / 500 , Accuracy (clean):  0.8690559440559441 , SR (clean):  0.3887798237055472 
+
+# Batch:  287 / 500 , Accuracy (dirty):  0.6013937282229965 , SR (dirty):  0.39049497083717044
+# Batch:  287 / 500 , Accuracy (clean):  0.8689895470383275 , SR (clean):  0.3887846882199235 
+
+# Batch:  288 / 500 , Accuracy (dirty):  0.6013888888888889 , SR (dirty):  0.390502617764104
+# Batch:  288 / 500 , Accuracy (clean):  0.8690972222222222 , SR (clean):  0.38879105812834813 
+
+# Batch:  289 / 500 , Accuracy (dirty):  0.6019031141868512 , SR (dirty):  0.3904966662878192
+# Batch:  289 / 500 , Accuracy (clean):  0.8695501730103806 , SR (clean):  0.38878734942471516 
+
+# Batch:  290 / 500 , Accuracy (dirty):  0.6020689655172414 , SR (dirty):  0.3904995494017487
+# Batch:  290 / 500 , Accuracy (clean):  0.8696551724137931 , SR (clean):  0.3887882049873925 
+
+# Batch:  291 / 500 , Accuracy (dirty):  0.6017182130584192 , SR (dirty):  0.3905033137223026
+# Batch:  291 / 500 , Accuracy (clean):  0.8699312714776632 , SR (clean):  0.38879327842052913 
+
+# Batch:  292 / 500 , Accuracy (dirty):  0.6017123287671233 , SR (dirty):  0.39050415048863263
+# Batch:  292 / 500 , Accuracy (clean):  0.8698630136986302 , SR (clean):  0.38879439642740743 
+
+# Batch:  293 / 500 , Accuracy (dirty):  0.6017064846416382 , SR (dirty):  0.3905046604313458
+# Batch:  293 / 500 , Accuracy (clean):  0.870136518771331 , SR (clean):  0.3887918160624594 
+
+# Batch:  294 / 500 , Accuracy (dirty):  0.601360544217687 , SR (dirty):  0.3905142883931063
+# Batch:  294 / 500 , Accuracy (clean):  0.8698979591836735 , SR (clean):  0.3887998617366637 
+
+# Batch:  295 / 500 , Accuracy (dirty):  0.6013559322033898 , SR (dirty):  0.39052215440616467
+# Batch:  295 / 500 , Accuracy (clean):  0.8696610169491525 , SR (clean):  0.3888061125808313 
+
+# Batch:  296 / 500 , Accuracy (dirty):  0.6008445945945946 , SR (dirty):  0.39052536183735975
+# Batch:  296 / 500 , Accuracy (clean):  0.8692567567567567 , SR (clean):  0.38880687194267605 
+
+# Batch:  297 / 500 , Accuracy (dirty):  0.6001683501683501 , SR (dirty):  0.39053196735590157
+# Batch:  297 / 500 , Accuracy (clean):  0.8691919191919192 , SR (clean):  0.38881435140255005 
+
+# Batch:  298 / 500 , Accuracy (dirty):  0.6 , SR (dirty):  0.3905239221859096
+# Batch:  298 / 500 , Accuracy (clean):  0.8692953020134229 , SR (clean):  0.38880884439031627 
+
+# Batch:  299 / 500 , Accuracy (dirty):  0.6001672240802676 , SR (dirty):  0.3905188660312494
+# Batch:  299 / 500 , Accuracy (clean):  0.8695652173913043 , SR (clean):  0.38879851964626255 
+
+# Batch:  300 / 500 , Accuracy (dirty):  0.6001666666666666 , SR (dirty):  0.3905211149729044
+# Batch:  300 / 500 , Accuracy (clean):  0.8695 , SR (clean):  0.3888022439587403 
+
+# Batch:  301 / 500 , Accuracy (dirty):  0.6001661129568107 , SR (dirty):  0.39053032310488434
+# Batch:  301 / 500 , Accuracy (clean):  0.8692691029900332 , SR (clean):  0.3888084358133137 
+
+# Batch:  302 / 500 , Accuracy (dirty):  0.6003311258278146 , SR (dirty):  0.39053110337655006
+# Batch:  302 / 500 , Accuracy (clean):  0.8693708609271523 , SR (clean):  0.3888112889342009 
+
+# Batch:  303 / 500 , Accuracy (dirty):  0.6004950495049505 , SR (dirty):  0.390530896222559
+# Batch:  303 / 500 , Accuracy (clean):  0.8691419141914192 , SR (clean):  0.3888115117374492 
+
+# Batch:  304 / 500 , Accuracy (dirty):  0.6006578947368421 , SR (dirty):  0.39053702839764626
+# Batch:  304 / 500 , Accuracy (clean):  0.86875 , SR (clean):  0.3888172429777357 
+
+# Batch:  305 / 500 , Accuracy (dirty):  0.6011475409836066 , SR (dirty):  0.3905446184280963
+# Batch:  305 / 500 , Accuracy (clean):  0.8688524590163934 , SR (clean):  0.3888220247851878 
+
+# Batch:  306 / 500 , Accuracy (dirty):  0.601797385620915 , SR (dirty):  0.390534817263553
+# Batch:  306 / 500 , Accuracy (clean):  0.8691176470588236 , SR (clean):  0.388819921575012 
+
+# Batch:  307 / 500 , Accuracy (dirty):  0.601628664495114 , SR (dirty):  0.39052418078698636
+# Batch:  307 / 500 , Accuracy (clean):  0.8690553745928339 , SR (clean):  0.38881847092699784 
+
+# Batch:  308 / 500 , Accuracy (dirty):  0.601461038961039 , SR (dirty):  0.3905214615299838
+# Batch:  308 / 500 , Accuracy (clean):  0.8688311688311688 , SR (clean):  0.38881778718769366 
+
+# Batch:  309 / 500 , Accuracy (dirty):  0.6014563106796117 , SR (dirty):  0.3905205705520586
+# Batch:  309 / 500 , Accuracy (clean):  0.8681229773462783 , SR (clean):  0.38881669965968835 
+
+# Batch:  310 / 500 , Accuracy (dirty):  0.6012903225806452 , SR (dirty):  0.39050921641904424
+# Batch:  310 / 500 , Accuracy (clean):  0.8683870967741936 , SR (clean):  0.38880987159064306 
+
+# Batch:  311 / 500 , Accuracy (dirty):  0.6008038585209003 , SR (dirty):  0.3905088483470308
+# Batch:  311 / 500 , Accuracy (clean):  0.8683279742765273 , SR (clean):  0.3888089956406997 
+
+# Batch:  312 / 500 , Accuracy (dirty):  0.6016025641025641 , SR (dirty):  0.390506591176639
+# Batch:  312 / 500 , Accuracy (clean):  0.8685897435897436 , SR (clean):  0.3888087203829784 
+
+# Batch:  313 / 500 , Accuracy (dirty):  0.6015974440894569 , SR (dirty):  0.39050908965693965
+# Batch:  313 / 500 , Accuracy (clean):  0.8686900958466454 , SR (clean):  0.38881399898315083 
+
+# Batch:  314 / 500 , Accuracy (dirty):  0.6015923566878981 , SR (dirty):  0.39050682665155345
+# Batch:  314 / 500 , Accuracy (clean):  0.868312101910828 , SR (clean):  0.3888124002416089 
+
+# Batch:  315 / 500 , Accuracy (dirty):  0.6009523809523809 , SR (dirty):  0.3905012976705474
+# Batch:  315 / 500 , Accuracy (clean):  0.8685714285714285 , SR (clean):  0.38880724715809667 
+
+# Batch:  316 / 500 , Accuracy (dirty):  0.6004746835443038 , SR (dirty):  0.3904949208137628
+# Batch:  316 / 500 , Accuracy (clean):  0.8689873417721519 , SR (clean):  0.3887967190712692 
+
+# Batch:  317 / 500 , Accuracy (dirty):  0.6009463722397477 , SR (dirty):  0.3905005005784413
+# Batch:  317 / 500 , Accuracy (clean):  0.8689274447949527 , SR (clean):  0.38879660209478073 
+
+# Batch:  318 / 500 , Accuracy (dirty):  0.6014150943396226 , SR (dirty):  0.39048956547844726
+# Batch:  318 / 500 , Accuracy (clean):  0.8690251572327043 , SR (clean):  0.38878857800451383 
+
+# Batch:  319 / 500 , Accuracy (dirty):  0.6015673981191223 , SR (dirty):  0.39048705567784825
+# Batch:  319 / 500 , Accuracy (clean):  0.8694357366771159 , SR (clean):  0.38878854401433716 
+
+# Batch:  320 / 500 , Accuracy (dirty):  0.60125 , SR (dirty):  0.39048743122089113
+# Batch:  320 / 500 , Accuracy (clean):  0.8690625 , SR (clean):  0.3887903469127215 
+
+# Batch:  321 / 500 , Accuracy (dirty):  0.6012461059190031 , SR (dirty):  0.39047542043413297
+# Batch:  321 / 500 , Accuracy (clean):  0.8693146417445483 , SR (clean):  0.38877822318887734 
+
+# Batch:  322 / 500 , Accuracy (dirty):  0.6007763975155279 , SR (dirty):  0.3904740271953653
+# Batch:  322 / 500 , Accuracy (clean):  0.868944099378882 , SR (clean):  0.3887793548901559 
+
+# Batch:  323 / 500 , Accuracy (dirty):  0.6009287925696595 , SR (dirty):  0.3904781044728547
+# Batch:  323 / 500 , Accuracy (clean):  0.8691950464396285 , SR (clean):  0.38878482256575386 
+
+# Batch:  324 / 500 , Accuracy (dirty):  0.6007716049382716 , SR (dirty):  0.3904766617501887
+# Batch:  324 / 500 , Accuracy (clean):  0.8694444444444445 , SR (clean):  0.38878672573277706 
+
+# Batch:  325 / 500 , Accuracy (dirty):  0.6007692307692307 , SR (dirty):  0.39047656468043535
+# Batch:  325 / 500 , Accuracy (clean):  0.8693846153846154 , SR (clean):  0.38878504932480307 
+
+# Batch:  326 / 500 , Accuracy (dirty):  0.6007668711656442 , SR (dirty):  0.39048474014935475
+# Batch:  326 / 500 , Accuracy (clean):  0.869478527607362 , SR (clean):  0.3887989288363677 
+
+# Batch:  327 / 500 , Accuracy (dirty):  0.600611620795107 , SR (dirty):  0.3904908672163657
+# Batch:  327 / 500 , Accuracy (clean):  0.8692660550458715 , SR (clean):  0.388803694655082 
+
+# Batch:  328 / 500 , Accuracy (dirty):  0.6007621951219512 , SR (dirty):  0.39049316609003903
+# Batch:  328 / 500 , Accuracy (clean):  0.8692073170731708 , SR (clean):  0.38881068962704135 
+
+# Batch:  329 / 500 , Accuracy (dirty):  0.6006079027355623 , SR (dirty):  0.39050127586619354
+# Batch:  329 / 500 , Accuracy (clean):  0.8691489361702127 , SR (clean):  0.3888163666210839 
+
+# Batch:  330 / 500 , Accuracy (dirty):  0.6007575757575757 , SR (dirty):  0.3905065445437842
+# Batch:  330 / 500 , Accuracy (clean):  0.8689393939393939 , SR (clean):  0.38881928465597226 
+
+# Batch:  331 / 500 , Accuracy (dirty):  0.6007552870090634 , SR (dirty):  0.39049894086174386
+# Batch:  331 / 500 , Accuracy (clean):  0.8691842900302115 , SR (clean):  0.3888144484660485 
+
+# Batch:  332 / 500 , Accuracy (dirty):  0.6007530120481928 , SR (dirty):  0.390501398210761
+# Batch:  332 / 500 , Accuracy (clean):  0.8694277108433734 , SR (clean):  0.38881871911400134 
+
+# Batch:  333 / 500 , Accuracy (dirty):  0.6003003003003003 , SR (dirty):  0.39049840280815984
+# Batch:  333 / 500 , Accuracy (clean):  0.8689189189189189 , SR (clean):  0.38881444240779994 
+
+# Batch:  334 / 500 , Accuracy (dirty):  0.5997005988023952 , SR (dirty):  0.3905051997639176
+# Batch:  334 / 500 , Accuracy (clean):  0.8691616766467066 , SR (clean):  0.3888166637437517 
+
+# Batch:  335 / 500 , Accuracy (dirty):  0.5991044776119403 , SR (dirty):  0.39050992735960854
+# Batch:  335 / 500 , Accuracy (clean):  0.8691044776119403 , SR (clean):  0.3888218004356184 
+
+# Batch:  336 / 500 , Accuracy (dirty):  0.5995535714285715 , SR (dirty):  0.3905086312664675
+# Batch:  336 / 500 , Accuracy (clean):  0.8691964285714285 , SR (clean):  0.38882016634593497 
+
+# Batch:  337 / 500 , Accuracy (dirty):  0.5998516320474777 , SR (dirty):  0.3905121657036691
+# Batch:  337 / 500 , Accuracy (clean):  0.8689910979228487 , SR (clean):  0.38882161041548824 
+
+# Batch:  338 / 500 , Accuracy (dirty):  0.5997041420118343 , SR (dirty):  0.39050588952371246
+# Batch:  338 / 500 , Accuracy (clean):  0.868491124260355 , SR (clean):  0.38881593630166367 
+
+# Batch:  339 / 500 , Accuracy (dirty):  0.5995575221238938 , SR (dirty):  0.3905024643550913
+# Batch:  339 / 500 , Accuracy (clean):  0.8685840707964602 , SR (clean):  0.3888122506585301 
+
+# Batch:  340 / 500 , Accuracy (dirty):  0.5992647058823529 , SR (dirty):  0.39049382051784576
+# Batch:  340 / 500 , Accuracy (clean):  0.8680882352941176 , SR (clean):  0.38880490849353977 
+
+# Batch:  341 / 500 , Accuracy (dirty):  0.5995601173020528 , SR (dirty):  0.39048758013771456
+# Batch:  341 / 500 , Accuracy (clean):  0.868475073313783 , SR (clean):  0.38879727848924905 
+
+# Batch:  342 / 500 , Accuracy (dirty):  0.5992690058479532 , SR (dirty):  0.39048173487527604
+# Batch:  342 / 500 , Accuracy (clean):  0.868421052631579 , SR (clean):  0.3887939981896521 
+
+# Batch:  343 / 500 , Accuracy (dirty):  0.5988338192419825 , SR (dirty):  0.39048032684052647
+# Batch:  343 / 500 , Accuracy (clean):  0.8682215743440234 , SR (clean):  0.38879269400560557 
+
+# Batch:  344 / 500 , Accuracy (dirty):  0.5984011627906977 , SR (dirty):  0.39048216817120085
+# Batch:  344 / 500 , Accuracy (clean):  0.8681686046511627 , SR (clean):  0.38879562801914236 
+
+# Batch:  345 / 500 , Accuracy (dirty):  0.5982608695652174 , SR (dirty):  0.3904801328207478
+# Batch:  345 / 500 , Accuracy (clean):  0.8682608695652174 , SR (clean):  0.3887928578796005 
+
+# Batch:  346 / 500 , Accuracy (dirty):  0.5976878612716763 , SR (dirty):  0.39048708683144073
+# Batch:  346 / 500 , Accuracy (clean):  0.8682080924855491 , SR (clean):  0.38879491741014893 
+
+# Batch:  347 / 500 , Accuracy (dirty):  0.5976945244956773 , SR (dirty):  0.3904971630210625
+# Batch:  347 / 500 , Accuracy (clean):  0.868299711815562 , SR (clean):  0.38880067777985783 
+
+# Batch:  348 / 500 , Accuracy (dirty):  0.5972701149425287 , SR (dirty):  0.39049838750537336
+# Batch:  348 / 500 , Accuracy (clean):  0.8683908045977011 , SR (clean):  0.3888041660250673 
+
+# Batch:  349 / 500 , Accuracy (dirty):  0.5968481375358167 , SR (dirty):  0.3904912480947118
+# Batch:  349 / 500 , Accuracy (clean):  0.8680515759312321 , SR (clean):  0.38879918618654075 
+
+# Batch:  350 / 500 , Accuracy (dirty):  0.5967142857142858 , SR (dirty):  0.3904885072365536
+# Batch:  350 / 500 , Accuracy (clean):  0.8678571428571429 , SR (clean):  0.38879874892847177 
+
+# Batch:  351 / 500 , Accuracy (dirty):  0.5968660968660968 , SR (dirty):  0.390490429864078
+# Batch:  351 / 500 , Accuracy (clean):  0.8678062678062678 , SR (clean):  0.3888002135012758 
+
+# Batch:  352 / 500 , Accuracy (dirty):  0.5964488636363636 , SR (dirty):  0.39048346248778953
+# Batch:  352 / 500 , Accuracy (clean):  0.8680397727272727 , SR (clean):  0.38879326702365025 
+
+# Batch:  353 / 500 , Accuracy (dirty):  0.5967422096317281 , SR (dirty):  0.3904731799281941
+# Batch:  353 / 500 , Accuracy (clean):  0.8678470254957507 , SR (clean):  0.3887841683490816 
+
+# Batch:  354 / 500 , Accuracy (dirty):  0.5971751412429378 , SR (dirty):  0.3904721083632533
+# Batch:  354 / 500 , Accuracy (clean):  0.8679378531073446 , SR (clean):  0.3887808690520679 
+
+# Batch:  355 / 500 , Accuracy (dirty):  0.5971830985915493 , SR (dirty):  0.3904735343666099
+# Batch:  355 / 500 , Accuracy (clean):  0.8677464788732394 , SR (clean):  0.3887823119027449 
+
+# Batch:  356 / 500 , Accuracy (dirty):  0.5970505617977528 , SR (dirty):  0.3904710915793643
+# Batch:  356 / 500 , Accuracy (clean):  0.8676966292134831 , SR (clean):  0.3887840103209562 
+
+# Batch:  357 / 500 , Accuracy (dirty):  0.5969187675070028 , SR (dirty):  0.3904667251267657
+# Batch:  357 / 500 , Accuracy (clean):  0.8677871148459384 , SR (clean):  0.3887797332598264 
+
+# Batch:  358 / 500 , Accuracy (dirty):  0.5967877094972067 , SR (dirty):  0.3904612212854931
+# Batch:  358 / 500 , Accuracy (clean):  0.8680167597765364 , SR (clean):  0.38877823182671667 
+
+# Batch:  359 / 500 , Accuracy (dirty):  0.5963788300835655 , SR (dirty):  0.3904674085767128
+# Batch:  359 / 500 , Accuracy (clean):  0.8676880222841226 , SR (clean):  0.3887821336654754 
+
+# Batch:  360 / 500 , Accuracy (dirty):  0.5966666666666667 , SR (dirty):  0.3904670256390129
+# Batch:  360 / 500 , Accuracy (clean):  0.8677777777777778 , SR (clean):  0.38878359657245243 
+
+# Batch:  361 / 500 , Accuracy (dirty):  0.5966759002770083 , SR (dirty):  0.3904674741130979
+# Batch:  361 / 500 , Accuracy (clean):  0.867590027700831 , SR (clean):  0.3887858782489333 
+
+# Batch:  362 / 500 , Accuracy (dirty):  0.5965469613259669 , SR (dirty):  0.3904669386123353
+# Batch:  362 / 500 , Accuracy (clean):  0.8675414364640884 , SR (clean):  0.38878580847123 
+
+# Batch:  363 / 500 , Accuracy (dirty):  0.596694214876033 , SR (dirty):  0.3904680855378436
+# Batch:  363 / 500 , Accuracy (clean):  0.8676308539944904 , SR (clean):  0.38878870489057604 
+
+# Batch:  364 / 500 , Accuracy (dirty):  0.5964285714285714 , SR (dirty):  0.3904710995988382
+# Batch:  364 / 500 , Accuracy (clean):  0.8677197802197802 , SR (clean):  0.3887919349241151 
+
+# Batch:  365 / 500 , Accuracy (dirty):  0.5958904109589042 , SR (dirty):  0.39048001866930593
+# Batch:  365 / 500 , Accuracy (clean):  0.8678082191780822 , SR (clean):  0.3887961257665574 
+
+# Batch:  366 / 500 , Accuracy (dirty):  0.5957650273224043 , SR (dirty):  0.3904804243251183
+# Batch:  366 / 500 , Accuracy (clean):  0.867896174863388 , SR (clean):  0.3887968493947779 
+
+# Batch:  367 / 500 , Accuracy (dirty):  0.5960490463215259 , SR (dirty):  0.3904919527437506
+# Batch:  367 / 500 , Accuracy (clean):  0.8681198910081744 , SR (clean):  0.3888050969287302 
+
+# Batch:  368 / 500 , Accuracy (dirty):  0.5967391304347827 , SR (dirty):  0.3904965314724044
+# Batch:  368 / 500 , Accuracy (clean):  0.8682065217391305 , SR (clean):  0.3888105453581754 
+
+# Batch:  369 / 500 , Accuracy (dirty):  0.5966124661246612 , SR (dirty):  0.3904962813353974
+# Batch:  369 / 500 , Accuracy (clean):  0.8682926829268293 , SR (clean):  0.3888112919797039 
+
+# Batch:  370 / 500 , Accuracy (dirty):  0.5966216216216216 , SR (dirty):  0.39050180245396804
+# Batch:  370 / 500 , Accuracy (clean):  0.8681081081081081 , SR (clean):  0.3888151581864624 
+
+# Batch:  371 / 500 , Accuracy (dirty):  0.5962264150943396 , SR (dirty):  0.3905034236832098
+# Batch:  371 / 500 , Accuracy (clean):  0.8677897574123989 , SR (clean):  0.3888181319646985 
+
+# Batch:  372 / 500 , Accuracy (dirty):  0.5959677419354839 , SR (dirty):  0.3905052237604999
+# Batch:  372 / 500 , Accuracy (clean):  0.8680107526881721 , SR (clean):  0.38882133710534583 
+
+# Batch:  373 / 500 , Accuracy (dirty):  0.5951742627345844 , SR (dirty):  0.3905011781599734
+# Batch:  373 / 500 , Accuracy (clean):  0.8676943699731904 , SR (clean):  0.38881461343230506 
+
+# Batch:  374 / 500 , Accuracy (dirty):  0.5955882352941176 , SR (dirty):  0.39050347366677685
+# Batch:  374 / 500 , Accuracy (clean):  0.868048128342246 , SR (clean):  0.38881686958086015 
+
+# Batch:  375 / 500 , Accuracy (dirty):  0.5952 , SR (dirty):  0.39049780880779605
+# Batch:  375 / 500 , Accuracy (clean):  0.8676 , SR (clean):  0.38881027333938045 
+
+# Batch:  376 / 500 , Accuracy (dirty):  0.5954787234042553 , SR (dirty):  0.3904962676165262
+# Batch:  376 / 500 , Accuracy (clean):  0.867686170212766 , SR (clean):  0.38880917806029214 
+
+# Batch:  377 / 500 , Accuracy (dirty):  0.5954907161803713 , SR (dirty):  0.39050006799256876
+# Batch:  377 / 500 , Accuracy (clean):  0.8679045092838197 , SR (clean):  0.38881196305766397 
+
+# Batch:  378 / 500 , Accuracy (dirty):  0.5953703703703703 , SR (dirty):  0.3905007662326839
+# Batch:  378 / 500 , Accuracy (clean):  0.8678571428571429 , SR (clean):  0.38881350725731967 
+
+# Batch:  379 / 500 , Accuracy (dirty):  0.5955145118733509 , SR (dirty):  0.3904948875521279
+# Batch:  379 / 500 , Accuracy (clean):  0.8678100263852243 , SR (clean):  0.38880752914810635 
+
+# Batch:  380 / 500 , Accuracy (dirty):  0.5955263157894737 , SR (dirty):  0.39049987227239014
+# Batch:  380 / 500 , Accuracy (clean):  0.8677631578947368 , SR (clean):  0.3888092754229585 
+
+# Batch:  381 / 500 , Accuracy (dirty):  0.5956692913385827 , SR (dirty):  0.39050715147325554
+# Batch:  381 / 500 , Accuracy (clean):  0.8675853018372703 , SR (clean):  0.3888141026257341 
+
+# Batch:  382 / 500 , Accuracy (dirty):  0.5955497382198953 , SR (dirty):  0.3904922562921658
+# Batch:  382 / 500 , Accuracy (clean):  0.8676701570680628 , SR (clean):  0.3888005172632033 
+
+# Batch:  383 / 500 , Accuracy (dirty):  0.5955613577023499 , SR (dirty):  0.3904975549747539
+# Batch:  383 / 500 , Accuracy (clean):  0.8674934725848564 , SR (clean):  0.3888048815587497 
+
+# Batch:  384 / 500 , Accuracy (dirty):  0.5954427083333333 , SR (dirty):  0.3905002484333572
+# Batch:  384 / 500 , Accuracy (clean):  0.8671875 , SR (clean):  0.38880425752268377 
+
+# Batch:  385 / 500 , Accuracy (dirty):  0.5959740259740259 , SR (dirty):  0.39049687025401336
+# Batch:  385 / 500 , Accuracy (clean):  0.8672727272727273 , SR (clean):  0.38880183206411223 
+
+# Batch:  386 / 500 , Accuracy (dirty):  0.5962435233160622 , SR (dirty):  0.3904956640291156
+# Batch:  386 / 500 , Accuracy (clean):  0.8674870466321244 , SR (clean):  0.38879950672902697 
+
+# Batch:  387 / 500 , Accuracy (dirty):  0.5961240310077519 , SR (dirty):  0.39050207922262103
+# Batch:  387 / 500 , Accuracy (clean):  0.8677002583979329 , SR (clean):  0.3888035059688264 
+
+# Batch:  388 / 500 , Accuracy (dirty):  0.5961340206185567 , SR (dirty):  0.39050244520093813
+# Batch:  388 / 500 , Accuracy (clean):  0.8676546391752578 , SR (clean):  0.3888056531406542 
+
+# Batch:  389 / 500 , Accuracy (dirty):  0.5965295629820051 , SR (dirty):  0.39050454860122097
+# Batch:  389 / 500 , Accuracy (clean):  0.8673521850899742 , SR (clean):  0.3888098079974738 
+
+# Batch:  390 / 500 , Accuracy (dirty):  0.5962820512820513 , SR (dirty):  0.39049631797143924
+# Batch:  390 / 500 , Accuracy (clean):  0.8671794871794872 , SR (clean):  0.3888017576657399 
+
+# Batch:  391 / 500 , Accuracy (dirty):  0.5960358056265984 , SR (dirty):  0.39049024044926917
+# Batch:  391 / 500 , Accuracy (clean):  0.8672634271099744 , SR (clean):  0.3887939687863369 
+
+# Batch:  392 / 500 , Accuracy (dirty):  0.5957908163265306 , SR (dirty):  0.39048463391557786
+# Batch:  392 / 500 , Accuracy (clean):  0.8670918367346939 , SR (clean):  0.38878689741665573 
+
+# Batch:  393 / 500 , Accuracy (dirty):  0.5956743002544529 , SR (dirty):  0.390485242691225
+# Batch:  393 / 500 , Accuracy (clean):  0.867175572519084 , SR (clean):  0.3887891041945851 
+
+# Batch:  394 / 500 , Accuracy (dirty):  0.5954314720812183 , SR (dirty):  0.39048643637476255
+# Batch:  394 / 500 , Accuracy (clean):  0.86751269035533 , SR (clean):  0.38878734150559047 
+
+# Batch:  395 / 500 , Accuracy (dirty):  0.5958227848101266 , SR (dirty):  0.3904883264457335
+# Batch:  395 / 500 , Accuracy (clean):  0.8673417721518988 , SR (clean):  0.38878341807038863 
+
+# Batch:  396 / 500 , Accuracy (dirty):  0.5957070707070707 , SR (dirty):  0.390488086552537
+# Batch:  396 / 500 , Accuracy (clean):  0.8672979797979798 , SR (clean):  0.3887855293687468 
+
+# Batch:  397 / 500 , Accuracy (dirty):  0.5955919395465995 , SR (dirty):  0.39048823974208957
+# Batch:  397 / 500 , Accuracy (clean):  0.8673803526448363 , SR (clean):  0.38878690642287506 
+
+# Batch:  398 / 500 , Accuracy (dirty):  0.5953517587939698 , SR (dirty):  0.3904782638203227
+# Batch:  398 / 500 , Accuracy (clean):  0.8670854271356784 , SR (clean):  0.38877694925007045 
+
+# Batch:  399 / 500 , Accuracy (dirty):  0.5951127819548873 , SR (dirty):  0.3904772022747176
+# Batch:  399 / 500 , Accuracy (clean):  0.8670426065162907 , SR (clean):  0.38877475411683693 
+
+# Batch:  400 / 500 , Accuracy (dirty):  0.595375 , SR (dirty):  0.39047324823820817
+# Batch:  400 / 500 , Accuracy (clean):  0.867125 , SR (clean):  0.3887709883259489 
+
+# Batch:  401 / 500 , Accuracy (dirty):  0.5955112219451372 , SR (dirty):  0.3904782950326354
+# Batch:  401 / 500 , Accuracy (clean):  0.8670822942643391 , SR (clean):  0.3887766916829124 
+
+# Batch:  402 / 500 , Accuracy (dirty):  0.5956467661691542 , SR (dirty):  0.39048213971743984
+# Batch:  402 / 500 , Accuracy (clean):  0.8670398009950249 , SR (clean):  0.3887776350659311 
+
+# Batch:  403 / 500 , Accuracy (dirty):  0.5955334987593052 , SR (dirty):  0.3904803957432881
+# Batch:  403 / 500 , Accuracy (clean):  0.8667493796526055 , SR (clean):  0.38877603353286716 
+
+# Batch:  404 / 500 , Accuracy (dirty):  0.5952970297029703 , SR (dirty):  0.3904845057505637
+# Batch:  404 / 500 , Accuracy (clean):  0.8667079207920793 , SR (clean):  0.38878101442662405 
+
+# Batch:  405 / 500 , Accuracy (dirty):  0.5955555555555555 , SR (dirty):  0.39048189748701856
+# Batch:  405 / 500 , Accuracy (clean):  0.8667901234567901 , SR (clean):  0.3887788902305296 
+
+# Batch:  406 / 500 , Accuracy (dirty):  0.5955665024630542 , SR (dirty):  0.3904863632455843
+# Batch:  406 / 500 , Accuracy (clean):  0.8666256157635468 , SR (clean):  0.38878161776318865 
+
+# Batch:  407 / 500 , Accuracy (dirty):  0.5952088452088452 , SR (dirty):  0.3904844824574276
+# Batch:  407 / 500 , Accuracy (clean):  0.8665847665847666 , SR (clean):  0.3887790956334033 
+
+# Batch:  408 / 500 , Accuracy (dirty):  0.5957107843137255 , SR (dirty):  0.3904749619962937
+# Batch:  408 / 500 , Accuracy (clean):  0.8667892156862745 , SR (clean):  0.38876642279351914 
+
+# Batch:  409 / 500 , Accuracy (dirty):  0.5958435207823961 , SR (dirty):  0.39047298180393086
+# Batch:  409 / 500 , Accuracy (clean):  0.8668704156479218 , SR (clean):  0.38876330214859356 
+
+# Batch:  410 / 500 , Accuracy (dirty):  0.5963414634146341 , SR (dirty):  0.39047405404203794
+# Batch:  410 / 500 , Accuracy (clean):  0.8669512195121951 , SR (clean):  0.3887636112349646 
+
+# Batch:  411 / 500 , Accuracy (dirty):  0.5964720194647202 , SR (dirty):  0.39047336875633654
+# Batch:  411 / 500 , Accuracy (clean):  0.8670316301703163 , SR (clean):  0.38876074498400126 
+
+# Batch:  412 / 500 , Accuracy (dirty):  0.5967233009708738 , SR (dirty):  0.3904653262401301
+# Batch:  412 / 500 , Accuracy (clean):  0.8671116504854369 , SR (clean):  0.3887542981038764 
+
+# Batch:  413 / 500 , Accuracy (dirty):  0.5973365617433414 , SR (dirty):  0.39045968868070835
+# Batch:  413 / 500 , Accuracy (clean):  0.8674334140435835 , SR (clean):  0.38875119348480414 
+
+# Batch:  414 / 500 , Accuracy (dirty):  0.5969806763285024 , SR (dirty):  0.3904586517401012
+# Batch:  414 / 500 , Accuracy (clean):  0.8673913043478261 , SR (clean):  0.3887497897512543 
+
+# Batch:  415 / 500 , Accuracy (dirty):  0.5971084337349397 , SR (dirty):  0.3904560614422524
+# Batch:  415 / 500 , Accuracy (clean):  0.8673493975903614 , SR (clean):  0.3887482656344048 
+
+# Batch:  416 / 500 , Accuracy (dirty):  0.5967548076923077 , SR (dirty):  0.39046671008738176
+# Batch:  416 / 500 , Accuracy (clean):  0.8674278846153847 , SR (clean):  0.3887551676318727 
+
+# Batch:  417 / 500 , Accuracy (dirty):  0.5967625899280575 , SR (dirty):  0.39046854487174987
+# Batch:  417 / 500 , Accuracy (clean):  0.8672661870503597 , SR (clean):  0.388758475932762 
+
+# Batch:  418 / 500 , Accuracy (dirty):  0.5966507177033493 , SR (dirty):  0.3904664398339214
+# Batch:  418 / 500 , Accuracy (clean):  0.8673444976076555 , SR (clean):  0.3887561378734574 
+
+# Batch:  419 / 500 , Accuracy (dirty):  0.5964200477326969 , SR (dirty):  0.3904700602907558
+# Batch:  419 / 500 , Accuracy (clean):  0.866945107398568 , SR (clean):  0.38875833134474846 
+
+# Batch:  420 / 500 , Accuracy (dirty):  0.5961904761904762 , SR (dirty):  0.39046588817855155
+# Batch:  420 / 500 , Accuracy (clean):  0.866904761904762 , SR (clean):  0.3887565641488244 
+
+# Batch:  421 / 500 , Accuracy (dirty):  0.5960807600950119 , SR (dirty):  0.3904658730164978
+# Batch:  421 / 500 , Accuracy (clean):  0.8668646080760095 , SR (clean):  0.38875619621730817 
+
+# Batch:  422 / 500 , Accuracy (dirty):  0.5965639810426541 , SR (dirty):  0.3904796409130862
+# Batch:  422 / 500 , Accuracy (clean):  0.8669431279620853 , SR (clean):  0.38876804020937805 
+
+# Batch:  423 / 500 , Accuracy (dirty):  0.5968085106382979 , SR (dirty):  0.3904750373344148
+# Batch:  423 / 500 , Accuracy (clean):  0.8667848699763593 , SR (clean):  0.3887645507206179 
+
+# Batch:  424 / 500 , Accuracy (dirty):  0.5965801886792453 , SR (dirty):  0.3904819328403685
+# Batch:  424 / 500 , Accuracy (clean):  0.866627358490566 , SR (clean):  0.38877229279199077 
+
+# Batch:  425 / 500 , Accuracy (dirty):  0.5962352941176471 , SR (dirty):  0.39047971784653024
+# Batch:  425 / 500 , Accuracy (clean):  0.8665882352941177 , SR (clean):  0.3887715775886129 
+
+# Batch:  426 / 500 , Accuracy (dirty):  0.5967136150234742 , SR (dirty):  0.3904821338809441
+# Batch:  426 / 500 , Accuracy (clean):  0.8667840375586855 , SR (clean):  0.3887732995388369 
+
+# Batch:  427 / 500 , Accuracy (dirty):  0.5966042154566745 , SR (dirty):  0.390477196097758
+# Batch:  427 / 500 , Accuracy (clean):  0.8666276346604216 , SR (clean):  0.38876854411787776 
+
+# Batch:  428 / 500 , Accuracy (dirty):  0.5967289719626169 , SR (dirty):  0.3904727854866471
+# Batch:  428 / 500 , Accuracy (clean):  0.8663551401869158 , SR (clean):  0.3887631020222866 
+
+# Batch:  429 / 500 , Accuracy (dirty):  0.5967365967365967 , SR (dirty):  0.3904763029468671
+# Batch:  429 / 500 , Accuracy (clean):  0.8662004662004662 , SR (clean):  0.38876623067310867 
+
+# Batch:  430 / 500 , Accuracy (dirty):  0.5968604651162791 , SR (dirty):  0.3904817428595305
+# Batch:  430 / 500 , Accuracy (clean):  0.8662790697674418 , SR (clean):  0.3887688387082249 
+
+# Batch:  431 / 500 , Accuracy (dirty):  0.5966357308584687 , SR (dirty):  0.39048295702897096
+# Batch:  431 / 500 , Accuracy (clean):  0.8664733178654292 , SR (clean):  0.38877081389997103 
+
+# Batch:  432 / 500 , Accuracy (dirty):  0.5966435185185185 , SR (dirty):  0.39048132041191175
+# Batch:  432 / 500 , Accuracy (clean):  0.8663194444444444 , SR (clean):  0.3887693089162525 
+
+# Batch:  433 / 500 , Accuracy (dirty):  0.5966512702078522 , SR (dirty):  0.3904801961779516
+# Batch:  433 / 500 , Accuracy (clean):  0.8661662817551963 , SR (clean):  0.3887714405787144 
+
+# Batch:  434 / 500 , Accuracy (dirty):  0.5963133640552996 , SR (dirty):  0.3904739227061579
+# Batch:  434 / 500 , Accuracy (clean):  0.8664746543778802 , SR (clean):  0.38876677618950084 
+
+# Batch:  435 / 500 , Accuracy (dirty):  0.5959770114942529 , SR (dirty):  0.3904767273860279
+# Batch:  435 / 500 , Accuracy (clean):  0.8666666666666667 , SR (clean):  0.38876529938831517 
+
+# Batch:  436 / 500 , Accuracy (dirty):  0.5964449541284403 , SR (dirty):  0.3904726328253225
+# Batch:  436 / 500 , Accuracy (clean):  0.8667431192660551 , SR (clean):  0.38876245733748116 
+
+# Batch:  437 / 500 , Accuracy (dirty):  0.5958810068649886 , SR (dirty):  0.39047564641277366
+# Batch:  437 / 500 , Accuracy (clean):  0.8663615560640733 , SR (clean):  0.38876611646115555 
+
+# Batch:  438 / 500 , Accuracy (dirty):  0.5957762557077626 , SR (dirty):  0.39047229634375036
+# Batch:  438 / 500 , Accuracy (clean):  0.8660958904109589 , SR (clean):  0.3887655401322774 
+
+# Batch:  439 / 500 , Accuracy (dirty):  0.596127562642369 , SR (dirty):  0.39047171464710606
+# Batch:  439 / 500 , Accuracy (clean):  0.8661731207289294 , SR (clean):  0.3887647170945181 
+
+# Batch:  440 / 500 , Accuracy (dirty):  0.5959090909090909 , SR (dirty):  0.39047633989736885
+# Batch:  440 / 500 , Accuracy (clean):  0.8663636363636363 , SR (clean):  0.38876916478818857 
+
+# Batch:  441 / 500 , Accuracy (dirty):  0.596031746031746 , SR (dirty):  0.3904784819110685
+# Batch:  441 / 500 , Accuracy (clean):  0.8660997732426304 , SR (clean):  0.38877339181963133 
+
+# Batch:  442 / 500 , Accuracy (dirty):  0.5961538461538461 , SR (dirty):  0.3904850350404847
+# Batch:  442 / 500 , Accuracy (clean):  0.8661764705882353 , SR (clean):  0.3887816100974246 
+
+# Batch:  443 / 500 , Accuracy (dirty):  0.5958239277652371 , SR (dirty):  0.3904894340137053
+# Batch:  443 / 500 , Accuracy (clean):  0.8664785553047404 , SR (clean):  0.3887891258212218 
+
+# Batch:  444 / 500 , Accuracy (dirty):  0.595945945945946 , SR (dirty):  0.3904868126972999
+# Batch:  444 / 500 , Accuracy (clean):  0.8665540540540541 , SR (clean):  0.38878672084007504 
+
+# Batch:  445 / 500 , Accuracy (dirty):  0.5964044943820225 , SR (dirty):  0.390484785264843
+# Batch:  445 / 500 , Accuracy (clean):  0.8668539325842697 , SR (clean):  0.3887825012269236 
+
+# Batch:  446 / 500 , Accuracy (dirty):  0.5964125560538116 , SR (dirty):  0.39048518715840497
+# Batch:  446 / 500 , Accuracy (clean):  0.867152466367713 , SR (clean):  0.3887822839859282 
+
+# Batch:  447 / 500 , Accuracy (dirty):  0.596420581655481 , SR (dirty):  0.3904873267241654
+# Batch:  447 / 500 , Accuracy (clean):  0.8672259507829978 , SR (clean):  0.38878492569700573 
+
+# Batch:  448 / 500 , Accuracy (dirty):  0.59609375 , SR (dirty):  0.3904875851167997
+# Batch:  448 / 500 , Accuracy (clean):  0.8672991071428572 , SR (clean):  0.3887841980849236 
+
+# Batch:  449 / 500 , Accuracy (dirty):  0.5959910913140312 , SR (dirty):  0.3904929634679074
+# Batch:  449 / 500 , Accuracy (clean):  0.8673719376391982 , SR (clean):  0.388787461385412 
+
+# Batch:  450 / 500 , Accuracy (dirty):  0.596 , SR (dirty):  0.3904898098563432
+# Batch:  450 / 500 , Accuracy (clean):  0.8673333333333333 , SR (clean):  0.388785503787174 
+
+# Batch:  451 / 500 , Accuracy (dirty):  0.5960088691796009 , SR (dirty):  0.39048764610754283
+# Batch:  451 / 500 , Accuracy (clean):  0.8675166297117517 , SR (clean):  0.38878419111242546 
+
+# Batch:  452 / 500 , Accuracy (dirty):  0.5961283185840708 , SR (dirty):  0.39048740415539274
+# Batch:  452 / 500 , Accuracy (clean):  0.8675884955752212 , SR (clean):  0.3887811657059115 
+
+# Batch:  453 / 500 , Accuracy (dirty):  0.5961368653421634 , SR (dirty):  0.39048397420420755
+# Batch:  453 / 500 , Accuracy (clean):  0.8676600441501103 , SR (clean):  0.388781017343212 
+
+# Batch:  454 / 500 , Accuracy (dirty):  0.5962555066079295 , SR (dirty):  0.3904860258201204
+# Batch:  454 / 500 , Accuracy (clean):  0.8679515418502203 , SR (clean):  0.3887803840789872 
+
+# Batch:  455 / 500 , Accuracy (dirty):  0.5963736263736263 , SR (dirty):  0.3904880200170677
+# Batch:  455 / 500 , Accuracy (clean):  0.868021978021978 , SR (clean):  0.38878231549011966 
+
+# Batch:  456 / 500 , Accuracy (dirty):  0.5961622807017544 , SR (dirty):  0.3904954701837319
+# Batch:  456 / 500 , Accuracy (clean):  0.8680921052631579 , SR (clean):  0.38878893306055706 
+
+# Batch:  457 / 500 , Accuracy (dirty):  0.5957330415754923 , SR (dirty):  0.3904922036123202
+# Batch:  457 / 500 , Accuracy (clean):  0.8682713347921225 , SR (clean):  0.38878741135695183 
+
+# Batch:  458 / 500 , Accuracy (dirty):  0.5956331877729257 , SR (dirty):  0.3904915166495381
+# Batch:  458 / 500 , Accuracy (clean):  0.8684497816593887 , SR (clean):  0.3887873818984786 
+
+# Batch:  459 / 500 , Accuracy (dirty):  0.5956427015250545 , SR (dirty):  0.39048731880629417
+# Batch:  459 / 500 , Accuracy (clean):  0.8687363834422658 , SR (clean):  0.38878559563148296 
+
+# Batch:  460 / 500 , Accuracy (dirty):  0.5957608695652173 , SR (dirty):  0.3904867236607197
+# Batch:  460 / 500 , Accuracy (clean):  0.868804347826087 , SR (clean):  0.38878473646878675 
+
+# Batch:  461 / 500 , Accuracy (dirty):  0.5956616052060738 , SR (dirty):  0.39048128163854323
+# Batch:  461 / 500 , Accuracy (clean):  0.868763557483731 , SR (clean):  0.3887801418942215 
+
+# Batch:  462 / 500 , Accuracy (dirty):  0.5954545454545455 , SR (dirty):  0.3904763358385498
+# Batch:  462 / 500 , Accuracy (clean):  0.8685064935064936 , SR (clean):  0.3887775916636159 
+
+# Batch:  463 / 500 , Accuracy (dirty):  0.5954643628509719 , SR (dirty):  0.3904760400008077
+# Batch:  463 / 500 , Accuracy (clean):  0.8685745140388769 , SR (clean):  0.3887782265602536 
+
+# Batch:  464 / 500 , Accuracy (dirty):  0.5952586206896552 , SR (dirty):  0.3904768027614237
+# Batch:  464 / 500 , Accuracy (clean):  0.8686422413793103 , SR (clean):  0.38877805867905013 
+
+# Batch:  465 / 500 , Accuracy (dirty):  0.5954838709677419 , SR (dirty):  0.39047547582258213
+# Batch:  465 / 500 , Accuracy (clean):  0.8687096774193548 , SR (clean):  0.38877640554147574 
+
+# Batch:  466 / 500 , Accuracy (dirty):  0.5949570815450643 , SR (dirty):  0.39048193325861336
+# Batch:  466 / 500 , Accuracy (clean):  0.8685622317596566 , SR (clean):  0.38878044945267887 
+
+# Batch:  467 / 500 , Accuracy (dirty):  0.5955032119914347 , SR (dirty):  0.3904795259731596
+# Batch:  467 / 500 , Accuracy (clean):  0.8687366167023555 , SR (clean):  0.38878013174947 
+
+# Batch:  468 / 500 , Accuracy (dirty):  0.5951923076923077 , SR (dirty):  0.3904718127662741
+# Batch:  468 / 500 , Accuracy (clean):  0.8686965811965812 , SR (clean):  0.388775663957485 
+
+# Batch:  469 / 500 , Accuracy (dirty):  0.5954157782515992 , SR (dirty):  0.39046897171634054
+# Batch:  469 / 500 , Accuracy (clean):  0.8686567164179104 , SR (clean):  0.3887711831390176 
+
+# Batch:  470 / 500 , Accuracy (dirty):  0.5952127659574468 , SR (dirty):  0.3904663427065457
+# Batch:  470 / 500 , Accuracy (clean):  0.8687234042553191 , SR (clean):  0.38877009665545337 
+
+# Batch:  471 / 500 , Accuracy (dirty):  0.5952229299363058 , SR (dirty):  0.39046526852520125
+# Batch:  471 / 500 , Accuracy (clean):  0.8686836518046709 , SR (clean):  0.38876926291988056 
+
+# Batch:  472 / 500 , Accuracy (dirty):  0.5951271186440678 , SR (dirty):  0.39046900439952736
+# Batch:  472 / 500 , Accuracy (clean):  0.8686440677966102 , SR (clean):  0.3887719870115529 
+
+# Batch:  473 / 500 , Accuracy (dirty):  0.5953488372093023 , SR (dirty):  0.39046832142689614
+# Batch:  473 / 500 , Accuracy (clean):  0.8687103594080339 , SR (clean):  0.3887726788790471 
+
+# Batch:  474 / 500 , Accuracy (dirty):  0.5955696202531645 , SR (dirty):  0.3904734450202021
+# Batch:  474 / 500 , Accuracy (clean):  0.8687763713080169 , SR (clean):  0.3887748002905186 
+
+# Batch:  475 / 500 , Accuracy (dirty):  0.5957894736842105 , SR (dirty):  0.390465675586101
+# Batch:  475 / 500 , Accuracy (clean):  0.8687368421052631 , SR (clean):  0.3887684604840842 
+
+# Batch:  476 / 500 , Accuracy (dirty):  0.5957983193277311 , SR (dirty):  0.39046693858955805
+# Batch:  476 / 500 , Accuracy (clean):  0.8685924369747899 , SR (clean):  0.38876829169996563 
+
+# Batch:  477 / 500 , Accuracy (dirty):  0.5959119496855346 , SR (dirty):  0.3904631131859714
+# Batch:  477 / 500 , Accuracy (clean):  0.8686582809224319 , SR (clean):  0.3887648744548271 
+
+# Batch:  478 / 500 , Accuracy (dirty):  0.5962343096234309 , SR (dirty):  0.3904666376690047
+# Batch:  478 / 500 , Accuracy (clean):  0.8686192468619247 , SR (clean):  0.38876605407136733 
+
+# Batch:  479 / 500 , Accuracy (dirty):  0.5964509394572025 , SR (dirty):  0.39046203134568425
+# Batch:  479 / 500 , Accuracy (clean):  0.8687891440501044 , SR (clean):  0.38876154073952796 
+
+# Batch:  480 / 500 , Accuracy (dirty):  0.5966666666666667 , SR (dirty):  0.3904554016471009
+# Batch:  480 / 500 , Accuracy (clean):  0.86875 , SR (clean):  0.38875569502468255 
+
+# Batch:  481 / 500 , Accuracy (dirty):  0.5966735966735967 , SR (dirty):  0.3904530330046657
+# Batch:  481 / 500 , Accuracy (clean):  0.8686070686070686 , SR (clean):  0.388754342148953 
+
+# Batch:  482 / 500 , Accuracy (dirty):  0.5968879668049792 , SR (dirty):  0.39046015637033105
+# Batch:  482 / 500 , Accuracy (clean):  0.8686721991701245 , SR (clean):  0.38876104643853293 
+
+# Batch:  483 / 500 , Accuracy (dirty):  0.5969979296066252 , SR (dirty):  0.3904559413189671
+# Batch:  483 / 500 , Accuracy (clean):  0.8686335403726708 , SR (clean):  0.38876047200367914 
+
+# Batch:  484 / 500 , Accuracy (dirty):  0.5970041322314049 , SR (dirty):  0.3904560315744343
+# Batch:  484 / 500 , Accuracy (clean):  0.868698347107438 , SR (clean):  0.3887605290702133 
+
+# Batch:  485 / 500 , Accuracy (dirty):  0.5969072164948453 , SR (dirty):  0.390448281331373
+# Batch:  485 / 500 , Accuracy (clean):  0.8687628865979381 , SR (clean):  0.3887570005463227 
+
+# Batch:  486 / 500 , Accuracy (dirty):  0.5972222222222222 , SR (dirty):  0.39044507527221883
+# Batch:  486 / 500 , Accuracy (clean):  0.8688271604938271 , SR (clean):  0.38875270409880214 
+
+# Batch:  487 / 500 , Accuracy (dirty):  0.5972279260780288 , SR (dirty):  0.39044232048148597
+# Batch:  487 / 500 , Accuracy (clean):  0.8688911704312114 , SR (clean):  0.38875070535070066 
+
+# Batch:  488 / 500 , Accuracy (dirty):  0.5969262295081967 , SR (dirty):  0.3904369450434486
+# Batch:  488 / 500 , Accuracy (clean):  0.8686475409836065 , SR (clean):  0.38874527904461476 
+
+# Batch:  489 / 500 , Accuracy (dirty):  0.5968302658486707 , SR (dirty):  0.3904414974113728
+# Batch:  489 / 500 , Accuracy (clean):  0.8688139059304704 , SR (clean):  0.3887487710192188 
+
+# Batch:  490 / 500 , Accuracy (dirty):  0.596530612244898 , SR (dirty):  0.39044219874926667
+# Batch:  490 / 500 , Accuracy (clean):  0.8685714285714285 , SR (clean):  0.3887485760421947 
+
+# Batch:  491 / 500 , Accuracy (dirty):  0.5966395112016293 , SR (dirty):  0.3904364895924577
+# Batch:  491 / 500 , Accuracy (clean):  0.8684317718940937 , SR (clean):  0.3887458341693889 
+
+# Batch:  492 / 500 , Accuracy (dirty):  0.5970528455284553 , SR (dirty):  0.3904398318426955
+# Batch:  492 / 500 , Accuracy (clean):  0.8682926829268293 , SR (clean):  0.3887473936263073 
+
+# Batch:  493 / 500 , Accuracy (dirty):  0.5968559837728195 , SR (dirty):  0.39043935007952535
+# Batch:  493 / 500 , Accuracy (clean):  0.8681541582150102 , SR (clean):  0.38874729263342955 
+
+# Batch:  494 / 500 , Accuracy (dirty):  0.5968623481781377 , SR (dirty):  0.3904331031476236
+# Batch:  494 / 500 , Accuracy (clean):  0.8680161943319838 , SR (clean):  0.38874213886834597 
+
+# Batch:  495 / 500 , Accuracy (dirty):  0.5969696969696969 , SR (dirty):  0.3904300739216051
+# Batch:  495 / 500 , Accuracy (clean):  0.867979797979798 , SR (clean):  0.38873945572280155 
+
+# Batch:  496 / 500 , Accuracy (dirty):  0.5972782258064516 , SR (dirty):  0.39042658125877805
+# Batch:  496 / 500 , Accuracy (clean):  0.8679435483870968 , SR (clean):  0.38873734564979223 
+
+# Batch:  497 / 500 , Accuracy (dirty):  0.5974849094567405 , SR (dirty):  0.39042508939170895
+# Batch:  497 / 500 , Accuracy (clean):  0.8678068410462777 , SR (clean):  0.38873801392291796 
+
+# Batch:  498 / 500 , Accuracy (dirty):  0.5973895582329317 , SR (dirty):  0.39041985868396833
+# Batch:  498 / 500 , Accuracy (clean):  0.8677710843373494 , SR (clean):  0.3887345196092772 
+
+# Batch:  499 / 500 , Accuracy (dirty):  0.5972945891783568 , SR (dirty):  0.39042275565993834
+# Batch:  499 / 500 , Accuracy (clean):  0.8677354709418837 , SR (clean):  0.3887380955656079 
+
+# Batch:  500 / 500 , Accuracy (dirty):  0.5971 , SR (dirty):  0.39042350160480044
+# Batch:  500 / 500 , Accuracy (clean):  0.8676 , SR (clean):  0.3887396270147223 
+
+
+************************* Final Statistics ************************
+
+rec_iter:  100 , rec_rr =  20 
+
+Accuracy (clean):  0.8676 , Accuracy (dirty):  0.5971 
+
+Sparsity (clean):  0.3887396270147223 , Sparsity (dirty):  0.39042350160480044 
+
+
+*******************************************************************
+
+Ended at: 2024-09-27 20:57:15.367000
+
