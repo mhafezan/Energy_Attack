@@ -5,9 +5,6 @@ import sys
 import numpy as np
 from torch import nn
 from torch.nn import Module
-
-
-
 from torch.nn import CrossEntropyLoss
 from torch.optim import SGD
 from torch.utils.data import DataLoader, Dataset
@@ -16,10 +13,8 @@ from tqdm import tqdm
 import torch.optim as optim
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
-
 import torchvision.datasets as dset
 import random
-
 
 class LeNet5(nn.Module):
     def __init__(self, beta=15):
@@ -37,19 +32,17 @@ class LeNet5(nn.Module):
         self.relu4 = nn.ReLU()
         self.fc3   = nn.Linear(84, 10)
         self.relu5 = nn.ReLU()
-
-      
-        
+ 
     def forward(self, x):
                        
         x = self.conv1(x)
-        x = self.relu1(x)
-             
+        x = self.relu1(x)             
         x = self.pool1(x)     
+        
         x = self.conv2(x)
-        x = self.relu2(x)
-      
+        x = self.relu2(x)      
         x = self.pool2(x)
+        
         x = x.view(x.shape[0], -1)
       
         x = self.fc1(x)
@@ -60,12 +53,8 @@ class LeNet5(nn.Module):
     
         x = self.fc3(x)
         x = self.relu5(x)
-          
+
         return x
-
-
-
-
 
 # To compute Sparsity-Map for each layer's output
 def sparsity_map(input_tensor):

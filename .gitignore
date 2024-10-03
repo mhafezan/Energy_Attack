@@ -47,6 +47,8 @@ Ehsan/MNIST_LeNet5/5_profile/profile_data/*.pt
 Ehsan/MNIST_LeNet5/6_adv_attack_detect/adversarial_data/*.pt
 Ehsan/MNIST_LeNet5/7_power_calculation/adversarial_data/*.pt
 
+Ehsan/FMNIST_LeNet5/fmnist_dataset/**
+
 Ehsan/CIFAR10_AlexNet/3_copy_weight/*.pkl
 Ehsan/CIFAR10_AlexNet/cifar10_dataset/*
 Ehsan/CIFAR10_AlexNet/5_profile/profile_data/*.pt
