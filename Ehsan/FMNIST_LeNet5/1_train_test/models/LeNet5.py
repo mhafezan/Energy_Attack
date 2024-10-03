@@ -14,12 +14,14 @@ class LeNet5(nn.Module):
         
         # Second layer (S2): Average Pooling Layer, Input 28x28x6, Output 14x14x6
         self.pool1 = nn.AvgPool2d(kernel_size=2, stride=2)
+        # self.pool1 = nn.MaxPool2d(kernel_size=2)
         
         # Third convolutional layer (C3): Input 14x14x6, Output 10x10x16
         self.conv2 = nn.Conv2d(in_channels=6, out_channels=16, kernel_size=5, stride=1, padding=0)
         
         # Fourth layer (S4): Average Pooling Layer, Input 10x10x16, Output 5x5x16
         self.pool2 = nn.AvgPool2d(kernel_size=2, stride=2)
+        # self.pool2 = nn.MaxPool2d(kernel_size=2)
         
         # Fifth layer (C5): Fully connected convolutional layer, Input 5x5x16, Output 1x1x120
         # Since the input size is reduced to 5x5, we use kernel size 5 to connect it to C5
@@ -30,21 +32,27 @@ class LeNet5(nn.Module):
         
         # Output layer: Fully connected layer, Input 84, Output 10
         self.fc2 = nn.Linear(84, 10)
+
+        self.dropout = nn.Dropout(p=0.3)
     
     def forward(self, x):
+        
         # First convolution + activation + pooling
         x = self.conv1(x)
         x = F.relu(x)
+        # x = F.tanh(x)
         x = self.pool1(x)
         
         # Second convolution + activation + pooling
         x = self.conv2(x)
         x = F.relu(x)
+        # x = F.tanh(x)
         x = self.pool2(x)
         
         # Third convolution + activation
         x = self.conv3(x)
         x = F.relu(x)
+        # x = F.tanh(x)
         
         # Flatten the output for fully connected layers
         x = x.view(-1, 120)
@@ -52,11 +60,11 @@ class LeNet5(nn.Module):
         # Fully connected layers with activation
         x = self.fc1(x)
         x = F.relu(x)
+        # x = F.tanh(x)
         
         # Output layer (softmax is applied during loss calculation)
+        x = self.dropout(x)
         x = self.fc2(x)
         
         return x
-
-def lenet5():
-    return LeNet5()
+    

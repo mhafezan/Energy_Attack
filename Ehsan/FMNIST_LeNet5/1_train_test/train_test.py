@@ -6,6 +6,7 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 import argparse
 import sys
+import random
 from models.LeNet5 import LeNet5
 
 def train(model, train_loader, test_loader, optimizer, device, args):
@@ -28,18 +29,45 @@ def train(model, train_loader, test_loader, optimizer, device, args):
             optimizer.step()
             
             running_loss += loss.item()
-            
+                
             # Loss over the batch progress
             if (index+1) % args.print_freq == 0:
                 print(f'Epoch [{epoch+1}/{args.epochs}], Step [{index+1}/{len(train_loader)}], Loss: {loss.item():.4f}','\n')
         
         # Average loss over the epoch progress
-        print(f'Epoch [{epoch+1}/{args.epochs}] completed! Average Loss: {running_loss/len(train_loader):.4f}','\n')
+        print(f'Epoch [{epoch+1}/{args.epochs}] ********** Average Loss: {running_loss/len(train_loader):.4f} **********','\n')
     
-    # To test the Model after all epochs
+    	# Test the model after each epoch
+        model.eval()
+        correct = 0
+        processed_images = 0
+        with torch.no_grad():
+            for images, labels in test_loader:
+                images, labels = images.to(device), labels.to(device)
+                outputs = model(images)
+                _, predicted = torch.max(outputs.data, 1)
+                processed_images += labels.size(0)
+                correct += (predicted == labels).sum().item()
+        
+        accuracy = float(correct / processed_images) * 100
+        print(f'Epoch [{epoch+1}/{args.epochs}] ********** Test Accuracy: {accuracy:.2f}% *********','\n')
+        
+        # Save the model parameters after each epoch
+        if accuracy>= 90:
+            model_save_path = f'{args.weights}/lenet5_epoch_{epoch+1}_{args.lr}_{args.batch_size}_{accuracy:.2f}.pth'
+            torch.save(model.state_dict(), model_save_path)
+        
+    return
+
+def test(model, test_loader, device, model_path):
+    
+    # Load the saved model parameters
+    model.load_state_dict(torch.load(model_path))
     model.eval()
+    
     correct = 0
     processed_images = 0
+    
     with torch.no_grad():
         for images, labels in test_loader:
             images, labels = images.to(device), labels.to(device)
@@ -48,8 +76,15 @@ def train(model, train_loader, test_loader, optimizer, device, args):
             processed_images += labels.size(0)
             correct += (predicted == labels).sum().item()
     
-    print(f'Test Accuracy: {100 * correct / processed_images:.2f}%','\n')
+    accuracy = float(correct / processed_images) * 100
+    print(f'\nModel Test Accuracy: {accuracy:.2f}%\n')
+
     return
+
+# Define initialisation function (using Xavier Distribution) for network weights
+def weights_init(model):
+    if isinstance(model, nn.Linear):
+        torch.nn.init.xavier_uniform_(model.weight)
 
 
 
@@ -57,14 +92,24 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Fashion-MNIST Training on a Custom LeNet5')
     parser.add_argument('--dataset', default="../fmnist_dataset", help="The path to the train and test datasets")
-    parser.add_argument('--epochs', default=10, type=int, metavar='N', help='Number of total epochs to train')
-    parser.add_argument('--batch-size', default=32, type=int, metavar='N', help='Mini-batch size')
-    parser.add_argument('--lr', default=0.005, type=float, metavar='LR', help='Learning rate')
+    parser.add_argument('--weights', default="./weights", help="The path to store model parameters")
+    parser.add_argument('--epochs', default=15, type=int, metavar='N', help='Number of total epochs to train')
+    parser.add_argument('--batch-size', default=128, type=int, metavar='N', help='Mini-batch size')
+    parser.add_argument('--lr', default=0.002, type=float, metavar='LR', help='Learning rate')
     parser.add_argument('--momentum', default=0.9, type=float, metavar='M', help='momentum')
     parser.add_argument('--optimizer', default="sgd", help="Optimizer option is either adam or sgd")
     parser.add_argument('--print_freq', default=100, type=int, help="To print loss and accuracy statistics every X mini-batch")
+    parser.add_argument('--manualSeed', type=int,  default=15, help='manual seed')
+    parser.add_argument('--phase', default="train", help="To specify train or test phase")
+    parser.add_argument('--model_path', default=None, help="The path to the pre-trained model")
     args = parser.parse_args()
     print(f"\n{args}\n")
+
+    if args.manualSeed is None:
+        args.manualSeed = random.randint(1, 10000)
+    print(f"\nRandom Seed: {args.manualSeed} \n")
+    random.seed(args.manualSeed)
+    torch.manual_seed(args.manualSeed)
     
     # Device Initialization
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -72,11 +117,15 @@ if __name__ == "__main__":
     
     # Model Initialization
     model = LeNet5().to(device)
+
+    # Initialise weights to Xavier Uniform using weights_init() function
+    model.apply(weights_init)
     
     # Load the Fashion-MNIST dataset
     TRANSFORM = transforms.Compose([transforms.Resize((32, 32)),
                                     transforms.ToTensor(),
-                                    transforms.Normalize((0.5,), (0.5,))
+                                    # transforms.Normalize((0.5,), (0.5,)),
+                                    transforms.Normalize(mean=0.3814, std=0.3994)
                                     ])
     
     train_dataset = torchvision.datasets.FashionMNIST(root=args.dataset, train=True, download=True, transform=TRANSFORM)
@@ -92,8 +141,12 @@ if __name__ == "__main__":
     else:
         optimizer = optim.Adam(model.parameters(), lr=args.lr)
 
-    train(model, train_loader, test_loader, optimizer, device, args)
+    if args.phase =="train":
+        train(model, train_loader, test_loader, optimizer, device, args)
+    else:
+        test(model, test_loader, device, args.model_path)
 
     sys.exit(0)
     
-# python3 train.py --epochs 10 --lr 0.005 --batch-size 32 --optimizer sgd
+# python3 train_test.py --phase train --epochs 15 --lr 0.002 --batch-size 128 --optimizer adam
+# python3 train_test.py --phase test --batch-size 128 --model_path ./weights/lenet5_epoch_22_0.002_64_90.05.pth
