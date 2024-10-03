@@ -149,4 +149,4 @@ if __name__ == "__main__":
     sys.exit(0)
     
 # python3 train_test.py --phase train --epochs 15 --lr 0.002 --batch-size 128 --optimizer adam
-# python3 train_test.py --phase test --batch-size 128 --model_path ./weights/lenet5_epoch_22_0.002_64_90.05.pth
+# python3 train_test.py --phase test --batch-size 128 --model_path ./weights/lenet5_epoch_26_0.002_128_90.78.pth
