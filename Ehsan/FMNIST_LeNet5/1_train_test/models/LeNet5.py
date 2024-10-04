@@ -32,8 +32,6 @@ class LeNet5(nn.Module):
         
         # Output layer: Fully connected layer, Input 84, Output 10
         self.fc2 = nn.Linear(84, 10)
-
-        self.dropout = nn.Dropout(p=0.3)
     
     def forward(self, x):
         
@@ -62,8 +60,7 @@ class LeNet5(nn.Module):
         x = F.relu(x)
         # x = F.tanh(x)
         
-        # Output layer (softmax is applied during loss calculation)
-        x = self.dropout(x)
+        # Output layer (Softmax is applied through Cross-Entropy loss function)
         x = self.fc2(x)
         
         return x
