@@ -133,8 +133,9 @@ def Profile (model, device, train_loader, num_classes, args):
                     prev_num_ones[target.item()] = curr_num_ones[target.item()]
 
                 if all(num < 1 for num in diff_num_ones):
-                    print(diff_num_ones)
                     break
+    
+    print(f"\nThe sparsity map converges when diff_num_ones elements are {diff_num_ones}\n")
 
     return updated_maps, range_for_each_class, index
 
