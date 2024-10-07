@@ -102,16 +102,17 @@ def Sparsity_Clean_Detection (model, device, offline_sparsity_maps, offline_spar
     wrongly_predicted_as_adversarial_for_class_range = [0] * num_classes
     wrongly_predicted_as_adversarial_ratio_range = []
 
+    print()
     for index, (data, target) in enumerate(tqdm(test_dataset, desc='Data Progress')):
 
         adversarial = 0
 
         data, target = data.to(device), target.to(device)
 
-        for i in range (args.batch_size):
+        for img_idx in range (args.batch_size):
 
-            single_image = data[i].unsqueeze(0).to(device)
-            single_target = target[i].unsqueeze(0).to(device)
+            single_image = data[img_idx].unsqueeze(0).to(device)
+            single_target = target[img_idx].unsqueeze(0).to(device)
 
             output = model(single_image)
             
