@@ -554,4 +554,4 @@ if __name__ == '__main__':
 
     sys.exit(0)
 
-# Arguments: python3 fmnist_power_delay.py --power --arch cnvlutin --batch_size 1 --im_index_last 10 --dataset ../fmnist_dataset --adversarial --adv_datapath ../5_detection/adversarial_data/adv_constrained.pt --weights ../2_copy_weight/lenet5_fmnist_fc_one_out.pkl
+# Arguments: python3 fmnist_power_delay.py --power --arch cnvlutin --batch_size 1 --im_index_last 10 --dataset ../fmnist_dataset --adversarial --adv_datapath ../5_detection/adversarial_data/adversarial_dataset.pt --weights ../2_copy_weight/lenet5_fmnist_fc_one_out.pkl
