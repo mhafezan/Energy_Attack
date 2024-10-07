@@ -182,7 +182,7 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', default="../fmnist_dataset", help="The path to the Fashion-MNIST datasets")
     parser.add_argument('--beta', default=15, type=int, help="Beta parameter used in Tanh function")
     parser.add_argument('--eps', default=0.9, type=float, help="L2-norm bound of epsilon for clipping purturbed data")
-    parser.add_argument('--constrained', default=True, help="To apply constrain on the generated purturbed data")
+    parser.add_argument('--constrained', action='store_true', help="To apply constrain on the generated purturbed data")
     parser.add_argument('--save_samples', action='store_true', help="To save sample adversarial images")
     parser.add_argument('--store_attack', action='store_true', help="To store generated adversarials as a dataset")
     parser.add_argument('--img_index_first', default=0, type=int, help="The first index of the dataset")
