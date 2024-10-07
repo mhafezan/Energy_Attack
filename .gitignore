@@ -52,6 +52,7 @@ Ehsan/FMNIST_LeNet5/1_train_test/weights/*.pth
 Ehsan/FMNIST_LeNet5/2_copy_weight/*.pkl
 Ehsan/FMNIST_LeNet5/3_attack/*.pt
 Ehsan/FMNIST_LeNet5/4_profile/profile_data/*.pt
+Ehsan/FMNIST_LeNet5/5_detection/adversarial_data/*.pt
 
 Ehsan/CIFAR10_AlexNet/3_copy_weight/*.pkl
 Ehsan/CIFAR10_AlexNet/cifar10_dataset/*
