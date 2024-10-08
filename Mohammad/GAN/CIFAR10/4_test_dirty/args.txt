@@ -1,4 +1,0 @@
-
-python3  ./test_dirty_256_256.py   --lr=0.1  --use_loss_per_image  --rec_iter=100 
-
-

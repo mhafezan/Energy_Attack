@@ -1,2 +1,0 @@
-
-python3  ./convert_dirty_mage_batch_one.py  --data_in=/home/ehsanaf/Ehsan/eg_pytorch/TrojAI/sparsity_attack/cifar10/3_attack_image_size_256_256/adversarial_dataset_cifar10_lr_0.9_Thursday_25_July_2024_01h_45m_20s.pt  --data_out=adv_cifar10_lr_0.9.pt

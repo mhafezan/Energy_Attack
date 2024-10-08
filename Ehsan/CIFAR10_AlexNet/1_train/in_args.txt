@@ -1,1 +1,0 @@
-python3 train_test_cifar10.py   --batch_size 20 --phase train  --epochs 95

@@ -89,3 +89,7 @@ Ehsan/Imagenet_dataset/*
 *.do
 *.bak*
 *.wlf
+*.txt
+*.rpt
+*.qsf
+*.qws
