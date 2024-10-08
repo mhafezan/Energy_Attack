@@ -2,7 +2,7 @@ import ctypes
 import math
 import torch
 import argparse
-import sys, os
+import sys
 import numpy as np
 import torch.nn.functional as F
 from torch import nn
@@ -405,8 +405,7 @@ if __name__ == '__main__':
     
     if args.adversarial:
         test_dataset = torch.load(args.adv_datapath, map_location=device)
-        test_dataset_sub = torch.utils.data.Subset(test_dataset, list(range(args.im_index_first, args.im_index_last)))
-        test_loader = DataLoader(test_dataset_sub, batch_size=args.batch_size, shuffle=False)
+        test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False)
     else:
         test_dataset = datasets.FashionMNIST(root=args.dataset, train=False, download=True, transform=TRANSFORM)
         test_dataset_sub = torch.utils.data.Subset(test_dataset, list(range(args.im_index_first, args.im_index_last)))
@@ -554,4 +553,8 @@ if __name__ == '__main__':
 
     sys.exit(0)
 
-# Arguments: python3 fmnist_power_delay.py --power --arch cnvlutin --batch_size 1 --im_index_last 10 --dataset ../fmnist_dataset --adversarial --adv_datapath ../5_detection/adversarial_data/adversarial_dataset.pt --weights ../2_copy_weight/lenet5_fmnist_fc_one_out.pkl
+# For testing original dataset
+# python3 fmnist_power_delay.py --power --arch cnvlutin --batch_size 1 --im_index_last 10000 --dataset ../fmnist_dataset --weights ../2_copy_weight/lenet5_fmnist_fc_one_out.pkl
+
+# For testing adversarial dataset
+# python3 fmnist_power_delay.py --power --arch cnvlutin --batch_size 1 --adversarial --adv_datapath ../5_detection/adversarial_data/adversarial_dataset.pt --weights ../2_copy_weight/lenet5_fmnist_fc_one_out.pkl

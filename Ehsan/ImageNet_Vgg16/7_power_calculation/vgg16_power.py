@@ -739,4 +739,4 @@ if __name__ == '__main__':
 
     sys.exit(0)
 
-# Arguments: python3 vgg16_power.py --power --arch cnvlutin --batch_size 1 --im_index_last 40 --dataset ../../Imagenet_dataset --adversarial --adv_images ../5_detection/adversarial_data/adv_constrained.pt --weights ../2_copy_weight/vgg16_imagenet_fc_one_out.pkl
+# python3 vgg16_power.py --power --arch cnvlutin --batch_size 1 --im_index_last 40 --dataset ../../Imagenet_dataset --adversarial --adv_images ../5_detection/adversarial_data/adv_constrained.pt --weights ../2_copy_weight/vgg16_imagenet_fc_one_out.pkl
