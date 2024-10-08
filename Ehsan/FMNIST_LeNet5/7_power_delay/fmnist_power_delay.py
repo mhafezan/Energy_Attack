@@ -554,7 +554,7 @@ if __name__ == '__main__':
     sys.exit(0)
 
 # For testing original dataset
-# python3 fmnist_power_delay.py --power --arch cnvlutin --batch_size 1 --im_index_last 10000 --dataset ../fmnist_dataset --weights ../2_copy_weight/lenet5_fmnist_fc_one_out.pkl
+# python3 fmnist_power_delay.py --power --arch cnvlutin --batch_size 10 --dataset ../fmnist_dataset --weights ../2_copy_weight/lenet5_fmnist_fc_one_out.pkl
 
 # For testing adversarial dataset
 # python3 fmnist_power_delay.py --power --arch cnvlutin --batch_size 1 --adversarial --adv_datapath ../5_detection/adversarial_data/adversarial_dataset.pt --weights ../2_copy_weight/lenet5_fmnist_fc_one_out.pkl
