@@ -1,5 +1,6 @@
 import ctypes
 import math
+import time
 import torch
 import argparse
 import sys, os
@@ -144,6 +145,7 @@ class VGG16(nn.Module):
         
         eng_dnmc = []
         num_cycles = []
+        latency = []
         
         if PC:
             dnmc, cycles, L1_dnmc_detail, L1_cycles_detail = conv_power(x, self.features[0].weight, self.features[0].stride, self.features[0].padding, args.arch)
@@ -151,8 +153,10 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L1_zeros, L1_sizes = sparsity_rate(x)
+        L1_start = time.time()
         x = self.features[0](x)
         x = self.features[1](x)
+        latency.append(time.time() - L1_start)
 
         if PC:
             dnmc, cycles, L2_dnmc_detail, L2_cycles_detail = conv_power(x, self.features[2].weight, self.features[2].stride, self.features[2].padding, args.arch)
@@ -160,9 +164,11 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L2_zeros, L2_sizes = sparsity_rate(x)
+        L2_start = time.time()
         x = self.features[2](x)
         x = self.features[3](x)
         x = self.features[4](x)
+        latency.append(time.time() - L2_start)
 
         if PC:
             dnmc, cycles, L3_dnmc_detail, L3_cycles_detail = conv_power(x, self.features[5].weight, self.features[5].stride, self.features[5].padding, args.arch)
@@ -170,8 +176,10 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L3_zeros, L3_sizes = sparsity_rate(x)
+        L3_start = time.time()
         x = self.features[5](x)
         x = self.features[6](x)
+        latency.append(time.time() - L3_start)
 
         if PC:
             dnmc, cycles, L4_dnmc_detail, L4_cycles_detail = conv_power(x, self.features[7].weight, self.features[7].stride, self.features[7].padding, args.arch)
@@ -179,9 +187,11 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L4_zeros, L4_sizes = sparsity_rate(x)
+        L4_start = time.time()
         x = self.features[7](x)
         x = self.features[8](x)
         x = self.features[9](x)
+        latency.append(time.time() - L4_start)
 
         if PC:
             dnmc, cycles, L5_dnmc_detail, L5_cycles_detail = conv_power(x, self.features[10].weight, self.features[10].stride, self.features[10].padding, args.arch)
@@ -189,8 +199,10 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L5_zeros, L5_sizes = sparsity_rate(x)
+        L5_start = time.time()
         x = self.features[10](x)
         x = self.features[11](x)
+        latency.append(time.time() - L5_start)
 
         if PC:
             dnmc, cycles, L6_dnmc_detail, L6_cycles_detail = conv_power(x, self.features[12].weight, self.features[12].stride, self.features[12].padding, args.arch)
@@ -198,8 +210,10 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L6_zeros, L6_sizes = sparsity_rate(x)
+        L6_start = time.time()
         x = self.features[12](x)
         x = self.features[13](x)
+        latency.append(time.time() - L6_start)
 
         if PC:
             dnmc, cycles, L7_dnmc_detail, L7_cycles_detail = conv_power(x, self.features[14].weight, self.features[14].stride, self.features[14].padding, args.arch)
@@ -207,9 +221,11 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L7_zeros, L7_sizes = sparsity_rate(x)
+        L7_start = time.time()
         x = self.features[14](x)
         x = self.features[15](x)
         x = self.features[16](x)
+        latency.append(time.time() - L7_start)
 
         if PC:
             dnmc, cycles, L8_dnmc_detail, L8_cycles_detail = conv_power(x, self.features[17].weight, self.features[17].stride, self.features[17].padding, args.arch)
@@ -217,8 +233,10 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L8_zeros, L8_sizes = sparsity_rate(x)
+        L8_start = time.time()
         x = self.features[17](x)
         x = self.features[18](x)
+        latency.append(time.time() - L8_start)
 
         if PC:
             dnmc, cycles, L9_dnmc_detail, L9_cycles_detail = conv_power(x, self.features[19].weight, self.features[19].stride, self.features[19].padding, args.arch)
@@ -226,8 +244,10 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L9_zeros, L9_sizes = sparsity_rate(x)
+        L9_start = time.time()
         x = self.features[19](x)
         x = self.features[20](x)
+        latency.append(time.time() - L9_start)
 
         if PC:
             dnmc, cycles, L10_dnmc_detail, L10_cycles_detail = conv_power(x, self.features[21].weight, self.features[21].stride, self.features[21].padding, args.arch)
@@ -235,9 +255,11 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L10_zeros, L10_sizes = sparsity_rate(x)
+        L10_start = time.time()
         x = self.features[21](x)
         x = self.features[22](x)
         x = self.features[23](x)
+        latency.append(time.time() - L10_start)
 
         if PC:
             dnmc, cycles, L11_dnmc_detail, L11_cycles_detail = conv_power(x, self.features[24].weight, self.features[24].stride, self.features[24].padding, args.arch)
@@ -245,8 +267,10 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L11_zeros, L11_sizes = sparsity_rate(x)
+        L11_start = time.time()
         x = self.features[24](x)
         x = self.features[25](x)
+        latency.append(time.time() - L11_start)
 
         if PC:
             dnmc, cycles, L12_dnmc_detail, L12_cycles_detail = conv_power(x, self.features[26].weight, self.features[26].stride, self.features[26].padding, args.arch)
@@ -254,8 +278,10 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L12_zeros, L12_sizes = sparsity_rate(x)
+        L12_start = time.time()
         x = self.features[26](x)
         x = self.features[27](x)
+        latency.append(time.time() - L12_start)
 
         if PC:
             dnmc, cycles, L13_dnmc_detail, L13_cycles_detail = conv_power(x, self.features[28].weight, self.features[28].stride, self.features[28].padding, args.arch)
@@ -263,11 +289,13 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L13_zeros, L13_sizes = sparsity_rate(x)
+        L13_start = time.time()
         x = self.features[28](x)
         x = self.features[29](x)
         x = self.features[30](x)
-
+        
         x = x.view(x.size(0), -1)
+        latency.append(time.time() - L13_start)
 
         if PC:
             dnmc, cycles, L14_dnmc_detail, L14_cycles_detail = fc_power(x, self.classifier[0].weight, args.arch)
@@ -275,9 +303,11 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L14_zeros, L14_sizes = sparsity_rate(x)
+        L14_start = time.time()
         x = self.classifier[0](x)
         x = self.classifier[1](x)
         x = self.classifier[2](x)
+        latency.append(time.time() - L14_start)
 
         if PC:
             dnmc, cycles, L15_dnmc_detail, L15_cycles_detail = fc_power(x, self.classifier[3].weight, args.arch)
@@ -285,11 +315,13 @@ class VGG16(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L15_zeros, L15_sizes = sparsity_rate(x)
+        L15_start = time.time()
         x = self.classifier[3](x)
         x = self.classifier[4](x)
         x = self.classifier[5](x)
 
         x = self.classifier[6](x)
+        latency.append(time.time() - L15_start)
         
         zeros_list = [L1_zeros, L2_zeros, L3_zeros, L4_zeros, L5_zeros, L6_zeros, L7_zeros, L8_zeros, L9_zeros, L10_zeros, L11_zeros, L12_zeros, L13_zeros, L14_zeros, L15_zeros]
         sizes_list = [L1_sizes, L2_sizes, L3_sizes, L4_sizes, L5_sizes, L6_sizes, L7_sizes, L8_sizes, L9_sizes, L10_sizes, L11_sizes, L12_sizes, L13_sizes, L14_sizes, L15_sizes]
@@ -312,7 +344,7 @@ class VGG16(nn.Module):
         
         eng_stat_total_inference = pow_stat_total_inference * sum(num_cycles)
 
-        return x, zeros_list, sizes_list, eng_dnmc_total_inference, eng_stat_total_inference, eng_dnmc_detail_inference, eng_stat_detail_inference
+        return x, zeros_list, sizes_list, eng_dnmc_total_inference, eng_stat_total_inference, eng_dnmc_detail_inference, eng_stat_detail_inference, sum(latency)
 
 def sparsity_rate(input_tensor):
     zeros = torch.count_nonzero(torch.eq(input_tensor, 0)).item()
@@ -566,7 +598,8 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', default=1, type=int)
     parser.add_argument('--weights', default="../2_copy_weight/vgg16_imagenet_fc_one_out.pkl", help="The path to the pre-trained weights")
     parser.add_argument('--dataset', default="../../Imagenet_dataset", help="The path to the train, val, and test datasets of ImageNet")
-    parser.add_argument('--power', action='store_true', help="To generate power results for CNVLUTIN or DaDianNao architecture")
+    parser.add_argument('--power', action='store_true', help="To generate inference power statistics")
+    parser.add_argument('--latency', action='store_true', help="To generate inference latency statistics")
     parser.add_argument('--arch', default='cnvlutin', help="To specify the architecture running the clean/adversarial images: cnvlutin or dadiannao")
     parser.add_argument('--adversarial', action='store_true', help="To test the adversarial dataset instead of original dataset")
     parser.add_argument('--im_index_first', default=0, type=int, help="The fisrt index of the dataset")
@@ -609,6 +642,7 @@ if __name__ == '__main__':
     num_processed_images = 0
     num_layers = 15
     
+    total_inference_latency = 0
     total_dynamic_energy_dataset = 0
     total_static_energy_dataset = 0
     eng_dnmc_detail_dataset = [0] * 10
@@ -648,6 +682,7 @@ if __name__ == '__main__':
         total_static_energy_dataset += output[4]
         eng_dnmc_detail_dataset = [a + b for a, b in zip(eng_dnmc_detail_dataset, output[5])]
         eng_stat_detail_dataset = [a + b for a, b in zip(eng_stat_detail_dataset, output[6])]
+        total_inference_latency += output[7]
 
         # Prediction and Accuracy Measurement
         _, preds = torch.max(output[0].data, 1)
@@ -670,21 +705,21 @@ if __name__ == '__main__':
         print(f"Sparsity rate of L{i+1}: {SR[i]:.5f}")
     print(f"Sparsity rate of Network: {SR_Net:.5f}")
         
-    # To print energy consumption statistics
+    # To print energy consumption and latency statistics
+    avg_latency = total_inference_latency / num_processed_images
     avg_dynamic_energy_dataset = total_dynamic_energy_dataset / num_processed_images
     avg_static_energy_dataset = (total_static_energy_dataset / num_processed_images) * critical_path_delay
     total_energy = avg_dynamic_energy_dataset + avg_static_energy_dataset
     eng_stat_detail_dataset = [x * critical_path_delay for x in eng_stat_detail_dataset]
     eng_total_detail_dataset = [a + b for a, b in zip(eng_dnmc_detail_dataset, eng_stat_detail_dataset)]
 
+    if args.latency:
+        print('\nAverage Inference Latency: %1.9f (Sec)' % (avg_latency))
     if args.power:
-        print()
-        print('Average Dynamic Energy of Dataset: %1.9f (J)' % (avg_dynamic_energy_dataset))
+        print('\nAverage Dynamic Energy of Dataset: %1.9f (J)' % (avg_dynamic_energy_dataset))
         print('Average Static Energy of Dataset: %1.9f (J)' % (avg_static_energy_dataset))
-        print('Total Energy of Dataset: %1.9f (J)' % (total_energy))
-        print()
-        print('########## Dynamic Energy Breakdown ##########')
-        print()
+        print('Total Energy of Dataset: %1.9f (J)' % (total_energy),'\n')
+        print('########## Dynamic Energy Breakdown ##########\n')
         print('Multiplier (J): %1.20f' % (eng_dnmc_detail_dataset[0]))
         print('AdderTree  (J): %1.20f' % (eng_dnmc_detail_dataset[1]))
         print('ReLu       (J): %1.20f' % (eng_dnmc_detail_dataset[2]))
@@ -697,11 +732,9 @@ if __name__ == '__main__':
         print('NM         (J): %1.20f' % (eng_dnmc_detail_dataset[9]))
     
         total_eng_dnmc = sum(eng_dnmc_detail_dataset)
-        print('Total      (J): %1.20f' % (total_eng_dnmc))
+        print('Total      (J): %1.20f' % (total_eng_dnmc),'\n')
     
-        print()
-        print('########## Static Energy Breakdown ###########')
-        print()
+        print('########## Static Energy Breakdown ###########\n')
         print('Multiplier (J): %1.20f' % (eng_stat_detail_dataset[0]))
         print('AdderTree  (J): %1.20f' % (eng_stat_detail_dataset[1]))
         print('ReLu       (J): %1.20f' % (eng_stat_detail_dataset[2]))
@@ -714,11 +747,9 @@ if __name__ == '__main__':
         print('NM         (J): %1.20f' % (eng_stat_detail_dataset[9]))
     
         total_eng_stat = sum(eng_stat_detail_dataset)
-        print('Total      (J): %1.20f' % (total_eng_stat))
+        print('Total      (J): %1.20f' % (total_eng_stat),'\n')
     
-        print()
-        print('########## Total Energy Breakdown ############')
-        print()
+        print('########## Total Energy Breakdown ############\n')
         print('Multiplier (J): %1.20f' % (eng_total_detail_dataset[0]))
         print('AdderTree  (J): %1.20f' % (eng_total_detail_dataset[1]))
         print('ReLu       (J): %1.20f' % (eng_total_detail_dataset[2]))
@@ -731,12 +762,12 @@ if __name__ == '__main__':
         print('NM         (J): %1.20f' % (eng_total_detail_dataset[9]))
     
         total_eng = sum(eng_total_detail_dataset)
-        print('Total      (J): %1.20f' % (total_eng))    
-        print()
-    else:
-        print()
-        print("No data is available for Energy Consumption. Use --power as arguments to print power results")
+        print('Total      (J): %1.20f' % (total_eng),'\n')
 
     sys.exit(0)
 
-# python3 vgg16_power.py --power --arch cnvlutin --batch_size 1 --im_index_last 40 --dataset ../../Imagenet_dataset --adversarial --adv_images ../5_detection/adversarial_data/adv_constrained.pt --weights ../2_copy_weight/vgg16_imagenet_fc_one_out.pkl
+# For original dataset
+# python3 vgg16_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --im_index_last 40 --dataset ../../Imagenet_dataset --weights ../2_copy_weight/vgg16_imagenet_fc_one_out.pkl
+
+# For adversarial dataset
+# python3 vgg16_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --im_index_last 40 --adversarial --adv_images ../5_detection/adversarial_data/adv_constrained.pt --weights ../2_copy_weight/vgg16_imagenet_fc_one_out.pkl
