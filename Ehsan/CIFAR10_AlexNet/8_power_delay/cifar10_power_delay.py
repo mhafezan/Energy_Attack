@@ -1,5 +1,6 @@
 import ctypes
 import math
+import time
 import torch
 import argparse
 import sys
@@ -96,6 +97,7 @@ class AlexNet(nn.Module):
         
         eng_dnmc = []
         num_cycles = []
+        latency = []
         
         if PC:
             dnmc, cycles, dnmc_detail1, cycles_detail1 = conv_power(x, self.features[0].weight, self.features[0].stride, self.features[0].padding, args.arch)
@@ -103,9 +105,11 @@ class AlexNet(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L1_zeros, L1_size = sparsity_rate(x)
+        L1_start = time.time()
         x = self.features[0](x)
         x = self.features[1](x)
         x = self.features[2](x)
+        latency.append(time.time() - L1_start)
 
         if PC:
             dnmc, cycles, dnmc_detail2, cycles_detail2 = conv_power(x, self.features[3].weight, self.features[3].stride, self.features[3].padding, args.arch)
@@ -113,9 +117,11 @@ class AlexNet(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L2_zeros, L2_size = sparsity_rate(x)
+        L2_start = time.time()
         x = self.features[3](x)
         x = self.features[4](x)
         x = self.features[5](x)
+        latency.append(time.time() - L2_start)
 
         if PC:
             dnmc, cycles, dnmc_detail3, cycles_detail3 = conv_power(x, self.features[6].weight, self.features[6].stride, self.features[6].padding, args.arch)
@@ -123,17 +129,21 @@ class AlexNet(nn.Module):
             num_cycles.append(cycles)
         if SR:        
             L3_zeros, L3_size = sparsity_rate(x)
+        L3_start = time.time()
         x = self.features[6](x)
         x = self.features[7](x)
+        latency.append(time.time() - L3_start)
 
         if PC:
             dnmc, cycles, dnmc_detail4, cycles_detail4 = conv_power(x, self.features[8].weight, self.features[8].stride, self.features[8].padding, args.arch)
             eng_dnmc.append(dnmc)
             num_cycles.append(cycles)
-        if SR:        
+        if SR:
             L4_zeros, L4_size = sparsity_rate(x)
+        L4_start = time.time()
         x = self.features[8](x)
         x = self.features[9](x)
+        latency.append(time.time() - L4_start)
 
         if PC:
             dnmc, cycles, dnmc_detail5, cycles_detail5 = conv_power(x, self.features[10].weight, self.features[10].stride, self.features[10].padding, args.arch)
@@ -141,6 +151,7 @@ class AlexNet(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L5_zeros, L5_size = sparsity_rate(x)
+        L5_start = time.time()
         x = self.features[10](x)
         x = self.features[11](x)
         x = self.features[12](x)
@@ -148,6 +159,7 @@ class AlexNet(nn.Module):
         x = self.avgpool(x)
         x = x.view(x.size(0), 256 * 6 * 6)
         x = self.classifier[0](x)
+        latency.append(time.time() - L5_start)
         
         if PC:
             dnmc, cycles, dnmc_detail6, cycles_detail6 = fc_power(x, self.classifier[1].weight, args.arch)
@@ -155,10 +167,11 @@ class AlexNet(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L6_zeros, L6_size = sparsity_rate(x)
+        L6_start = time.time()
         x = self.classifier[1](x)
         x = self.classifier[2](x)
-        
         x = self.classifier[3](x)
+        latency.append(time.time() - L6_start)
         
         if PC:
             dnmc, cycles, dnmc_detail7, cycles_detail7 = fc_power(x, self.classifier[4].weight, args.arch)
@@ -166,10 +179,11 @@ class AlexNet(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L7_zeros, L7_size = sparsity_rate(x)
+        L7_start = time.time()
         x = self.classifier[4](x)
         x = self.classifier[5](x)
-        
         x = self.classifier[6](x)
+        latency.append(time.time() - L7_start)
                 
         zeros_list = [L1_zeros, L2_zeros, L3_zeros, L4_zeros, L5_zeros, L6_zeros, L7_zeros]
         sizes_list = [L1_size, L2_size, L3_size, L4_size, L5_size, L6_size, L7_size]
@@ -182,7 +196,7 @@ class AlexNet(nn.Module):
         
         eng_stat_detail_inference = [a * b for a, b in zip(pow_stat_detail_inference, cycles_detail_inference)]
 
-        return x, zeros_list, sizes_list, sum(eng_dnmc), pow_stat * sum(num_cycles), eng_dnmc_detail_inference, eng_stat_detail_inference
+        return x, zeros_list, sizes_list, sum(eng_dnmc), pow_stat * sum(num_cycles), eng_dnmc_detail_inference, eng_stat_detail_inference, sum(latency)
 
 def sparsity_rate(input_tensor):
     zeros = torch.count_nonzero(torch.eq(input_tensor, 0)).item()
@@ -436,20 +450,21 @@ if __name__ == '__main__':
     # Initialize parser and setting the hyper parameters
     parser = argparse.ArgumentParser(description="AlexNet Network with CIFAR10 Dataset")
     parser.add_argument('--batch_size', default=1, type=int)
-    parser.add_argument('--weights', default="../2_copy_weight_256_256/alexnet_cifar10_fc_one_out_458624.pkl", help="The path to the pre-trained weights")
+    parser.add_argument('--weights', default="../3_copy_weight/alexnet_cifar10_fc_one_out_458624.pkl", help="The path to the pretrained model")
     parser.add_argument('--dataset', default="../cifar10_dataset", help="The path to the train or test datasets")
-    parser.add_argument('--power', action='store_true', help="To generate power results for CNVLUTIN or DaDianNao architecture")
-    parser.add_argument('--arch', default='cnvlutin', help="To specify the architecture running the clean/adversarial images: cnvlutin or dadiannao")
-    parser.add_argument('--adversarial', action='store_true', help="To test the adversarial dataset instead of original dataset")
-    parser.add_argument('--im_index_first', default=0, type=int, help="The fisrt index of the dataset")
-    parser.add_argument('--im_index_last', default=100, type=int, help="The last index of the dataset")
-    parser.add_argument('--adv_images', default=None, help="The path to the adversarial images generated by energy attack algorithm")
+    parser.add_argument('--power', action='store_true', help="To generate inference power statistics")
+    parser.add_argument('--latency', action='store_true', help="To generate inference latency statistics")
+    parser.add_argument('--arch', default='cnvlutin', help="To specify the underlying architecture: cnvlutin or dadiannao")
+    parser.add_argument('--adversarial', action='store_true', help="To allow for testing the adversarial dataset")
+    parser.add_argument('--im_index_first', default=0, type=int, help="The first index of the dataset")
+    parser.add_argument('--im_index_last', default=10000, type=int, help="The last index of the dataset")
+    parser.add_argument('--adv_images', default=None, help="The path to the adversarial images")
     args = parser.parse_args()
-    print(f"{args}\n")
+    print(f"\n{args}\n")
     
     # Device Initialization
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    print(f"\n A {device} is assigned for processing! \n")
+    print(f"{device} assigned for processing! \n")
 
     # CIFAR10 dataset and dataloader declaration
     TRANSFORMS = transforms.Compose([
@@ -459,7 +474,7 @@ if __name__ == '__main__':
     
     if args.adversarial:
         # To load the GAN/EA dataset from the offline file generated by GAN/EA algorithm
-        test_dataset = torch.load(args.adv_images, map_location=torch.device('cpu')) # To examine the sparsity attack
+        test_dataset = torch.load(args.adv_images, map_location=torch.device('cpu'))
         test_dataset_sub = torch.utils.data.Subset(test_dataset, list(range(args.im_index_first, args.im_index_last)))                
         test_loader  = DataLoader(test_dataset_sub, batch_size=args.batch_size)
     else:             
@@ -482,6 +497,7 @@ if __name__ == '__main__':
     sample_num = 0
     num_layers = 7
         
+    total_inference_latency = 0
     total_dynamic_energy_dataset = 0
     total_static_energy_dataset = 0
     eng_dnmc_detail_dataset = [0] * 10
@@ -503,7 +519,7 @@ if __name__ == '__main__':
         image = image.to(device)
         label = label.to(device)
 
-        output = model(image, True, args.power) # (to get input image, to activate SR calculation, to activate power calculation)
+        output = model(image, True, args.power)
                    
         # Sparsity calculations
         for i in range(num_layers): zeros_all_layers[i] += output[1][i]
@@ -516,6 +532,7 @@ if __name__ == '__main__':
         total_static_energy_dataset += output[4]
         eng_dnmc_detail_dataset = [a + b for a, b in zip(eng_dnmc_detail_dataset, output[5])]
         eng_stat_detail_dataset = [a + b for a, b in zip(eng_stat_detail_dataset, output[6])]
+        total_inference_latency += output[7]
             
         # Prediction and Accuracy Measurement
         _, preds = torch.max(output[0].data, 1)
@@ -524,8 +541,7 @@ if __name__ == '__main__':
 
     # To print accuracy statistics        
     acc = correct_num / sample_num
-    print()
-    print('Accuracy of Testing is (percent): %1.2f' % (acc*100), flush=True)
+    print('\nAccuracy of Testing is (percent): %1.2f' % (acc*100), '\n')
         
     # To print sparsity rate statistics
     SR_L1  = (zeros_all_layers[0]/sizes_all_layers[0]) if sizes_all_layers[0] != 0 else 0
@@ -536,7 +552,6 @@ if __name__ == '__main__':
     SR_L6  = (zeros_all_layers[5]/sizes_all_layers[5]) if sizes_all_layers[5] != 0 else 0
     SR_L7  = (zeros_all_layers[6]/sizes_all_layers[6]) if sizes_all_layers[6] != 0 else 0
     SR_Net = (net_zeros/net_sizes) if net_sizes != 0 else 0
-    print()
     print('Sparsity rate of L1 is: %1.5f'   % (SR_L1))
     print('Sparsity rate of L2 is: %1.5f'   % (SR_L2))
     print('Sparsity rate of L3 is: %1.5f'   % (SR_L3))
@@ -546,21 +561,21 @@ if __name__ == '__main__':
     print('Sparsity rate of L7 is: %1.5f'   % (SR_L7))
     print('Sparsity rate of Network: %1.5f' % (SR_Net))
         
-    # To print energy consumption statistics
+    # To print energy consumption and latency statistics
+    avg_latency = total_inference_latency / sample_num
     avg_dynamic_energy_dataset = total_dynamic_energy_dataset / sample_num
     avg_static_energy_dataset = (total_static_energy_dataset / sample_num) * critical_path_delay
     total_energy = avg_dynamic_energy_dataset + avg_static_energy_dataset
     eng_stat_detail_dataset = [x * critical_path_delay for x in eng_stat_detail_dataset]
     eng_total_detail_dataset = [a + b for a, b in zip(eng_dnmc_detail_dataset, eng_stat_detail_dataset)]
     
+    if args.latency:
+        print('\nAverage Inference Latency: %1.9f (Sec)' % (avg_latency))
     if args.power:
-        print()
-        print('Average Dynamic Energy of Dataset: %1.9f (J)' % (avg_dynamic_energy_dataset))
+        print('\nAverage Dynamic Energy of Dataset: %1.9f (J)' % (avg_dynamic_energy_dataset))
         print('Average Static Energy of Dataset: %1.9f (J)' % (avg_static_energy_dataset))
-        print('Total Energy of Dataset: %1.9f (J)' % (total_energy))
-        print()
-        print('########## Dynamic Energy Breakdown ##########')
-        print()
+        print('Total Energy of Dataset: %1.9f (J)' % (total_energy),'\n')
+        print('########## Dynamic Energy Breakdown ##########\n')
         print('Multiplier (J): %1.20f' % (eng_dnmc_detail_dataset[0]))
         print('AdderTree  (J): %1.20f' % (eng_dnmc_detail_dataset[1]))
         print('ReLu       (J): %1.20f' % (eng_dnmc_detail_dataset[2]))
@@ -573,11 +588,9 @@ if __name__ == '__main__':
         print('NM         (J): %1.20f' % (eng_dnmc_detail_dataset[9]))
     
         total_eng_dnmc = sum(eng_dnmc_detail_dataset)
-        print('Total      (J): %1.20f' % (total_eng_dnmc))
+        print('Total      (J): %1.20f' % (total_eng_dnmc),'\n')
     
-        print()
-        print('########## Static Energy Breakdown ###########')
-        print()
+        print('########## Static Energy Breakdown ###########\n')
         print('Multiplier (J): %1.20f' % (eng_stat_detail_dataset[0]))
         print('AdderTree  (J): %1.20f' % (eng_stat_detail_dataset[1]))
         print('ReLu       (J): %1.20f' % (eng_stat_detail_dataset[2]))
@@ -590,11 +603,9 @@ if __name__ == '__main__':
         print('NM         (J): %1.20f' % (eng_stat_detail_dataset[9]))
     
         total_eng_stat = sum(eng_stat_detail_dataset)
-        print('Total      (J): %1.20f' % (total_eng_stat))
+        print('Total      (J): %1.20f' % (total_eng_stat),'\n')
     
-        print()
-        print('########## Total Energy Breakdown ############')
-        print()
+        print('########## Total Energy Breakdown ############\n')
         print('Multiplier (J): %1.20f' % (eng_total_detail_dataset[0]))
         print('AdderTree  (J): %1.20f' % (eng_total_detail_dataset[1]))
         print('ReLu       (J): %1.20f' % (eng_total_detail_dataset[2]))
@@ -607,16 +618,12 @@ if __name__ == '__main__':
         print('NM         (J): %1.20f' % (eng_total_detail_dataset[9]))
     
         total_eng = sum(eng_total_detail_dataset)
-        print('Total      (J): %1.20f' % (total_eng))    
-        print()
-    else:
-        print()
-        print("No data is available for Energy Consumption. Use --power as arguments to print power results")
+        print('Total      (J): %1.20f' % (total_eng),'\n')
 
     sys.exit(0)
 
 # For cnvlutin + adversarial
-# python3 cifar10_power.py --power --arch cnvlutin --batch_size 4 --im_index_first 0 --im_index_last 20 --adversarial --adv_images ../6_adv_attack_detect/adversarial_data/adversarial_cifar10_constrained_batch_one.pt
+# python3 cifar10_power_delay.py --power --latency --arch cnvlutin --batch_size 10 --adversarial --adv_images ../6_detection/adversarial_data/adversarial_cifar10_constrained_batch_one.pt
 
 # For cnvlutin + clean images
-# python3 cifar10_power.py --power --arch cnvlutin --batch_size 20 --im_index_first 0 --im_index_last 20 --dataset ../cifar10_dataset
+# python3 cifar10_power_delay.py --power --latency --arch cnvlutin --batch_size 20 --dataset ../cifar10_dataset
