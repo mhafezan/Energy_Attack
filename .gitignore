@@ -41,11 +41,11 @@ Mohammad/GAN/CIFAR10/2_test_clean/z_sets/*.pt
 Mohammad/GAN/CIFAR10/2_test_clean/z_stars/*.pt
 
 Ehsan/MNIST_LeNet5/2_copy_weight/*.pkl
-Ehsan/MNIST_LeNet5/dataset/*
+Ehsan/MNIST_LeNet5/mnist_dataset/*
 Ehsan/MNIST_LeNet5/3_attack/*.pt
 Ehsan/MNIST_LeNet5/5_profile/profile_data/*.pt
 Ehsan/MNIST_LeNet5/6_adv_attack_detect/adversarial_data/*.pt
-Ehsan/MNIST_LeNet5/7_power_calculation/adversarial_data/*.pt
+Ehsan/MNIST_LeNet5/7_power_delay/adversarial_data/*.pt
 
 Ehsan/FMNIST_LeNet5/fmnist_dataset/**
 Ehsan/FMNIST_LeNet5/1_train_test/weights/*.pth

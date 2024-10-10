@@ -144,7 +144,7 @@ def Sparsity_Attack_Generation(model1_active_in, model2_in, device, test_loader_
 
         # To store the generated adversarial (x_new) or benign data in a similar dataset with a pollution rate of 100% for each class
         if args.store_attack:
-            adversarial_data.append((x_new, target_clean, 1))
+            adversarial_data.append((x_new, target_clean))
 
         # Compute the L2-Norm of difference between perturbed image (x_new) and clean image (data)
         l2norm_diff = torch.norm((x_new-inputs_clean).view(args.batch_size, -1), p=2, dim=1)
