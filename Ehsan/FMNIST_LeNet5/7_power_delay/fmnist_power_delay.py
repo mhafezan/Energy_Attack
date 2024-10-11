@@ -119,13 +119,7 @@ class LeNet5(nn.Module):
         L4_start = time.time()
         x = self.fc1(x)
         x = F.relu(x)
-        latency.append(time.time() - L4_start)
         
-        if PC:
-            dnmc, cycles, L5_dnmc_detail, L5_cycles_detail = fc_power(x, self.fc2.weight, args.arch)
-            eng_dnmc.append(dnmc)
-            num_cycles.append(cycles)
-        L4_start = time.time()
         x = self.fc2(x)
         latency.append(time.time() - L4_start)
         
