@@ -142,5 +142,5 @@ if __name__ == "__main__":
 
     sys.exit(0)
 
-# python3 train_model1.py --phase train --epochs 50 --lr 0.002 --batch-size 128 --optimizer adam
-# python3 train_model1.py --phase test --batch-size 128 --model_path ./weights/model1_epoch_x.pth
+# python3 train_model1.py --phase train --epochs 20 --lr 0.001 --batch-size 128 --optimizer adam
+# python3 train_model1.py --phase test --batch-size 128 --model_path ./weights/model1_epoch_20_0.001_128_99.33.pth
