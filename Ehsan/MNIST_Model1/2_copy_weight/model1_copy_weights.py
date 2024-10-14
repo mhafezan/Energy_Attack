@@ -77,7 +77,6 @@ if __name__ == '__main__':
     test_dataset = torchvision.datasets.MNIST(root=args.dataset, train=False, download=True, transform=TRANSFORM)
     test_sub_dataset = torch.utils.data.Subset(test_dataset, list(range(args.im_index_first, args.im_index_last)))
     test_loader = DataLoader(test_sub_dataset, batch_size=args.batch_size, shuffle=False)
-    test_sub_dataset = torch.utils.data.Subset(test_dataset, list(range(args.im_index_first, args.im_index_last)))
     
     # To test both models using the assigned weights
     test (model_src, test_loader, device)
