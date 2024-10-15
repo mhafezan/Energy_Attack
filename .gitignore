@@ -52,6 +52,7 @@ Ehsan/MNIST_Model1/1_train_model1/weights/*.pth
 Ehsan/MNIST_Model1/2_copy_weight/*.pkl
 Ehsan/MNIST_Model1/3_attack/*.pt
 Ehsan/MNIST_Model1/4_power_delay/adversarial_data/*.pt
+Ehsan/MNIST_Model1/4_power_delay/weights/*.pkl
 
 Ehsan/FMNIST_LeNet5/fmnist_dataset/**
 Ehsan/FMNIST_LeNet5/1_train_test/weights/*.pth

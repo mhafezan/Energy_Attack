@@ -29,7 +29,7 @@ lib.count_fc_multiplications.argtypes = (ctypes.c_int, ctypes.c_int, ctypes.c_in
                                          ctypes.POINTER(ctypes.c_int),
                                          ctypes.POINTER(ctypes.c_int))
 
-lib.count_conv_multiplications.restype = None # No return value
+lib.count_conv_multiplications.restype = None
 lib.count_fc_multiplications.restype = None
 
 # Custom Dataset to store the adversarial data
@@ -395,10 +395,9 @@ def fc_power (input, weight, architecture):
 
 if __name__ == '__main__':
     
-    # Initialize parser and setting the hyper parameters
-    parser = argparse.ArgumentParser(description="LenNet5 Network with MNIST Dataset")
+    parser = argparse.ArgumentParser(description="LenNet5 Network as BLACK-BOX model trained on MNIST Dataset")
     parser.add_argument('--batch_size', default=1, type=int)
-    parser.add_argument('--weights', default='../2_copy_weight/lenet5_mnist_fc_one_out.pkl', help="The path to the pre-trained weights")
+    parser.add_argument('--weights', default='../2_copy_weight/lenet5_mnist_fc_one_out.pkl', help="The path to the pretrained weights")
     parser.add_argument('--dataset', default='../mnist_dataset', help="The path to MNIST dataset")
     parser.add_argument('--power', action='store_true', help="To generate inference power statistics")
     parser.add_argument('--latency', action='store_true', help="To generate inference latency statistics")
@@ -428,9 +427,9 @@ if __name__ == '__main__':
     # Network Initialization
     model = LeNet5(args).to(device)
     
-    # To load the pretrained model
+    # To load the pretrained BlackBox model
     if args.weights is not None:
-        model.load_state_dict(torch.load(args.weights, map_location=device))
+        model.load_state_dict(torch.load(args.weights, map_location=device, weights_only=True))
     else:
         print('No weights are provided.')
         sys.exit()
@@ -465,7 +464,7 @@ if __name__ == '__main__':
             image = image.to(device)
             label = label.to(device)
 
-        output = model(image, True, args.power) # (input image, SR calculation, power calculation)
+        output = model(image, True, args.power)
                    
         # Sparsity calculations
         for i in range(num_layers): zeros_all_layers[i] += output[1][i]
@@ -565,4 +564,10 @@ if __name__ == '__main__':
 
     sys.exit(0)
 
-# python3 mnist_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --dataset ../mnist_dataset --adversarial --adv_images adversarial_data/adversarial_dataset_mnist.pt --weights weights/lenet5_mnist_fc_one_out.pkl
+#################### Arguments considering pretrained LeNet5 as black-box model
+
+# For test on adversarial MNIST
+# python3 lenet5_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --adversarial --adv_images adversarial_data/adversarial_dataset_by_substitute_model1.pt --weights weights/lenet5_mnist_fc_one_out.pkl
+
+# For test on original MNIST
+# python3 lenet5_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --dataset ../mnist_dataset --weights weights/lenet5_mnist_fc_one_out.pkl
