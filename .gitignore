@@ -66,6 +66,13 @@ Ehsan/CIFAR10_AlexNet/cifar10_dataset/*
 Ehsan/CIFAR10_AlexNet/5_profile/profile_data/*.pt
 Ehsan/CIFAR10_AlexNet/6_detection/adversarial_data/*.pt
 
+Ehsan/CIFAR10_Model2/cifar10_dataset/**
+Ehsan/CIFAR10_Model2/1_train_model2/weights/*.pth
+Ehsan/CIFAR10_Model2/2_copy_weight/*.pkl
+Ehsan/CIFAR10_Model2/3_attack/*.pt
+Ehsan/CIFAR10_Model2/4_power_delay/adversarial_data/*.pt
+Ehsan/CIFAR10_Model2/4_power_delay/weights/*.pkl
+
 Ehsan/CIFAR100_GoogleNet/1_train_test/weight_dir/*.pkl
 Ehsan/CIFAR100_GoogleNet/2_copy_weight/*.pkl
 Ehsan/CIFAR100_GoogleNet/cifar100_dataset/*
