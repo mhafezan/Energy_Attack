@@ -205,15 +205,15 @@ if __name__ == '__main__':
     print(f"\n{device} assigned for processing!\n")
     
     # To load the MNIST dataset
-    transform = transforms.ToTensor()
-    test_dataset_clean  = torchvision.datasets.MNIST(root=args.dataset, train=False, download=True, transform=transform)
+    TRANSFORM = transforms.Compose([transforms.ToTensor(), transforms.Normalize(mean=[0.1307], std=[0.3081])])
+    test_dataset_clean  = torchvision.datasets.MNIST(root=args.dataset, train=False, download=True, transform=TRANSFORM)
     test_dataset_clean_sub = torch.utils.data.Subset(test_dataset_clean, list(range(args.img_index_first, args.img_index_last)))    
     test_loader_clean = DataLoader(test_dataset_clean_sub, shuffle=False, num_workers=1, batch_size=args.batch_size)
         
     if args.cons_adv_geneartion:
         test_loader_dirty = torch.load('./adversarial_dataset_in.pt', map_location=device)
     else:
-        test_dataset_dirty  = torchvision.datasets.MNIST(root=args.dataset, train=False, download=True, transform=transform)
+        test_dataset_dirty  = torchvision.datasets.MNIST(root=args.dataset, train=False, download=True, transform=TRANSFORM)
         test_dataset_sub_dirty = torch.utils.data.Subset(test_dataset_dirty, list(range(args.img_index_first, args.img_index_last)))
         test_loader_dirty = DataLoader(test_dataset_sub_dirty, shuffle=False, num_workers=1, batch_size=args.batch_size)
         
