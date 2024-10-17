@@ -12,7 +12,6 @@ class Model2(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=3, stride=3)
         self.fc1 = nn.Linear(32*22*22, 512)
         self.fc2 = nn.Linear(512, 10)
-        self.softmax = nn.Softmax(dim=1)
     
     def forward(self, x):
         
@@ -43,9 +42,6 @@ class Model2(nn.Module):
         
         # Second fully connected layer
         x = self.fc2(x)
-        
-        # Output layer with softmax
-        x = self.softmax(x)
         
         return x
 

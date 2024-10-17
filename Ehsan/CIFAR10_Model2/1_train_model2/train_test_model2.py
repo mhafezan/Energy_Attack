@@ -3,10 +3,11 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 import torchvision.transforms as transforms
-from torch.utils.data import DataLoader
 import argparse
 import sys
 import random
+from torch.utils.data import DataLoader
+from torch.optim.lr_scheduler import StepLR
 from models.model2 import Model2
 
 def train(model, train_loader, test_loader, optimizer, device, args):
@@ -31,6 +32,9 @@ def train(model, train_loader, test_loader, optimizer, device, args):
             # Loss over the batch progress
             if (index + 1) % args.print_freq == 0:
                 print(f'Epoch [{epoch+1}/{args.epochs}], Step [{index+1}/{len(train_loader)}], Loss: {loss.item():.4f}', '\n')
+        
+        # Adjust the learning rate
+        scheduler.step()
 
         # Average loss over the epoch progress
         print(f'Epoch [{epoch+1}/{args.epochs}] ********** Average Loss: {running_loss/len(train_loader):.4f} **********', '\n')
@@ -78,13 +82,9 @@ def test(model, test_loader, device, model_path):
 
     return
 
-def initialize_weights(model):
-    """
-    Initializes the weights of the given model.
-    Uses Kaiming Initialization for convolutional layers, 
-    Xavier Initialization for fully connected layers, 
-    and sets the biases to zero.
-    """
+"""def initialize_weights(model):
+    # Initializes the weights of the given model. Uses Kaiming Initialization for CONV layers and Xavier Initialization for FC layers
+    
     for layer in model.modules():
         if isinstance(layer, nn.Conv2d):
             # Kaiming Initialization for convolutional layers
@@ -95,7 +95,7 @@ def initialize_weights(model):
             # Xavier Initialization for fully connected layers
             nn.init.xavier_normal_(layer.weight)
             if layer.bias is not None:
-                nn.init.constant_(layer.bias, 0)
+                nn.init.constant_(layer.bias, 0)"""
 
 
 
@@ -128,12 +128,13 @@ if __name__ == "__main__":
     # Model Initialization
     model = Model2().to(device)
 
-    # Initialize weights
-    model.apply(initialize_weights)
+    """# Initialize weights
+    model.apply(initialize_weights)"""
 
     # Load the CIFAR10 dataset
     TRANSFORM = transforms.Compose([
         transforms.Resize(256),  # Resize the images to 256x256 to later generate adversarial images for AlexNet
+        transforms.RandomHorizontalFlip(), # Randomly flip images horizontally
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2023, 0.1994, 0.2010])])
 
@@ -143,12 +144,14 @@ if __name__ == "__main__":
     test_loader = DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=False)
 
     # Set loss function and optimizer
-    criterion = nn.CrossEntropyLoss()
+    # criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
 
     if args.optimizer == 'sgd':
         optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
     else:
         optimizer = optim.Adam(model.parameters(), lr=args.lr)
+        scheduler = StepLR(optimizer, step_size=30, gamma=0.1) # Reduce LR by a factor of 0.1 every 30 epochs
 
     if args.phase == "train":
         train(model, train_loader, test_loader, optimizer, device, args)
