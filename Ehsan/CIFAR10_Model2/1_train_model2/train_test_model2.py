@@ -51,7 +51,7 @@ def train(model, train_loader, test_loader, optimizer, device, args):
         print(f'Epoch [{epoch+1}/{args.epochs}] ********** Test Accuracy: {accuracy:.2f}% *********', '\n')
 
         # Save the model parameters after each epoch
-        if accuracy >= 90:
+        if accuracy >= 70:
             model_save_path = f'{args.weights}/model2_epoch_{epoch+1}_{args.lr}_{args.batch_size}_{accuracy:.2f}.pth'
             torch.save(model.state_dict(), model_save_path)
 
@@ -126,7 +126,7 @@ if __name__ == "__main__":
     print(f"\n{device} assigned for processing!\n")
 
     # Model Initialization
-    model = Model2().to(device)  # Use Model2
+    model = Model2().to(device)
 
     # Initialize weights
     model.apply(initialize_weights)
