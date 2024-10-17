@@ -251,6 +251,15 @@ if __name__ == '__main__':
     print(f"Sparsity rate after energy attack: {sr_net_after}")
     print(f"Sparsity reduction applying energy attack: {sr_net_before/(sys.float_info.epsilon if sr_net_after == 0 else sr_net_after)}")
     print(f"Average difference of L2-Norms: {sum(l2_norms) / len(l2_norms)} \n")
+    
+    f_ptr = open('./tmp_sparsity_results.txt','a')
+    print('lrrrrrrr=', args.lr, file=f_ptr)
+    print('accu_before=', initial_accuracy, file=f_ptr)
+    print('accu_after=', final_accuracy, file=f_ptr)
+    print('sparsity_before=', sr_net_before, file=f_ptr)
+    print('sparsity_after=', sr_net_after, file=f_ptr)
+    print(' ', file=f_ptr)
+    
     sys.exit(0)
 
 # Arguments (Constrained):   python3 model1_attack.py --lr 0.1 --eps 0.9 --beta 30 --imax 500 --constrained --store_attack
