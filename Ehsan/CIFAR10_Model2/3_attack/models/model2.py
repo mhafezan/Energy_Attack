@@ -1,14 +1,11 @@
 import torch
 import torch.nn as nn
 
+class Model2(nn.Module):
+    def __init__(self, args=None):
+        super(Model2, self).__init__()
 
- 
-
-class AlexNet(nn.Module):
-    def __init__(self, beta=15):
-        super(AlexNet, self).__init__()
-
-        self.beta  = beta
+        self.beta  = args.beta
 
         self.features = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
@@ -54,60 +51,67 @@ class AlexNet(nn.Module):
 
         self.my_fc8 = nn.Linear(7, 1, bias=False)
   
-     
-
-
+        
+      
     def forward(self, x):
        
         
         #print(x.size())
-        y1 = count_ones(x)  
-      
+        y1 = x.view(x.shape[0], -1)
+        y1 = tanh(y1, self.beta)
+        y1 = self.my_fc1(y1)
+
         x = self.features[0](x)  #conv
         x = self.features[1](x)  #relu        
         x = self.features[2](x)  #maxpool
       
 
-        #print(x.size())
-        y2 = count_ones(x)  
-
+       #print(x.size())
+        y2 = x.view(x.shape[0], -1)
+        y2 = tanh(y2, self.beta)
+        y2 = self.my_fc2(y2)
+ 
         x = self.features[3](x)  #conv
         x = self.features[4](x)  #relu        
         x = self.features[5](x)  #maxpool
        
         #print(x.size())
-        y3 = count_ones(x)  
-
+        y3 = x.view(x.shape[0], -1)
+        y3 = tanh(y3, self.beta)
+        y3 = self.my_fc3(y3)
+ 
         x = self.features[6](x)  #conv
         x = self.features[7](x)  #relu
         
       
         #print(x.size())
-        y4 = count_ones(x)  
-
+        y4 = x.view(x.shape[0], -1)
+        y4 = tanh(y4, self.beta)
+        y4 = self.my_fc4(y4)
 
         x = self.features[8](x)  #conv
         x = self.features[9](x)  #relu
         
 
         #print(x.size())
-        y5 = count_ones(x)  
-
+        y5 = x.view(x.shape[0], -1)
+        y5 = tanh(y5, self.beta)
+        y5 = self.my_fc5(y5)
 
         x = self.features[10](x) #conv
         x = self.features[11](x) #relu        
         x = self.features[12](x) #maxpool     
         
-        x = self.avgpool(x)      
+        x = self.avgpool(x)
 
         x = x.view(x.size(0), 256 * 6 * 6)    
 
-        
         x = self.classifier[0](x) #drop
 
         #print(x.size())
-        y6 = count_ones(x)  
-
+        y6 = x.view(x.shape[0], -1)
+        y6 = tanh(y6, self.beta)
+        y6 = self.my_fc6(y6)
 
         x = self.classifier[1](x) #linear           
         x = self.classifier[2](x) #relu
@@ -116,8 +120,9 @@ class AlexNet(nn.Module):
 
 
         #print(x.size())
-        y7 = count_ones(x)  
-
+        y7 = x.view(x.shape[0], -1)
+        y7 = tanh(y7, self.beta)
+        y7 = self.my_fc7(y7)
  
         
         x = self.classifier[4](x) #linear
@@ -126,20 +131,30 @@ class AlexNet(nn.Module):
         x = self.classifier[6](x) #linear
 
 
-        y = y1+y2+y3+y4+y5+y6+y7
+        y = self.my_fc8( torch.cat((y1,y2,y3,y4,y5,y6,y7),1) )
 
         
         return x, y
 
   
+
+    def model2_set_weights_one(self):
+
+        self.my_fc1.weight.data.fill_(1.)
+        self.my_fc2.weight.data.fill_(1.)
+        self.my_fc3.weight.data.fill_(1.)
+        self.my_fc4.weight.data.fill_(1.)
+        self.my_fc5.weight.data.fill_(1.)
+        self.my_fc6.weight.data.fill_(1.)
+        self.my_fc7.weight.data.fill_(1.)
+        self.my_fc8.weight.data.fill_(1.)
+
+        return
   
- 
-def count_ones(input_tensor):
-    zeros = torch.count_nonzero(torch.eq(input_tensor, 0)).item()
-    activation_count = input_tensor.numel()
-    return (activation_count - zeros)
 
 
-
-def alexnet(beta=15):
-    return AlexNet(beta=beta)
+def tanh(input_tensor, beta):
+    output = torch.tanh(beta * input_tensor)
+    output = torch.pow(output, 2)
+    return output
+    

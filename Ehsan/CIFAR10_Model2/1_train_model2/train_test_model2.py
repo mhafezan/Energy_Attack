@@ -136,7 +136,7 @@ if __name__ == "__main__":
         transforms.Resize(256),  # Resize the images to 256x256 to later generate adversarial images for AlexNet
         transforms.RandomHorizontalFlip(), # Randomly flip images horizontally
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2023, 0.1994, 0.2010])])
+        transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])])
 
     train_dataset = torchvision.datasets.CIFAR10(root=args.dataset, train=True, download=True, transform=TRANSFORM)
     test_dataset = torchvision.datasets.CIFAR10(root=args.dataset, train=False, download=True, transform=TRANSFORM)
@@ -161,4 +161,4 @@ if __name__ == "__main__":
     sys.exit(0)
 
 # python3 train_test_model2.py --phase train --epochs 100 --lr 0.001 --batch-size 128 --optimizer adam
-# python3 train_test_model2.py --phase test --batch-size 128 --model_path ./weights/model2_epoch_9_0.001_100_70.63.pth
+# python3 train_test_model2.py --phase test --batch-size 128 --model_path ./weights/model2_epoch_6_0.001_64_70.69.pth

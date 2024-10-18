@@ -46,7 +46,7 @@ def test(model, test_loader, device):
 if __name__ == '__main__':
        
     parser = argparse.ArgumentParser(description="Customized Model2 Network with CIFAR10 Dataset")
-    parser.add_argument('--weights_src', default='../1_train_model2/weights/model2_epoch_9_0.001_100_70.63.pth', help="The path to the trained weights")
+    parser.add_argument('--weights_src', default='../1_train_model2/weights/model2_epoch_6_0.001_64_70.69.pth', help="The path to the trained weights")
     parser.add_argument('--weights_dest', default='./model2_cifar10_fc_one_out.pkl', help="The path to store copied weights")
     parser.add_argument('--batch_size', default=64, type=int, help="Batch size")
     parser.add_argument('--dataset', default="../cifar10_dataset", help="The path to the MNIST dataset")
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     TRANSFORM = transforms.Compose([
         transforms.Resize(256),
         transforms.ToTensor(),
-        transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2023, 0.1994, 0.2010])])
+        transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])])
 
     test_dataset = torchvision.datasets.CIFAR10(root=args.dataset, train=False, download=True, transform=TRANSFORM)
     test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)

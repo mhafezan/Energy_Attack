@@ -11,8 +11,8 @@ import datetime
 import torchvision.utils as vutils
 import random
 from torch.utils.data import DataLoader, Dataset
-from models.source_c10_model import alexnet
-from models.c10_model import alexnet_active
+from models.source_model2 import Model2_stat
+from models.model2 import Model2
 
 class AdversarialDataset(Dataset):
     def __init__(self, data):
@@ -24,14 +24,7 @@ class AdversarialDataset(Dataset):
     def __getitem__(self, idx):
         return self.data[idx]
 
-# To compute tanh with beta parameter
-def tanh(input_tensor, beta):
-    # To scale the tensor by BETA and apply tanh function to the scaled tensor
-    output = torch.tanh(beta * input_tensor)
-    # To sum the activations separately for each image in the batch
-    return output
-
-# To clip the perturbed input (if needed) so as to ensure that added distortions are within the "L2 bound eps" and does not exceed the input range of [0, 1]
+# To clip the perturbed input (if needed) so as to ensure that added distortions are within the "L2 bound eps" and does not exceed the input range of Cifar10 (min, max)
 def clip_tensor(input_tensor, eps_in, batch_size, input_tensor_clean, min_in, max_in):
 
     with torch.no_grad():
@@ -44,7 +37,6 @@ def clip_tensor(input_tensor, eps_in, batch_size, input_tensor_clean, min_in, ma
         torch.clamp(clapped_in[:,1, :,:], min=((0-0.456)/0.224), max=((1-0.456)/0.224), out=clapped_in[:,1, :,:])
         torch.clamp(clapped_in[:,2, :,:], min=((0-0.406)/0.225), max=((1-0.406)/0.225), out=clapped_in[:,2, :,:])
     
-
     return clapped_in
 
 # Convert a clean image into an advesarial image
@@ -185,20 +177,20 @@ def Sparsity_Attack_Generation(model_active_in, model2_in, device, test_loader_c
 if __name__ == '__main__':
        
     # Initialize parser and setting the hyper parameters
-    parser = argparse.ArgumentParser(description="AlexNet Network with CIFAR10 Dataset")
+    parser = argparse.ArgumentParser(description="Model2 Substitute Network with CIFAR10 Dataset")
     parser.add_argument('--batch_size', default=20, type=int, help="Batch size")
-    parser.add_argument('--weights', default='../3_copy_weight/alexnet_cifar10_fc_one_out_458624.pkl', help="The path to the saved weights")
+    parser.add_argument('--weights', default='../2_copy_weight/model2_cifar10_fc_one_out.pkl', help="The path to the saved weights")
     parser.add_argument('--dataset', default='../cifar10_dataset', help="The path to the cifar10 dataset")
     parser.add_argument('--beta', default=50, type=int, help="Beta parameter used in Tanh function")
-    parser.add_argument('--eps', default=0.9, type=float, help="L2-norm bound of epsilon for clipping purturbed data")
-    parser.add_argument('--constrained', action='store_true', help="To enable clipping the generated purturbed data")
+    parser.add_argument('--eps', default=0.99, type=float, help="L2-norm bound of epsilon for constraining purturbed image")
+    parser.add_argument('--constrained', action='store_true', help="To put constrain on adversarial generation")
     parser.add_argument('--cont_adv_geneartion', action='store_true', help="Reads advesarial images from previous imax-loop and continues optmizing the images")
     parser.add_argument('--save_samples', action='store_true', help="To save generated adversarial samples")
-    parser.add_argument('--store_attack', action='store_true', help="To enable or disable algorithm to store generated adversarials in an output dataset")
-    parser.add_argument('--img_index_first', default=0, type=int, help="The fisrt index of the dataset")
+    parser.add_argument('--store_attack', action='store_true', help="To store generated adversarials as a dataset")
+    parser.add_argument('--img_index_first', default=0, type=int, help="The first index of the dataset")
     parser.add_argument('--img_index_last', default=10000, type=int, help="The last index of the dataset")
     parser.add_argument('--lr', default=0.01, type=float, help="Initial learning rate")
-    parser.add_argument('--imax', default=100, type=int, help="Maximum iterations in the inner loop of Sparsity Attack function")
+    parser.add_argument('--imax', default=50, type=int, help="Maximum iterations of the inner loop")
     parser.add_argument('--manualSeed', type=int,  default=13, help='manual seed')
     args = parser.parse_args()
     print(args)
@@ -209,9 +201,10 @@ if __name__ == '__main__':
     random.seed(args.manualSeed)
     torch.manual_seed(args.manualSeed)
 
-    transform = transforms.Compose([transforms.Resize(256),
-                                    transforms.ToTensor(),
-                                    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
+    TRANSFORM = transforms.Compose([
+        transforms.Resize(256),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])])
     
     # Dataset definition
     test_dataset_clean  = torchvision.datasets.CIFAR10(root=args.dataset, train=False, download=True, transform=transform)
@@ -270,5 +263,5 @@ if __name__ == '__main__':
     print(f"Average difference of L2-Norms: {sum(l2_norms) / len(l2_norms)} \n")
 
 # Arguments:
-# python3 ./c10_conv_attack.py --lr=0.001 --constrained --store_attack
-# python3 ./c10_conv_attack.py --lr=0.08 beta=5 imax=50 --store_attack
+# python3 model2_attack.py --lr=0.001 --eps 0.99 --constrained --store_attack
+# python3 model2_attack.py --lr=0.08 beta=5 imax=50 --store_attack
