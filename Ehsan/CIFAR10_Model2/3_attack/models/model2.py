@@ -1,160 +1,88 @@
 import torch
 import torch.nn as nn
+from torch.nn import functional as F
 
 class Model2(nn.Module):
     def __init__(self, args=None):
         super(Model2, self).__init__()
-
-        self.beta  = args.beta
-
-        self.features = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=11, stride=4, padding=2),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2),
-
-            nn.Conv2d(64, 192, kernel_size=5, padding=2),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2),
-
-            nn.Conv2d(192, 384, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-
-            nn.Conv2d(384, 256, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-
-            nn.Conv2d(256, 256, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(kernel_size=3, stride=2)                 
-        )
-
-        self.avgpool = nn.AdaptiveAvgPool2d((6, 6))
-
-        self.classifier = nn.Sequential(
-            nn.Dropout(p=0.5, inplace=False),
-            nn.Linear(9216, 4096),
-            nn.ReLU(inplace=True),
-            nn.Dropout(p=0.5, inplace=False),
-            nn.Linear(4096, 1024),
-            nn.ReLU(inplace=True),
-            nn.Linear(1024, 10)
-        )
-
-        #458624
+        
+        self.beta = args.beta
+        
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=5)
+        self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=5)
+        self.conv3 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3)
+        self.conv4 = nn.Conv2d(in_channels=64, out_channels=32, kernel_size=3)
+        self.pool = nn.MaxPool2d(kernel_size=3, stride=3)
+        self.fc1 = nn.Linear(32*22*22, 512)
+        self.fc2 = nn.Linear(512, 10)
+        
+        # To compute sum of ones
         self.my_fc1 = nn.Linear(3*256*256, 1, bias=False)
-        self.my_fc2 = nn.Linear(64*31*31, 1, bias=False)
-        self.my_fc3 = nn.Linear(192*15*15, 1, bias=False)
-        self.my_fc4 = nn.Linear(384*15*15, 1, bias=False)
-        self.my_fc5 = nn.Linear(256*15*15, 1, bias=False)
-
-        self.my_fc6 = nn.Linear(9216, 1, bias=False)
-        self.my_fc7 = nn.Linear(4096, 1, bias=False)
-
-        self.my_fc8 = nn.Linear(7, 1, bias=False)
-  
-        
-      
+        self.my_fc2 = nn.Linear(64*84*84, 1, bias=False)
+        self.my_fc3 = nn.Linear(64*26*26, 1, bias=False)
+        self.my_fc4 = nn.Linear(64*24*24, 1, bias=False)
+        self.my_fc5 = nn.Linear(32*22*22, 1, bias=False)
+        self.my_fc6 = nn.Linear(5, 1, bias=False)
+    
     def forward(self, x):
-       
         
-        #print(x.size())
+        # First conv layer
         y1 = x.view(x.shape[0], -1)
         y1 = tanh(y1, self.beta)
         y1 = self.my_fc1(y1)
-
-        x = self.features[0](x)  #conv
-        x = self.features[1](x)  #relu        
-        x = self.features[2](x)  #maxpool
-      
-
-       #print(x.size())
+        x = self.conv1(x)
+        x = F.relu(x)
+        x = self.pool(x)
+        
+        # Second conv layer
         y2 = x.view(x.shape[0], -1)
         y2 = tanh(y2, self.beta)
         y2 = self.my_fc2(y2)
- 
-        x = self.features[3](x)  #conv
-        x = self.features[4](x)  #relu        
-        x = self.features[5](x)  #maxpool
-       
-        #print(x.size())
+        x = self.conv2(x)
+        x = F.relu(x)
+        x = self.pool(x)
+        
+        # Third conv layer
         y3 = x.view(x.shape[0], -1)
         y3 = tanh(y3, self.beta)
         y3 = self.my_fc3(y3)
- 
-        x = self.features[6](x)  #conv
-        x = self.features[7](x)  #relu
+        x = self.conv3(x)
+        x = F.relu(x)
         
-      
-        #print(x.size())
+        # Fourth conv layer
         y4 = x.view(x.shape[0], -1)
         y4 = tanh(y4, self.beta)
         y4 = self.my_fc4(y4)
-
-        x = self.features[8](x)  #conv
-        x = self.features[9](x)  #relu
+        x = self.conv4(x)
+        x = F.relu(x)
         
-
-        #print(x.size())
+        # Flatten the output for the fully connected layer
+        x = x.view(x.size(0), -1)
+        
+        # First fully connected layer
         y5 = x.view(x.shape[0], -1)
         y5 = tanh(y5, self.beta)
         y5 = self.my_fc5(y5)
-
-        x = self.features[10](x) #conv
-        x = self.features[11](x) #relu        
-        x = self.features[12](x) #maxpool     
+        x = self.fc1(x)
+        x = F.relu(x)
         
-        x = self.avgpool(x)
-
-        x = x.view(x.size(0), 256 * 6 * 6)    
-
-        x = self.classifier[0](x) #drop
-
-        #print(x.size())
-        y6 = x.view(x.shape[0], -1)
-        y6 = tanh(y6, self.beta)
-        y6 = self.my_fc6(y6)
-
-        x = self.classifier[1](x) #linear           
-        x = self.classifier[2](x) #relu
+        # Second fully connected layer
+        x = self.fc2(x)
         
-        x = self.classifier[3](x) #drop
-
-
-        #print(x.size())
-        y7 = x.view(x.shape[0], -1)
-        y7 = tanh(y7, self.beta)
-        y7 = self.my_fc7(y7)
- 
-        
-        x = self.classifier[4](x) #linear
-        x = self.classifier[5](x) #relu
-        
-        x = self.classifier[6](x) #linear
-
-
-        y = self.my_fc8( torch.cat((y1,y2,y3,y4,y5,y6,y7),1) )
-
+        y = self.my_fc6(torch.cat((y1,y2,y3,y4,y5), 1))
         
         return x, y
-
-  
-
+    
     def model2_set_weights_one(self):
-
         self.my_fc1.weight.data.fill_(1.)
         self.my_fc2.weight.data.fill_(1.)
         self.my_fc3.weight.data.fill_(1.)
         self.my_fc4.weight.data.fill_(1.)
         self.my_fc5.weight.data.fill_(1.)
         self.my_fc6.weight.data.fill_(1.)
-        self.my_fc7.weight.data.fill_(1.)
-        self.my_fc8.weight.data.fill_(1.)
-
         return
-  
-
 
 def tanh(input_tensor, beta):
     output = torch.tanh(beta * input_tensor)
     output = torch.pow(output, 2)
     return output
-    
