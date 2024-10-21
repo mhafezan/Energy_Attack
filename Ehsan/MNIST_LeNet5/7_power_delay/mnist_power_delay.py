@@ -1,6 +1,5 @@
 import ctypes
 import math
-import time
 import torch
 import argparse
 import sys
@@ -75,7 +74,6 @@ class LeNet5(Module):
         
         eng_dnmc = []
         num_cycles = []
-        latency = []
         
         if PC:
             dnmc, cycles, dnmc_detail1, cycles_detail1 = conv_power(x, self.conv1.weight, self.conv1.stride, self.conv1.padding, args.arch)
@@ -83,11 +81,9 @@ class LeNet5(Module):
             num_cycles.append(cycles)
         if SR:
             L1_zeros, L1_size = sparsity_rate(x)
-        L1_start = time.time()
         x = self.conv1(x)
         x = self.relu1(x)
         x = self.pool1(x)
-        latency.append(time.time() - L1_start)
 
         if PC:
             dnmc, cycles, dnmc_detail2, cycles_detail2 = conv_power(x, self.conv2.weight, self.conv2.stride, self.conv2.padding, args.arch)
@@ -95,11 +91,9 @@ class LeNet5(Module):
             num_cycles.append(cycles)
         if SR:
             L2_zeros, L2_size = sparsity_rate(x)
-        L2_start = time.time()
         x = self.conv2(x)
         x = self.relu2(x)
         x = self.pool2(x)
-        latency.append(time.time() - L2_start)
 
         x = x.view(x.shape[0], -1)
 
@@ -109,10 +103,8 @@ class LeNet5(Module):
             num_cycles.append(cycles)
         if SR:
             L3_zeros, L3_size = sparsity_rate(x)
-        L3_start = time.time()
         x = self.fc1(x)
         x = self.relu3(x)
-        latency.append(time.time() - L3_start)
 
         if PC:
             dnmc, cycles, dnmc_detail4, cycles_detail4 = fc_power(x, self.fc2.weight, args.arch)
@@ -120,10 +112,8 @@ class LeNet5(Module):
             num_cycles.append(cycles)
         if SR:
             L4_zeros, L4_size = sparsity_rate(x)
-        L4_start = time.time()
         x = self.fc2(x)
         x = self.relu4(x)
-        latency.append(time.time() - L4_start)
 
         if PC:
             dnmc, cycles, dnmc_detail5, cycles_detail5 = fc_power(x, self.fc3.weight, args.arch)
@@ -131,10 +121,8 @@ class LeNet5(Module):
             num_cycles.append(cycles)
         if SR:
             L5_zeros, L5_size = sparsity_rate(x)
-        L5_start = time.time()
         x = self.fc3(x)
         x = self.relu5(x)
-        latency.append(time.time() - L5_start)
         
         zeros_list = [L1_zeros] + [L2_zeros] + [L3_zeros] + [L4_zeros] + [L5_zeros]
         sizes_list = [L1_size]  + [L2_size]  + [L3_size]  + [L4_size]  + [L5_size]
@@ -144,7 +132,7 @@ class LeNet5(Module):
         eng_dnmc_detail_inference = [a + b + c + d + e for a, b, c, d, e in zip(dnmc_detail1, dnmc_detail2, dnmc_detail3, dnmc_detail4, dnmc_detail5)]
         eng_stat_detail_inference = [a * b for a, b in zip(pow_stat_detail_inference, cycles_detail_inference)]
         
-        return x, zeros_list, sizes_list, sum(eng_dnmc), pow_stat * sum(num_cycles), eng_dnmc_detail_inference, eng_stat_detail_inference, sum(latency)
+        return x, zeros_list, sizes_list, sum(eng_dnmc), pow_stat * sum(num_cycles), eng_dnmc_detail_inference, eng_stat_detail_inference, sum(num_cycles)
 
 def sparsity_rate(input_tensor):
     zeros = torch.count_nonzero(torch.eq(input_tensor, 0)).item()
@@ -401,7 +389,6 @@ if __name__ == '__main__':
     parser.add_argument('--weights', default='../2_copy_weight/lenet5_mnist_fc_one_out.pkl', help="The path to the pre-trained weights")
     parser.add_argument('--dataset', default='../mnist_dataset', help="The path to MNIST dataset")
     parser.add_argument('--power', action='store_true', help="To generate inference power statistics")
-    parser.add_argument('--latency', action='store_true', help="To generate inference latency statistics")
     parser.add_argument('--arch', default='cnvlutin', help="To specify the underlying architecture: cnvlutin or dadiannao")
     parser.add_argument('--adversarial', action='store_true', help="To allow for testing the adversarial dataset")
     parser.add_argument('--im_index_first', default=0, type=int, help="The first index of the dataset")
@@ -439,7 +426,7 @@ if __name__ == '__main__':
     sample_num = 0
     num_layers = 5
         
-    total_inference_latency = 0
+    total_inference_cycles = 0
     total_dynamic_energy_dataset = 0
     total_static_energy_dataset = 0
     eng_dnmc_detail_dataset = [0] * 10
@@ -478,7 +465,7 @@ if __name__ == '__main__':
         total_static_energy_dataset += output[4]
         eng_dnmc_detail_dataset = [a + b for a, b in zip(eng_dnmc_detail_dataset, output[5])]
         eng_stat_detail_dataset = [a + b for a, b in zip(eng_stat_detail_dataset, output[6])]
-        total_inference_latency += output[7]
+        total_inference_cycles += output[7]
             
         preds = torch.argmax(output[0], dim=-1)
         current_correct_num = preds == label
@@ -505,17 +492,20 @@ if __name__ == '__main__':
     print('Sparsity rate of Network: %1.5f' % (SR_Net))
         
     # To print energy consumption and latency statistics
-    avg_latency = total_inference_latency / sample_num
+    avg_inference_cycles = total_inference_cycles / sample_num
     avg_dynamic_energy_dataset = total_dynamic_energy_dataset / sample_num
     avg_static_energy_dataset = (total_static_energy_dataset / sample_num) * critical_path_delay
     total_energy = avg_dynamic_energy_dataset + avg_static_energy_dataset
     eng_stat_detail_dataset = [x * critical_path_delay for x in eng_stat_detail_dataset]
     eng_total_detail_dataset = [a + b for a, b in zip(eng_dnmc_detail_dataset, eng_stat_detail_dataset)]
+    avg_inference_latency = critical_path_delay * avg_inference_cycles
 
-    if args.latency:
-        print('\nAverage Inference Latency: %1.9f (Sec)' % (avg_latency))
     if args.power:
-        print('\nAverage Dynamic Energy of Dataset: %1.9f (J)' % (avg_dynamic_energy_dataset))
+        print('\n########## Latency Statistics ##########\n')
+        print('Average Inference Latency: %1.9f (Sec)' % (avg_inference_latency))
+        print('Average Inference Cycles : %1.2f' % (avg_inference_cycles))
+        print('\n########## Energy Statistics ##########\n')
+        print('Average Dynamic Energy of Dataset: %1.9f (J)' % (avg_dynamic_energy_dataset))
         print('Average Static Energy of Dataset: %1.9f (J)' % (avg_static_energy_dataset))
         print('Total Energy of Dataset: %1.9f (J)' % (total_energy),'\n')
         print('########## Dynamic Energy Breakdown ##########\n')
@@ -565,4 +555,6 @@ if __name__ == '__main__':
 
     sys.exit(0)
 
-# python3 mnist_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --dataset ../mnist_dataset --adversarial --adv_images adversarial_data/adversarial_dataset_mnist.pt --weights weights/lenet5_mnist_fc_one_out.pkl
+# python3 mnist_power_delay.py --power --arch cnvlutin --batch_size 1 --dataset ../mnist_dataset --weights weights/lenet5_mnist_fc_one_out.pkl
+
+# python3 mnist_power_delay.py --power --arch cnvlutin --batch_size 1 --adversarial --adv_images adversarial_data/adversarial_dataset_mnist.pt --weights weights/lenet5_mnist_fc_one_out.pkl
