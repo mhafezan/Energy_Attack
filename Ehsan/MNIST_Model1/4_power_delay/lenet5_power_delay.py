@@ -567,7 +567,7 @@ if __name__ == '__main__':
 #################### Arguments considering pretrained LeNet5 as black-box model
 
 # For test on adversarial MNIST
-# python3 lenet5_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --adversarial --adv_images adversarial_data/adversarial_dataset_by_substitute_model1.pt --weights weights/lenet5_mnist_fc_one_out.pkl
+# python3 lenet5_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --adversarial --adv_images adversarial_data/adversarial_dataset_mnist_model1_Unconstrained.pt --weights weights/lenet5_mnist_fc_one_out.pkl
 
 # For test on original MNIST
-# python3 lenet5_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --dataset ../mnist_dataset --weights weights/lenet5_mnist_fc_one_out.pkl
+# python3 lenet5_power_delay.py --power --latency --arch cnvlutin --batch_size 100 --dataset ../mnist_dataset --weights weights/lenet5_mnist_fc_one_out.pkl
