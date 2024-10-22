@@ -1,6 +1,5 @@
 import ctypes
 import math
-import time
 import torch
 import argparse
 import sys
@@ -105,7 +104,6 @@ class Inception(nn.Module):
         sizes    = []
         eng_dnmc = []
         num_cycles = []
-        latency  = []
         
         dnmc_detail_b1, dnmc_detail_b21, dnmc_detail_b22, dnmc_detail_b31, dnmc_detail_b32, dnmc_detail_b33, dnmc_detail_b4 = ([] for _ in range(7))
         cycles_detail_b1, cycles_detail_b21, cycles_detail_b22, cycles_detail_b31, cycles_detail_b32, cycles_detail_b33, cycles_detail_b4  = ([] for _ in range(7))
@@ -118,22 +116,18 @@ class Inception(nn.Module):
             b1_zeros, b1_sizes = sparsity_rate(x)
             zeros.append(b1_zeros)
             sizes.append(b1_sizes)
-        b1_start = time.time()
         s = self.b1[0](x) # conv2
         s = self.b1[1](s) # batch
         s = self.b1[2](s) # relu
-        latency.append(time.time() - b1_start)
 
         if PC:
             dnmc, cycles, dnmc_detail_b21, cycles_detail_b21 = conv_power(x, self.b2[0].weight, self.b2[0].stride, self.b2[0].padding, args.arch)
             eng_dnmc.append(dnmc)
             num_cycles.append(cycles)
         # We don't need to compute SR(x) at this point, as we already computed it at b1 layer
-        b2_start = time.time()
         t = self.b2[0](x) # conv2
         t = self.b2[1](t) # batch
         t = self.b2[2](t) # relu
-        latency.append(time.time() - b2_start)
 
         if PC:
             dnmc, cycles, dnmc_detail_b22, cycles_detail_b22 = conv_power(t, self.b2[3].weight, self.b2[3].stride, self.b2[3].padding, args.arch)
@@ -143,22 +137,18 @@ class Inception(nn.Module):
             b2_zeros, b2_sizes = sparsity_rate(t)
             zeros.append(b2_zeros)
             sizes.append(b2_sizes)
-        b2_start = time.time()
         t = self.b2[3](t) # conv2
         t = self.b2[4](t) # batch
         t = self.b2[5](t) # relu
-        latency.append(time.time() - b2_start)
 
         if PC:
             dnmc, cycles, dnmc_detail_b31, cycles_detail_b31 = conv_power(x, self.b3[0].weight, self.b3[0].stride, self.b3[0].padding, args.arch)
             eng_dnmc.append(dnmc)
             num_cycles.append(cycles)
         # We don't need to compute SR(x) and SM(x) at this point, as we already computed it at b1 layer
-        b3_start = time.time()
         u = self.b3[0](x) # conv2
         u = self.b3[1](u) # batch
         u = self.b3[2](u) # relu
-        latency.append(time.time() - b3_start)
 
         if PC:
             dnmc, cycles, dnmc_detail_b32, cycles_detail_b32 = conv_power(u, self.b3[3].weight, self.b3[3].stride, self.b3[3].padding, args.arch)
@@ -168,11 +158,9 @@ class Inception(nn.Module):
             b3_zeros, b3_sizes = sparsity_rate(u)
             zeros.append(b3_zeros)
             sizes.append(b3_sizes)
-        b3_start = time.time()
         u = self.b3[3](u) # conv2
         u = self.b3[4](u) # batch
         u = self.b3[5](u) # relu
-        latency.append(time.time() - b3_start)
 
         if PC:
             dnmc, cycles, dnmc_detail_b33, cycles_detail_b33 = conv_power(u, self.b3[6].weight, self.b3[6].stride, self.b3[6].padding, args.arch)
@@ -182,15 +170,11 @@ class Inception(nn.Module):
             b3_zeros, b3_sizes = sparsity_rate(u)
             zeros.append(b3_zeros)
             sizes.append(b3_sizes)
-        b3_start = time.time()
         u = self.b3[6](u) # conv2
         u = self.b3[7](u) # batch
         u = self.b3[8](u) # relu
-        latency.append(time.time() - b3_start)
      
-        b4_start = time.time()
         v = self.b4[0](x) # MaxPool2d
-        latency.append(time.time() - b4_start)
 
         if PC:
             dnmc, cycles, dnmc_detail_b4, cycles_detail_b4 = conv_power(v, self.b4[1].weight, self.b4[1].stride, self.b4[1].padding, args.arch)
@@ -200,16 +184,14 @@ class Inception(nn.Module):
             b4_zeros, b4_sizes = sparsity_rate(v)
             zeros.append(b4_zeros)
             sizes.append(b4_sizes)
-        b4_start = time.time()  
         v = self.b4[1](v) # conv2
         v = self.b4[2](v) # batch
         v = self.b4[3](v) # relu
-        latency.append(time.time() - b4_start)
         
         eng_dnmc_detail = [a + b + c + d + e + f + g for a, b, c, d, e, f, g in zip(dnmc_detail_b1, dnmc_detail_b21, dnmc_detail_b22, dnmc_detail_b31, dnmc_detail_b32, dnmc_detail_b33, dnmc_detail_b4)]
         cycles_detail = [a + b + c + d + e + f + g for a, b, c, d, e, f, g in zip(cycles_detail_b1, cycles_detail_b21, cycles_detail_b22, cycles_detail_b31, cycles_detail_b32, cycles_detail_b33, cycles_detail_b4)]
 
-        return torch.cat([s, t, u, v], dim=1), zeros, sizes, sum(eng_dnmc), sum(num_cycles), eng_dnmc_detail, cycles_detail, sum(latency)
+        return torch.cat([s, t, u, v], dim=1), zeros, sizes, sum(eng_dnmc), sum(num_cycles), eng_dnmc_detail, cycles_detail
     
 class GoogleNet(nn.Module):
     
@@ -269,7 +251,6 @@ class GoogleNet(nn.Module):
         
         eng_dnmc = []
         num_cycles = []
-        latency = []
         
         if PC:
             dnmc, cycles, L1_dnmc_detail, L1_cycles_detail = conv_power(x, self.prelayer[0].weight, self.prelayer[0].stride, self.prelayer[0].padding, args.arch)
@@ -277,11 +258,9 @@ class GoogleNet(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L1_zeros, L1_sizes = sparsity_rate(x)
-        L1_start = time.time()
         x = self.prelayer[0](x) # conv2
         x = self.prelayer[1](x) # batch
         x = self.prelayer[2](x) # relu
-        latency.append(time.time() - L1_start)
 
         if PC:
             dnmc, cycles, L2_dnmc_detail, L2_cycles_detail = conv_power(x, self.prelayer[3].weight, self.prelayer[3].stride, self.prelayer[3].padding, args.arch)
@@ -289,11 +268,9 @@ class GoogleNet(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L2_zeros, L2_sizes = sparsity_rate(x)
-        L2_start = time.time()
         x = self.prelayer[3](x) # conv2
         x = self.prelayer[4](x) # batch
         x = self.prelayer[5](x) # relu
-        latency.append(time.time() - L2_start)
 
         if PC:
             dnmc, cycles, L3_dnmc_detail, L3_cycles_detail = conv_power(x, self.prelayer[6].weight, self.prelayer[6].stride, self.prelayer[6].padding, args.arch)
@@ -301,49 +278,41 @@ class GoogleNet(nn.Module):
             num_cycles.append(cycles)
         if SR:
             L3_zeros, L3_sizes = sparsity_rate(x)
-        L3_start = time.time()
         x = self.prelayer[6](x) # conv2
         x = self.prelayer[7](x) # batch
         x = self.prelayer[8](x) # relu
 
         x = self.maxpool(x)
-        latency.append(time.time() - L3_start)
 
-        x, L4_L8_zeros, L4_L8_sizes, L4_L8_dnmc, L4_L8_cycles, L4_L8_dnmc_detail, L4_L8_cycles_detail, L4_L8_latency = self.a3(x, SR, PC)
+        x, L4_L8_zeros, L4_L8_sizes, L4_L8_dnmc, L4_L8_cycles, L4_L8_dnmc_detail, L4_L8_cycles_detail = self.a3(x, SR, PC)
         
-        x, L9_L13_zeros, L9_L13_sizes, L9_L13_dnmc, L9_L13_cycles, L9_L13_dnmc_detail, L9_L13_cycles_detail, L9_L13_latency = self.b3(x, SR, PC)
+        x, L9_L13_zeros, L9_L13_sizes, L9_L13_dnmc, L9_L13_cycles, L9_L13_dnmc_detail, L9_L13_cycles_detail = self.b3(x, SR, PC)
 
-        L_start = time.time()
         x = self.maxpool(x)
-        latency.append(time.time() - L_start)
 
-        x, L14_L18_zeros, L14_L18_sizes, L14_L18_dnmc, L14_L18_cycles, L14_L18_dnmc_detail, L14_L18_cycles_detail, L14_L18_latency = self.a4(x, SR, PC)
+        x, L14_L18_zeros, L14_L18_sizes, L14_L18_dnmc, L14_L18_cycles, L14_L18_dnmc_detail, L14_L18_cycles_detail = self.a4(x, SR, PC)
 
-        x, L19_L23_zeros, L19_L23_sizes, L19_L23_dnmc, L19_L23_cycles, L19_L23_dnmc_detail, L19_L23_cycles_detail, L19_L23_latency = self.b4(x, SR, PC)
+        x, L19_L23_zeros, L19_L23_sizes, L19_L23_dnmc, L19_L23_cycles, L19_L23_dnmc_detail, L19_L23_cycles_detail = self.b4(x, SR, PC)
 
-        x, L24_L28_zeros, L24_L28_sizes, L24_L28_dnmc, L24_L28_cycles, L24_L28_dnmc_detail, L24_L28_cycles_detail, L24_L28_latency = self.c4(x, SR, PC)
+        x, L24_L28_zeros, L24_L28_sizes, L24_L28_dnmc, L24_L28_cycles, L24_L28_dnmc_detail, L24_L28_cycles_detail = self.c4(x, SR, PC)
         
-        x, L29_L33_zeros, L29_L33_sizes, L29_L33_dnmc, L29_L33_cycles, L29_L33_dnmc_detail, L29_L33_cycles_detail, L29_L33_latency = self.d4(x, SR, PC)
+        x, L29_L33_zeros, L29_L33_sizes, L29_L33_dnmc, L29_L33_cycles, L29_L33_dnmc_detail, L29_L33_cycles_detail = self.d4(x, SR, PC)
 
-        x, L34_L38_zeros, L34_L38_sizes, L34_L38_dnmc, L34_L38_cycles, L34_L38_dnmc_detail, L34_L38_cycles_detail, L34_L38_latency = self.e4(x, SR, PC)
+        x, L34_L38_zeros, L34_L38_sizes, L34_L38_dnmc, L34_L38_cycles, L34_L38_dnmc_detail, L34_L38_cycles_detail = self.e4(x, SR, PC)
 
-        L_start = time.time()
         x = self.maxpool(x)
-        latency.append(time.time() - L_start)
 
-        x, L39_L43_zeros, L39_L43_sizes, L39_L43_dnmc, L39_L43_cycles, L39_L43_dnmc_detail, L39_L43_cycles_detail, L39_L43_latency = self.a5(x, SR, PC)
+        x, L39_L43_zeros, L39_L43_sizes, L39_L43_dnmc, L39_L43_cycles, L39_L43_dnmc_detail, L39_L43_cycles_detail = self.a5(x, SR, PC)
 
-        x, L44_L48_zeros, L44_L48_sizes, L44_L48_dnmc, L44_L48_cycles, L44_L48_dnmc_detail, L44_L48_cycles_detail, L44_L48_latency = self.b5(x, SR, PC)
+        x, L44_L48_zeros, L44_L48_sizes, L44_L48_dnmc, L44_L48_cycles, L44_L48_dnmc_detail, L44_L48_cycles_detail = self.b5(x, SR, PC)
 
-        L_start = time.time()
         x = self.avgpool(x)
         x = self.dropout(x)
         
         x = x.view(x.size(0), -1)
         x = self.linear(x)
-        latency.append(time.time() - L_start)
         
-        latency.extend([L4_L8_latency, L9_L13_latency, L14_L18_latency, L19_L23_latency, L24_L28_latency, L29_L33_latency, L34_L38_latency, L39_L43_latency, L44_L48_latency])
+        num_cycles.extend([L4_L8_cycles, L9_L13_cycles, L14_L18_cycles, L19_L23_cycles, L24_L28_cycles, L29_L33_cycles, L34_L38_cycles, L39_L43_cycles, L44_L48_cycles])
         
         zeros_list = [L1_zeros] + [L2_zeros] + [L3_zeros] + L4_L8_zeros + L9_L13_zeros + L14_L18_zeros + L19_L23_zeros + L24_L28_zeros + L29_L33_zeros + L34_L38_zeros + L39_L43_zeros + L44_L48_zeros
         sizes_list = [L1_sizes] + [L2_sizes] + [L3_sizes] + L4_L8_sizes + L9_L13_sizes + L14_L18_sizes + L19_L23_sizes + L24_L28_sizes + L29_L33_sizes + L34_L38_sizes + L39_L43_sizes + L44_L48_sizes
@@ -358,9 +327,9 @@ class GoogleNet(nn.Module):
         
         eng_dnmc_total_inference = sum(eng_dnmc) + L4_L8_dnmc + L9_L13_dnmc + L14_L18_dnmc + L19_L23_dnmc + L24_L28_dnmc + L29_L33_dnmc + L34_L38_dnmc + L39_L43_dnmc + L44_L48_dnmc
         
-        eng_stat_total_inference = pow_stat_total_inference * (sum(num_cycles) + L4_L8_cycles + L9_L13_cycles + L14_L18_cycles + L19_L23_cycles + L24_L28_cycles + L29_L33_cycles + L34_L38_cycles + L39_L43_cycles + L44_L48_cycles)
+        eng_stat_total_inference = pow_stat_total_inference * sum(num_cycles)
         
-        return x, zeros_list, sizes_list, eng_dnmc_total_inference, eng_stat_total_inference, eng_dnmc_detail_inference, eng_stat_detail_inference, sum(latency)
+        return x, zeros_list, sizes_list, eng_dnmc_total_inference, eng_stat_total_inference, eng_dnmc_detail_inference, eng_stat_detail_inference, sum(num_cycles)
 
 def sparsity_rate(input_tensor):
     zeros = torch.count_nonzero(torch.eq(input_tensor, 0)).item()
@@ -615,7 +584,6 @@ if __name__ == '__main__':
     parser.add_argument('--weights', default="../2_copy_weight/googlenet_cifar100_fc_one_out.pkl", help="The path to the pretrained weights")
     parser.add_argument('--dataset', default="../cifar100_dataset", help="The path to the train or test datasets")
     parser.add_argument('--power', action='store_true', help="To generate inference power statistics")
-    parser.add_argument('--latency', action='store_true', help="To generate inference latency statistics")
     parser.add_argument('--arch', default='cnvlutin', help="To specify the underlying architecture: cnvlutin or dadiannao")
     parser.add_argument('--adversarial', action='store_true', help="To allow for testing the adversarial dataset")
     parser.add_argument('--im_index_first', default=0, type=int, help="The fisrt index of the dataset")
@@ -658,7 +626,7 @@ if __name__ == '__main__':
     sample_num = 0
     num_layers = 48
     
-    total_inference_latency = 0
+    total_inference_cycles = 0
     total_dynamic_energy_dataset = 0
     total_static_energy_dataset = 0
     eng_dnmc_detail_dataset = [0] * 10
@@ -697,7 +665,7 @@ if __name__ == '__main__':
         total_static_energy_dataset += output[4]
         eng_dnmc_detail_dataset = [a + b for a, b in zip(eng_dnmc_detail_dataset, output[5])]
         eng_stat_detail_dataset = [a + b for a, b in zip(eng_stat_detail_dataset, output[6])]
-        total_inference_latency += output[7]
+        total_inference_cycles += output[7]
 
         # Prediction and Accuracy Measurement
         _, preds = torch.max(output[0].data, 1)
@@ -720,17 +688,20 @@ if __name__ == '__main__':
     print('Sparsity rate of Network: %1.5f' % (SR_Net))
         
     # To print energy consumption and latency statistics
-    avg_latency = total_inference_latency / sample_num
+    avg_inference_cycles = total_inference_cycles / sample_num
+    avg_inference_latency = critical_path_delay * avg_inference_cycles
     avg_dynamic_energy_dataset = total_dynamic_energy_dataset / sample_num
     avg_static_energy_dataset = (total_static_energy_dataset / sample_num) * critical_path_delay
     total_energy = avg_dynamic_energy_dataset + avg_static_energy_dataset
     eng_stat_detail_dataset = [x * critical_path_delay for x in eng_stat_detail_dataset]
     eng_total_detail_dataset = [a + b for a, b in zip(eng_dnmc_detail_dataset, eng_stat_detail_dataset)]
 
-    if args.latency:
-        print('\nAverage Inference Latency: %1.9f (Sec)' % (avg_latency))
     if args.power:
-        print('\nAverage Dynamic Energy of Dataset: %1.9f (J)' % (avg_dynamic_energy_dataset))
+        print('\n########## Latency Statistics ##########\n')
+        print('Average Inference Latency: %1.9f (Sec)' % (avg_inference_latency))
+        print('Average Inference Cycles : %1.2f' % (avg_inference_cycles))
+        print('\n########## Energy Statistics ##########\n')
+        print('Average Dynamic Energy of Dataset: %1.9f (J)' % (avg_dynamic_energy_dataset))
         print('Average Static Energy of Dataset: %1.9f (J)' % (avg_static_energy_dataset))
         print('Total Energy of Dataset: %1.9f (J)' % (total_energy),'\n')
         print('########## Dynamic Energy Breakdown ##########\n')
@@ -781,7 +752,7 @@ if __name__ == '__main__':
     sys.exit(0)
 
 # For original dataset
-# python3 cifar100_power_delay.py --power --latency --arch cnvlutin --batch_size 40 --dataset ../cifar100_dataset --weights ../2_copy_weight/googlenet_cifar100_fc_one_out.pkl
+# python3 cifar100_power_delay.py --power --arch cnvlutin --batch_size 40 --dataset ../cifar100_dataset --weights ../2_copy_weight/googlenet_cifar100_fc_one_out.pkl
 
 # For adversarial dataset
-# python3 cifar100_power_delay.py --power --latency --arch cnvlutin --batch_size 1 --im_index_last 250 --adversarial --adv_images ../5_detection/adversarial_data/adv_constrained.pt --weights ../2_copy_weight/googlenet_cifar100_fc_one_out.pkl
+# python3 cifar100_power_delay.py --power --arch cnvlutin --batch_size 1 --im_index_last 250 --adversarial --adv_images ../5_detection/adversarial_data/adv_constrained.pt --weights ../2_copy_weight/googlenet_cifar100_fc_one_out.pkl
