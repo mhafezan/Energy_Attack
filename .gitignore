@@ -98,7 +98,7 @@ Models/ImageNet_ResNet18/5_detection/adversarial_data/*.pt
 
 Models/Imagenet_dataset/*
 
-./.gitignore
+/home/administrator/Projects/Energy_Attack/.gitignore
 **__pycache__**
 *.qpf
 *.sft
@@ -111,3 +111,4 @@ Models/Imagenet_dataset/*
 *.qsf
 *.qws
 *.qdf
+
