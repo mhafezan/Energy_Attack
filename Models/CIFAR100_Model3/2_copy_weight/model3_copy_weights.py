@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     model_dest.model3_set_weights_one()
 
-    torch.save(model_dest.state_dict(), './model3_cifar10_fc_one_out.pkl')
+    torch.save(model_dest.state_dict(), './model3_cifar100_fc_one_out.pkl')
     
     # CIFAR100 dataset and dataloader declaration
     CIFAR100_MEAN = (0.5070751592371323, 0.48654887331495095, 0.4409178433670343)
