@@ -60,8 +60,8 @@ def train(model, train_loader, test_loader, optimizer, scheduler, device, args):
             print(f"Learning Rate after Epoch [{epoch+1}]: {current_lr:.6f}\n")
 
         # Save the model parameters after each epoch
-        if accuracy >= 40:
-            model_save_path = f'{args.weights}/model2_epoch_{epoch+1}_{args.lr}_{args.batch_size}_{accuracy:.2f}.pth'
+        if accuracy >= 45:
+            model_save_path = f'{args.weights}/model3_epoch_{epoch+1}_{args.lr}_{args.batch_size}_{accuracy:.2f}.pth'
             torch.save(model.state_dict(), model_save_path)
 
     return
@@ -167,5 +167,5 @@ if __name__ == "__main__":
 
     sys.exit(0)
 
-# python3 train_test_model3.py --phase train --epochs 100 --lr 0.01 --batch-size 256 --print_freq 20 --optimizer sgd
-# python3 train_test_model3.py --phase test --batch-size 128 --model_path ./weights/model2_epoch_22_0.01_256_42.76.pth
+# python3 train_test_model3.py --phase train --epochs 100 --lr 0.01 --batch-size 256 --print_freq 100 --optimizer sgd
+# python3 train_test_model3.py --phase test --batch-size 128 --model_path ./weights/model3_epoch_22_0.01_256_42.76.pth

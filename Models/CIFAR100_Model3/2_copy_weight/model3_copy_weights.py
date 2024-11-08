@@ -5,8 +5,8 @@ import torchvision
 import torchvision.transforms as transforms
 import argparse
 from torch.utils.data import DataLoader
-from models.source_model2 import Model2_stat
-from models.model2 import Model2
+from models.source_model3 import Model3_stat
+from models.model3 import Model3
 
 def copy_weights(model_src_in, model_dest_out):
 
@@ -45,11 +45,11 @@ def test(model, test_loader, device):
 
 if __name__ == '__main__':
        
-    parser = argparse.ArgumentParser(description="Customized Model2 Network with CIFAR10 Dataset")
-    parser.add_argument('--weights_src', default='../1_train_model2/weights/model2_epoch_6_0.001_64_70.69.pth', help="The path to the trained weights")
-    parser.add_argument('--weights_dest', default='./model2_cifar10_fc_one_out.pkl', help="The path to store copied weights")
+    parser = argparse.ArgumentParser(description="Customized Model3 Network with CIFAR100 Dataset")
+    parser.add_argument('--weights_src', default='../1_train_model3/weights/model3_epoch_22_0.01_256_42.76.pth', help="The path to the trained weights")
+    parser.add_argument('--weights_dest', default='./model3_cifar100_fc_one_out.pkl', help="The path to store copied weights")
     parser.add_argument('--batch_size', default=64, type=int, help="Batch size")
-    parser.add_argument('--dataset', default="../cifar10_dataset", help="The path to the MNIST dataset")
+    parser.add_argument('--dataset', default="../cifar100_dataset", help="The path to the MNIST dataset")
     parser.add_argument('--beta', default=15, type=int, help="Beta parameter used in Tanh function")
     parser.add_argument('--im_index_first', default=0, type=int, help="The first index of the dataset")
     parser.add_argument('--im_index_last', default=10000, type=int, help="The last index of the dataset")
@@ -58,8 +58,8 @@ if __name__ == '__main__':
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    model_src = Model2_stat().to(device)
-    model_dest = Model2(args=args).to(device)
+    model_src = Model3_stat().to(device)
+    model_dest = Model3(args=args).to(device)
 
     if torch.cuda.is_available():
         model_src.load_state_dict(torch.load(args.weights_src))
@@ -68,18 +68,19 @@ if __name__ == '__main__':
 
     copy_weights(model_src, model_dest)
 
-    model_dest.model2_set_weights_one()
+    model_dest.model3_set_weights_one()
 
-    torch.save(model_dest.state_dict(), './model2_cifar10_fc_one_out.pkl')
+    torch.save(model_dest.state_dict(), './model3_cifar10_fc_one_out.pkl')
     
-    # Load the CIFAR10 dataset
-    TRANSFORM = transforms.Compose([
-        transforms.Resize(256),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])])
+    # CIFAR100 dataset and dataloader declaration
+    CIFAR100_MEAN = (0.5070751592371323, 0.48654887331495095, 0.4409178433670343)
+    CIFAR100_STD  = (0.2673342858792401, 0.2564384629170883, 0.27615047132568404)
+    TRANSFORM = transforms.Compose([transforms.ToTensor(),
+                                    transforms.RandomHorizontalFlip(),
+                                    transforms.Normalize(CIFAR100_MEAN, CIFAR100_STD)])
 
-    test_dataset = torchvision.datasets.CIFAR10(root=args.dataset, train=False, download=True, transform=TRANSFORM)
-    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
+    test_dataset = torchvision.datasets.CIFAR100(root=args.dataset, train=False, download=True, transform=TRANSFORM)
+    test_loader = DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=False)
     
     # To test both models using the assigned weights
     test (model_src, test_loader, device)
@@ -87,4 +88,4 @@ if __name__ == '__main__':
     
     sys.exit()
 
-# python3 model2_copy_weights.py
+# python3 model3_copy_weights.py

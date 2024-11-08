@@ -11,7 +11,7 @@ class Model3(nn.Module):
         self.conv3 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, padding=1)
         
         # To Define the fully connected layers
-        self.fc1 = nn.Linear(32 * 16 * 16, 64)  # CIFAR-100 images are 32x32; downsampled by pooling
+        self.fc1 = nn.Linear(32 * 16 * 16, 64)
         self.fc2 = nn.Linear(64, num_classes)
         
         # To define max pooling layer and softmax
