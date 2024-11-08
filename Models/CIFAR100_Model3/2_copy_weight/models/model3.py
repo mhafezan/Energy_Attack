@@ -17,9 +17,9 @@ class Model3(nn.Module):
         
         # To compute sum of ones
         self.my_fc1 = nn.Linear(3*32*32, 1, bias=False)
-        self.my_fc2 = nn.Linear(16*16*32, 1, bias=False)
-        self.my_fc3 = nn.Linear(16*16*32, 1, bias=False)
-        self.my_fc4 = nn.Linear(16*16*32, 1, bias=False)
+        self.my_fc2 = nn.Linear(32*16*16, 1, bias=False)
+        self.my_fc3 = nn.Linear(32*16*16, 1, bias=False)
+        self.my_fc4 = nn.Linear(8192, 1, bias=False)
         self.my_fc5 = nn.Linear(4, 1, bias=False)
     
     def forward(self, x):

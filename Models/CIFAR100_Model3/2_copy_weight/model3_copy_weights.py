@@ -62,7 +62,7 @@ if __name__ == '__main__':
     model_dest = Model3(args=args).to(device)
 
     if torch.cuda.is_available():
-        model_src.load_state_dict(torch.load(args.weights_src))
+        model_src.load_state_dict(torch.load(args.weights_src, weights_only=True))
     else:
         model_src.load_state_dict(torch.load(args.weights_src, map_location=torch.device('cpu')))
 
