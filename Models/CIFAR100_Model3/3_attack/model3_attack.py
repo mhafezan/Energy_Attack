@@ -10,8 +10,8 @@ import datetime
 import torchvision.utils as vutils
 import random
 from torch.utils.data import DataLoader, Dataset
-from models.source_model2 import Model2_stat
-from models.model2 import Model2
+from models.source_model3 import Model3_stat
+from models.model3 import Model3
 
 class AdversarialDataset(Dataset):
     def __init__(self, data):
@@ -23,7 +23,7 @@ class AdversarialDataset(Dataset):
     def __getitem__(self, idx):
         return self.data[idx]
 
-# To clip the perturbed input (if needed) so as to ensure that added distortions are within the "L2 bound eps" and does not exceed the input range of Cifar10 (min, max)
+# To clip the perturbed input (if needed) so as to ensure that added distortions are within the "L2 bound eps" and does not exceed the input range of Cifar100 (min, max)
 def clip_tensor(input_tensor, eps_in, batch_size, min_in, max_in):
 
     with torch.no_grad():
@@ -72,9 +72,9 @@ def convert_clean_to_adversarial(model_active_in, inputs_dirty, inputs_clean, in
         perfectt = torch.ones(args.batch_size, 1, requires_grad=False).to(device)
 
         for j in range(args.batch_size):
-            assert(outputs[1][j].unsqueeze(0) < 743808)
+            assert(outputs[1][j].unsqueeze(0) < 27648)
                 
-        loss2 = torch.stack([sparsity_loss(outputs[1][j].unsqueeze(0)/743808, perfectt[j].unsqueeze(0)) for j in range(args.batch_size)])
+        loss2 = torch.stack([sparsity_loss(outputs[1][j].unsqueeze(0)/27648, perfectt[j].unsqueeze(0)) for j in range(args.batch_size)])
 
         """loss3 = torch.stack([image_loss(x[j], inputs_clean[j]) for j in range(args.batch_size)])"""
 
@@ -108,12 +108,14 @@ def Sparsity_Attack_Generation(model_active_in, model_passive_in, device, test_l
     l2_norms = []
     adversarial_data = []
 
-    # net_sizes = 743808 = (3*256*256) + (64*84*84) + (64*26*26) + (64*24*24) + (32*22*22) 
-    net_sizes = 743808 * args.batch_size
+    # net_sizes = 27648 = (3*32*32) + (32*16*16) + (32*16*16) + (8192)
+    net_sizes = 27648 * args.batch_size
 
+    # Batch Counter
     count = 0
 
     for ((data_clean, target_clean) , (data_dirty, target_dirty)) in zip(test_loader_clean_in, test_loader_dirty_in):
+        
         inputs_clean, target_clean = data_clean.to(device), target_clean.to(device)
         inputs_dirty, target_dirty = data_dirty.to(device), target_dirty.to(device)
 
@@ -176,11 +178,11 @@ def Sparsity_Attack_Generation(model_active_in, model_passive_in, device, test_l
 if __name__ == '__main__':
        
     # Initialize parser and setting the hyper parameters
-    parser = argparse.ArgumentParser(description="Model2 Substitute Network with CIFAR10 Dataset")
+    parser = argparse.ArgumentParser(description="Model3 Substitute Network with CIFAR100 Dataset")
     parser.add_argument('--batch_size', default=20, type=int, help="Batch size")
-    parser.add_argument('--weights', default='../2_copy_weight/model2_cifar10_fc_one_out.pkl', help="The path to the saved weights")
-    parser.add_argument('--dataset', default='../cifar10_dataset', help="The path to the cifar10 dataset")
-    parser.add_argument('--beta', default=50, type=int, help="Beta parameter used in Tanh function")
+    parser.add_argument('--weights', default='../2_copy_weight/model3_cifar100_fc_one_out.pkl', help="The path to the saved weights")
+    parser.add_argument('--dataset', default='../cifar100_dataset', help="The path to the cifar100 dataset")
+    parser.add_argument('--beta', default=15, type=int, help="Beta parameter used in Tanh function")
     parser.add_argument('--eps', default=0.99, type=float, help="L2-norm bound of epsilon for constraining purturbed image")
     parser.add_argument('--constrained', action='store_true', help="To put constrain on adversarial generation")
     parser.add_argument('--cont_adv_geneartion', action='store_true', help="Reads advesarial images from previous imax-loop and continues optmizing the images")
@@ -200,30 +202,32 @@ if __name__ == '__main__':
     random.seed(args.manualSeed)
     torch.manual_seed(args.manualSeed)
 
-    TRANSFORM = transforms.Compose([
-        transforms.Resize(256),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.4914, 0.4822, 0.4465], std=[0.2470, 0.2435, 0.2616])])
+    # CIFAR100 dataset and dataloader declaration
+    CIFAR100_MEAN = (0.5070751592371323, 0.48654887331495095, 0.4409178433670343)
+    CIFAR100_STD  = (0.2673342858792401, 0.2564384629170883, 0.27615047132568404)
+    TRANSFORM = transforms.Compose([transforms.ToTensor(),
+                                    transforms.RandomHorizontalFlip(),
+                                    transforms.Normalize(CIFAR100_MEAN, CIFAR100_STD)])
     
     # Dataset definition
-    test_dataset_clean  = torchvision.datasets.CIFAR10(root=args.dataset, train=False, download=True, transform=TRANSFORM)
-    test_dataset_sub_clean = torch.utils.data.Subset(test_dataset_clean,  list(range(args.img_index_first, args.img_index_last)))        
-    test_loader_clean = DataLoader(test_dataset_sub_clean, shuffle=False, num_workers=1, batch_size=args.batch_size) 
+    test_dataset_clean = torchvision.datasets.CIFAR100(root=args.dataset, train=False, download=True, transform=TRANSFORM)
+    test_dataset_sub_clean = torch.utils.data.Subset(test_dataset_clean,  list(range(args.img_index_first, args.img_index_last)))
+    test_loader_clean = DataLoader(test_dataset_sub_clean, batch_size=args.batch_size, shuffle=False)
         
     if args.cont_adv_geneartion:
-        test_loader_dirty = torch.load('./adversarial_dataset_cifar10_in.pt', map_location=torch.device('cuda'))
+        test_loader_dirty = torch.load('./adversarial_dataset_cifar100_model3_in.pt', map_location=torch.device('cuda'))
     else:
-        test_dataset_dirty  = torchvision.datasets.CIFAR10(root=args.dataset, train=False, download=True, transform=TRANSFORM)
-        test_dataset_sub_dirty = torch.utils.data.Subset(test_dataset_dirty,  list(range(args.img_index_first, args.img_index_last)))        
-        test_loader_dirty = DataLoader(test_dataset_sub_dirty, shuffle=False, num_workers=1, batch_size=args.batch_size)
+        test_dataset_dirty = torchvision.datasets.CIFAR100(root=args.dataset, train=False, download=True, transform=TRANSFORM)
+        test_dataset_sub_dirty = torch.utils.data.Subset(test_dataset_dirty,  list(range(args.img_index_first, args.img_index_last)))
+        test_loader_dirty = DataLoader(test_dataset_sub_dirty, batch_size=args.batch_size, shuffle=False)
 
     # Device Initialization
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(f"\n{device} assigned for processing!\n")
     
     # Network Initialization
-    model_active = Model2(args=args)
-    model_passive = Model2_stat()
+    model_active = Model3(args=args)
+    model_passive = Model3_stat()
     model_active.to(device)
     model_passive.to(device)
 
@@ -241,11 +245,11 @@ if __name__ == '__main__':
     num_classes  = len(test_dataset_clean.classes)
     c_init = 0.5
     
-    adversarial_dataset, initial_accuracy, final_accuracy, l2_norms, sr_net_before, sr_net_after = Sparsity_Attack_Generation (model_active, model_passive, device, test_loader_clean, test_loader_dirty,num_classes, c_init, args)
+    adversarial_dataset, initial_accuracy, final_accuracy, l2_norms, sr_net_before, sr_net_after = Sparsity_Attack_Generation (model_active, model_passive, device, test_loader_clean, test_loader_dirty, num_classes, c_init, args)
 
     DATE_FORMAT = '%A_%d_%B_%Y_%Hh_%Mm_%Ss'
     TIME_NOW = datetime.datetime.now().strftime(DATE_FORMAT)
-    image_out_name = 'adversarial_dataset_cifar10_model2'
+    image_out_name = 'adversarial_dataset_cifar100_model3'
     image_out_name = os.path.join(image_out_name, '_lr_', str(args.lr), '_', TIME_NOW, '.pt')
     image_out_name = image_out_name.replace('/',  '')
     
@@ -271,5 +275,5 @@ if __name__ == '__main__':
     sys.exit(0)
 
 # Arguments:
-# python3 model2_attack.py --lr=0.001 --eps 0.99 --beta 50 --imax 50 --constrained --store_attack
-# python3 model2_attack.py --lr=0.08  --eps 0.99 --beta 5  --imax=50 --store_attack
+# python3 model3_attack.py --lr=0.001 --eps 0.99 --beta 50 --imax 50 --constrained --store_attack
+# python3 model3_attack.py --lr=0.08  --eps 0.99 --beta 5  --imax=50 --store_attack
